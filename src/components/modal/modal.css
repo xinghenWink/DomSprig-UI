@@ -1,4 +1,4 @@
-/* Nova UI · Modal 对话框
+/* DomSprig-UI · Modal 对话框
  * <div class="nv-modal" id hidden aria-labelledby>      根节点 = 遮罩（打开时移到 body）
  *   <div class="nv-modal-panel">                          面板
  *     <div class="nv-modal-header">  .nv-modal-icon? .nv-modal-title .nv-modal-desc .nv-modal-close

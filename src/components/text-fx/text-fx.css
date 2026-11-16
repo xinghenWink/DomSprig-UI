@@ -1,4 +1,4 @@
-/* Nova UI · Text FX 文字特效
+/* DomSprig-UI · Text FX 文字特效
  * .nv-text-gradient                 流动渐变文字（--nv-text-gradient 自定义渐变，需首尾同色才能无缝）
  * .nv-text-shine                    文字扫光（--nv-text-shine-base 底色 / --nv-text-shine-color 高光）
  * [data-nv-text="blur-in"]          逐词（data-split="char" 逐字）模糊淡入，进入视口触发

@@ -1,4 +1,4 @@
-/* Nova UI · Checkbox 复选框（纯 CSS）
+/* DomSprig-UI · Checkbox 复选框（纯 CSS）
  * <input type="checkbox" class="nv-checkbox">            对勾描边绘制动画；el.indeterminate = true 为半选
  * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
  * <label class="nv-check"><input …><span class="nv-check-text"><span class="nv-check-label">标题</span><span class="nv-check-desc">说明</span></span></label>

@@ -21,7 +21,7 @@ export default async ({ page, assert, sleep }) => {
     };
   }, first);
   assert(aria.chevron, '插入箭头');
-  assert.equal(aria.label, 'Nova UI 需要构建工具吗？', '标题包进 label');
+  assert.equal(aria.label, 'DomSprig-UI 需要构建工具吗？', '标题包进 label');
   assert(aria.controls && aria.labelled, 'aria-controls / aria-labelledby');
   assert.equal(aria.region, 'region', 'region 角色');
   assert.equal(aria.state, 'open', 'data-state');
@@ -78,11 +78,11 @@ export default async ({ page, assert, sleep }) => {
   assert.equal(f, '如何切换暗色主题？', 'End');
   await page.keyboard.press('ArrowDown');
   f = await page.evaluate(() => document.activeElement.textContent.trim());
-  assert.equal(f, 'Nova UI 需要构建工具吗？', '↓ 循环');
+  assert.equal(f, 'DomSprig-UI 需要构建工具吗？', '↓ 循环');
   await page.keyboard.press('ArrowUp');
   await page.keyboard.press('Home');
   f = await page.evaluate(() => document.activeElement.textContent.trim());
-  assert.equal(f, 'Nova UI 需要构建工具吗？', 'Home');
+  assert.equal(f, 'DomSprig-UI 需要构建工具吗？', 'Home');
 
   // 多开
   const multi = '#accordion-api';

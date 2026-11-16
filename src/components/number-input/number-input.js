@@ -1,4 +1,4 @@
-/* Nova UI · Number Input
+/* DomSprig-UI · Number Input
  * <input type="number" class="nv-number" min="0" max="100" step="1">
  * - 独立的 input 会被包进 .nv-control.nv-number-box；已在 .nv-control 里（带前后缀）则直接增强。
  * - data-controls  stacked（默认，右侧上下箭头）| sides（左减右加）| none

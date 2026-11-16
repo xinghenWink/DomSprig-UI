@@ -1,4 +1,4 @@
-/* Nova UI · Select
+/* DomSprig-UI · Select
  * 增强 <select data-nv-select>：原生 select 保留（视觉隐藏）并双向同步，表单提交与 input/change 事件照常。
  * 单选 / 多选（multiple）、占位、说明（option[data-desc]）、图标（option[data-icon]）、分组（optgroup）、
  * 禁用项、搜索（data-search）、清除（data-clearable）、尺寸（data-size）、错误（aria-invalid）、禁用。

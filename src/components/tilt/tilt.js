@@ -1,4 +1,4 @@
-/* Nova UI · Tilt / Magnetic
+/* DomSprig-UI · Tilt / Magnetic
  * 两者都用同一个阻尼弹簧在 rAF 中积分：指针静止且弹簧到位后循环立即停止，离开时弹回原位。
  * - 倾斜写 transform（复位后清空，恢复元素原有样式）；磁吸写独立的 translate 属性，可与 transform 叠加。
  * - 每帧先读位置、后写样式；触屏指针与减少动态时不做任何运动。

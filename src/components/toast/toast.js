@@ -1,4 +1,4 @@
-/* Nova UI · Toast —— 轻量、非阻断的操作反馈
+/* DomSprig-UI · Toast —— 轻量、非阻断的操作反馈
  * Nova.toast('已保存')                         Nova.toast.success('已保存') / .error / .warning / .info / .loading
  * Nova.toast.show({ title, description, type, duration, position, id, closable, action: { label, onClick }, icon, onClose })
  * const t = Nova.toast.loading('上传中…'); t.update({ type: 'success', title: '上传完成' }); t.dismiss()

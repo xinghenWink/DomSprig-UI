@@ -1,4 +1,4 @@
-/* Nova UI 文档站交互：路由、目录、代码展开/复制、主题与主色、搜索 */
+/* DomSprig-UI 文档站交互：路由、目录、代码展开/复制、主题与主色、搜索 */
 (() => {
   const body = document.body;
   const isPreview = body.classList.contains('is-preview');
@@ -71,7 +71,7 @@
     const changed = page.hidden;
     pages.forEach((p) => { p.hidden = p !== page; });
     links.forEach((a) => (a.dataset.nav === page.dataset.page ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
-    document.title = page.dataset.title ? `${page.dataset.title} · Nova UI` : 'Nova UI · 组件库';
+    document.title = page.dataset.title ? `${page.dataset.title} · DomSprig-UI` : 'DomSprig-UI · 组件库';
     if (changed) buildToc(page);
     body.classList.remove('nav-open');
     const target = anchor && document.getElementById(decodeURIComponent(anchor));

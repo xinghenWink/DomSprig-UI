@@ -1,4 +1,4 @@
-/* Nova UI · Backdrop 装饰背景
+/* DomSprig-UI · Backdrop 装饰背景
  * 背景层都是容器内的绝对定位层（inset: 0），不拦截指针，默认 z-index: -1 垫在内容下面。
  * 容器需要建立层叠上下文：加 .nv-bg-host（position: relative + isolation: isolate + 裁切），
  * 或自行写 position: relative; isolation: isolate。

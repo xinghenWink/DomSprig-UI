@@ -10,7 +10,7 @@ export default async ({ page, assert, sleep }) => {
   });
   assert.equal(base.label, '面包屑', '自动补 aria-label');
   assert.equal(base.current, 1, '只有一个当前页');
-  assert.equal(base.second, 'nova-ui', '最后一项自动设为 aria-current');
+  assert.equal(base.second, 'domsprig-ui', '最后一项自动设为 aria-current');
 
   // —— 折叠 —— //
   const sel = '.nv-breadcrumb[data-max="4"]';

@@ -1,4 +1,4 @@
-/* Nova UI · Tag Input
+/* DomSprig-UI · Tag Input
  * <div class="nv-tag-input" data-name="tags" data-value="设计,前端" data-placeholder="输入后回车" aria-label="标签"></div>
  * 回车或分隔符（默认逗号，中文逗号同样生效）把输入变成标签；输入框为空时按退格先选中最后一个标签，再按一次删除。
  * 每个标签对应一个隐藏 input[name]，表单提交得到 tags=设计&tags=前端；没有 data-name 时不生成隐藏域。

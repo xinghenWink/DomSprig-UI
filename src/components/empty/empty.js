@@ -1,4 +1,4 @@
-/* Nova UI · Empty
+/* DomSprig-UI · Empty
  * - 按 data-image 注入内置线性插画（装饰性，aria-hidden）；已有 .nv-empty-image / .nv-empty-icon 时保留作者内容
  * - 没写标题/描述时补上该类型的默认文案；data-title / data-description 或 Nova.empty.texts 可覆盖
  * - data-image / data-title / data-description 变化时自动重绘

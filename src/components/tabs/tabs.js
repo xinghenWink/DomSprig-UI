@@ -1,4 +1,4 @@
-/* Nova UI · Tabs
+/* DomSprig-UI · Tabs
  * 作者只写 .nv-tabs > .nv-tabs-list > .nv-tab[data-value] 与 .nv-tab-panel[data-value]；
  * 本文件补齐 role / id / aria-*、滑动指示器、WAI-ARIA APG 键盘、溢出渐隐与面板淡入。
  *

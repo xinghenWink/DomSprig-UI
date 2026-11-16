@@ -1,4 +1,4 @@
-/* Nova UI · Command 命令面板
+/* DomSprig-UI · Command 命令面板
  * 命令式：const h = Nova.command.open({ items, placeholder, emptyText }); h.close()
  *   items: [{ id, label, group, icon, keywords, shortcut, desc, disabled, onSelect }]
  * 内嵌：<div class="nv-command" data-nv-command> <input class="nv-command-input"> <div class="nv-command-list"> .nv-item[data-value]… </div></div>

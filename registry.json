@@ -1,6 +1,6 @@
 {
   "$schema": "./registry.schema.json",
-  "name": "nova-ui",
+  "name": "domsprig-ui",
   "version": "1.0.0",
   "core": {
     "description": "设计变量、基础样式与运行时，所有组件都需要",

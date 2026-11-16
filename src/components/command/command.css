@@ -1,4 +1,4 @@
-/* Nova UI · Command 命令面板
+/* DomSprig-UI · Command 命令面板
  * 命令式：Nova.command.open({ items, placeholder, emptyText }) → 遮罩 .nv-command-dialog > .nv-command[role=dialog]
  * 内嵌：  <div class="nv-command" data-nv-command> .nv-command-input + .nv-command-list > .nv-item[data-value] </div>
  * 可定制：--nv-command-width（面板宽 640px）  --nv-command-top（面板距顶 12vh）  --nv-command-max-height（列表最大高度）

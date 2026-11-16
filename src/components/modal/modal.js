@@ -1,4 +1,4 @@
-/* Nova UI · Modal 对话框
+/* DomSprig-UI · Modal 对话框
  * 声明式：<div class="nv-modal" id="m1" hidden aria-labelledby="m1-title"><div class="nv-modal-panel">…</div></div>
  *   打开：[data-nv-modal-open="#m1"]；关闭：[data-nv-modal-close] / .nv-modal-close、Esc、点击遮罩（data-static 时不关闭）
  * 命令式：Nova.modal.open(el) / close(el) / toggle(el) / isOpen(el)

@@ -1,4 +1,4 @@
-# Nova UI 组件开发规范
+# DomSprig-UI 组件开发规范
 
 所有组件必须遵守本文。参考实现：`src/components/button/`（CSS + JS + 文档片段）和 `src/core.js`。
 

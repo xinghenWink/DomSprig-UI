@@ -1,4 +1,4 @@
-/* Nova UI · Kbd 键盘按键
+/* DomSprig-UI · Kbd 键盘按键
  * <kbd class="nv-kbd">Ctrl</kbd> + <kbd class="nv-kbd">K</kbd>
  * <span class="nv-kbd-group"><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">K</kbd></span>  紧凑组合
  * <kbd class="nv-kbd" data-keys="mod+shift+p"></kbd>   需 kbd.js：按平台渲染（Mac 显示 ⌘ ⇧，其他显示 Ctrl Shift）

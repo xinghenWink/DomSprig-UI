@@ -1,4 +1,4 @@
-/* Nova UI · Tag
+/* DomSprig-UI · Tag
  * - [data-closable]：追加关闭按钮。点击先派发可取消的 nv:close，未取消则播放退场动画并移除；
  *   data-closable="hide" 时只隐藏（hidden），不移除。
  * - [data-checkable]（建议用 <button>）：点击切换 aria-pressed，派发 nv:change { checked }。

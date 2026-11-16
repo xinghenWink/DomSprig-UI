@@ -1,4 +1,4 @@
-/* Nova UI · Shimmer Button 流光按钮 / 扫光 / 发光
+/* DomSprig-UI · Shimmer Button 流光按钮 / 扫光 / 发光
  * .nv-shimmer           流光按钮：一束光沿边框环绕，表面有高光扫过。可单独使用，也可叠加在 .nv-btn 上
  *   data-size           sm | md | lg（仅单独使用时；叠加 .nv-btn 时沿用按钮尺寸）
  * [data-shine]          扫光：悬停 / 键盘聚焦 / 触屏按下时一道高光扫过，任意容器元素可用（光层由 JS 注入）

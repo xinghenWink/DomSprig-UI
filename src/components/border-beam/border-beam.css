@@ -1,4 +1,4 @@
-/* Nova UI · Border Beam 光束边框 / 流动渐变描边
+/* DomSprig-UI · Border Beam 光束边框 / 流动渐变描边
  * .nv-border-beam         给任意卡片加一束沿边框循环运动的光（光层由 border-beam.js 注入）
  *   data-beams="2"        同时运行的光束数（1–4，均匀错开）
  *   data-reverse          逆时针

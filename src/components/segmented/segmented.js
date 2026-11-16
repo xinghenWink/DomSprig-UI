@@ -1,4 +1,4 @@
-/* Nova UI · Segmented
+/* DomSprig-UI · Segmented
  * 给 .nv-segmented 加一个滑动指示器，跟随选中的 radio 移动；尺寸变化（字体加载、容器缩放）时重新定位。
  * 原生 change 事件照常冒泡；另外在容器上派发 nv:change { value }。
  * 用 JS 改 input.checked 不会触发事件，改完调用 Nova.get(el, 'segmented').refresh()，或用 .value = 'x'。

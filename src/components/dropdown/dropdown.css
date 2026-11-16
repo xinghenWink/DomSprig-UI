@@ -1,4 +1,4 @@
-/* Nova UI · Dropdown 下拉菜单 / 右键菜单
+/* DomSprig-UI · Dropdown 下拉菜单 / 右键菜单
  * <div class="nv-menu" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）与 role="menu"
  *   .nv-item[role=menuitem|menuitemcheckbox|menuitemradio]   菜单项（button 或 a）
  *   .nv-item-kbd           快捷键提示（右对齐）

@@ -1,7 +1,7 @@
-/*! Nova UI v1.0.0 · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */
+/*! DomSprig-UI v1.0.0 · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */
 /* src/core.js */
 /*!
- * Nova UI · Core runtime（无依赖，挂到 window.Nova）
+ * DomSprig-UI · Core runtime（无依赖，挂到 window.Nova）
  * 所有组件共享：注册与自动初始化、浮层定位、浮层栈（Esc / 点击外部）、焦点陷阱、滚动锁定、
  * 列表键盘导航、图标、主题。组件文件只依赖这里的 API。
  */
@@ -607,7 +607,7 @@
 
 ;
 /* src/components/button/button.js */
-/* Nova UI · Button
+/* DomSprig-UI · Button
  * 纯 CSS 即可使用；本文件只提供两项增强：
  * 1. data-ripple：按压水波纹（任意元素可用，事件委托，动态元素自动生效）
  * 2. Nova.button.loading(el, true|false)：切换加载态并同步 aria-busy
@@ -644,7 +644,7 @@
 
 ;
 /* src/components/input/input.js */
-/* Nova UI · Input
+/* DomSprig-UI · Input
  * 增强 <input> 的三项能力（纯外观无需 JS）：
  *   data-clearable                 有内容时显示清除按钮（data-clear-label 覆盖文案）
  *   type="password" data-toggle     显示/隐藏密码（data-show-label / data-hide-label）
@@ -788,7 +788,7 @@
 
 ;
 /* src/components/field/field.js */
-/* Nova UI · Field
+/* DomSprig-UI · Field
  * 自动关联：label[for] ↔ 控件 id；说明 / 错误的 id → 控件 aria-describedby；有错误文字 → aria-invalid="true"。
  * 错误文字可随时改写（textContent / hidden），MutationObserver 自动同步。
  * 控件查找：[data-field-control] 优先，否则取字段内第一个可见输入元素或复合控件。
@@ -899,7 +899,7 @@
 
 ;
 /* src/components/textarea/textarea.js */
-/* Nova UI · Textarea
+/* DomSprig-UI · Textarea
  * data-autosize                 随内容自动增高；data-min-rows（默认取 rows 或 2）/ data-max-rows（超过后出现滚动条）
  * maxlength + data-count         右下角字数统计
  * 实例：Nova.get(el, 'textarea') → { resize, refresh, destroy }；Nova.textarea.resize(el) 脚本改值后调用
@@ -998,7 +998,7 @@
 
 ;
 /* src/components/switch/switch.js */
-/* Nova UI · Switch
+/* DomSprig-UI · Switch
  * 纯 CSS 即可使用；本文件只提供：
  * 1. data-loading 时拦截点击与空格键（保持当前状态），并同步 aria-busy
  * 2. Nova.switch.loading(el, true|false)
@@ -1022,7 +1022,7 @@
 
 ;
 /* src/components/slider/slider.js */
-/* Nova UI · Slider
+/* DomSprig-UI · Slider
  * 单值 input[type=range].nv-slider：包进 .nv-slider-box，写入填充比例、数值气泡、刻度。原生 input / change 照常。
  * 范围 .nv-slider-range：两个 role="slider" 拇指（方向键、Shift ×10、PageUp/Down、Home/End），不会交叉；
  *      data-name 时生成隐藏 input（值 "20,80"）；拖动时派发 input，松手 / 键盘派发 change 与 nv:change（detail.value = [a, b]）。
@@ -1291,7 +1291,7 @@
 
 ;
 /* src/components/segmented/segmented.js */
-/* Nova UI · Segmented
+/* DomSprig-UI · Segmented
  * 给 .nv-segmented 加一个滑动指示器，跟随选中的 radio 移动；尺寸变化（字体加载、容器缩放）时重新定位。
  * 原生 change 事件照常冒泡；另外在容器上派发 nv:change { value }。
  * 用 JS 改 input.checked 不会触发事件，改完调用 Nova.get(el, 'segmented').refresh()，或用 .value = 'x'。
@@ -1350,7 +1350,7 @@
 
 ;
 /* src/components/number-input/number-input.js */
-/* Nova UI · Number Input
+/* DomSprig-UI · Number Input
  * <input type="number" class="nv-number" min="0" max="100" step="1">
  * - 独立的 input 会被包进 .nv-control.nv-number-box；已在 .nv-control 里（带前后缀）则直接增强。
  * - data-controls  stacked（默认，右侧上下箭头）| sides（左减右加）| none
@@ -1559,7 +1559,7 @@
 
 ;
 /* src/components/pin-input/pin-input.js */
-/* Nova UI · Pin Input
+/* DomSprig-UI · Pin Input
  * <input class="nv-pin" name="code" data-length="6" aria-label="验证码">
  * 只有一个真实 input（透明地盖在格子上），所以下面这些都由浏览器原生完成：
  *   表单提交与校验、短信验证码自动填充（autocomplete="one-time-code"）、撤销、读屏朗读。
@@ -1751,7 +1751,7 @@
 
 ;
 /* src/components/avatar/avatar.js */
-/* Nova UI · Avatar
+/* DomSprig-UI · Avatar
  * - data-name：生成文字头像。中文取最后两个字（xs 尺寸取一个），英文取前两个单词的首字母；
  *   色相由名字哈希得出，同名同色。写了 data-color 则不自动配色。
  * - 图片加载失败：回退为文字头像（名字取 data-name 或 img 的 alt），都没有时显示 user 图标。
@@ -1840,7 +1840,7 @@
 
 ;
 /* src/components/tag/tag.js */
-/* Nova UI · Tag
+/* DomSprig-UI · Tag
  * - [data-closable]：追加关闭按钮。点击先派发可取消的 nv:close，未取消则播放退场动画并移除；
  *   data-closable="hide" 时只隐藏（hidden），不移除。
  * - [data-checkable]（建议用 <button>）：点击切换 aria-pressed，派发 nv:change { checked }。
@@ -1946,7 +1946,7 @@
 
 ;
 /* src/components/tag-input/tag-input.js */
-/* Nova UI · Tag Input
+/* DomSprig-UI · Tag Input
  * <div class="nv-tag-input" data-name="tags" data-value="设计,前端" data-placeholder="输入后回车" aria-label="标签"></div>
  * 回车或分隔符（默认逗号，中文逗号同样生效）把输入变成标签；输入框为空时按退格先选中最后一个标签，再按一次删除。
  * 每个标签对应一个隐藏 input[name]，表单提交得到 tags=设计&tags=前端；没有 data-name 时不生成隐藏域。
@@ -2127,7 +2127,7 @@
 
 ;
 /* src/components/rating/rating.js */
-/* Nova UI · Rating
+/* DomSprig-UI · Rating
  * <div class="nv-rating" data-name="score" data-value="3.5" data-half aria-label="评分"></div>
  * 每颗星是一个原生 radio（半星模式左右各一个，值为 n-0.5 和 n），表单提交、方向键、读屏都由浏览器完成。
  * JS 只做三件事：按 data-value 生成 radio、用 --_fill 画填充比例、悬停时预览。
@@ -2283,7 +2283,7 @@
 
 ;
 /* src/components/select/select.js */
-/* Nova UI · Select
+/* DomSprig-UI · Select
  * 增强 <select data-nv-select>：原生 select 保留（视觉隐藏）并双向同步，表单提交与 input/change 事件照常。
  * 单选 / 多选（multiple）、占位、说明（option[data-desc]）、图标（option[data-icon]）、分组（optgroup）、
  * 禁用项、搜索（data-search）、清除（data-clearable）、尺寸（data-size）、错误（aria-invalid）、禁用。
@@ -2722,7 +2722,7 @@
 
 ;
 /* src/components/combobox/combobox.js */
-/* Nova UI · Combobox 自动补全
+/* DomSprig-UI · Combobox 自动补全
  * <input class="nv-combobox" list="cities" aria-label="城市">  +  <datalist id="cities"><option value="北京">首都</option></datalist>
  * 增强后 input 包进 .nv-control.nv-combobox-box，浏览器原生的 datalist 下拉换成 .nv-panel 建议面板。
  * 按 option 的 value 做不区分大小写的包含匹配，匹配段加粗；option 的文字或 label 作为右侧说明，data-icon 显示图标。
@@ -3001,7 +3001,7 @@
 
 ;
 /* src/components/datepicker/datepicker.js */
-/* Nova UI · DatePicker
+/* DomSprig-UI · DatePicker
  * <input type="date" data-nv-date>             日期        值 YYYY-MM-DD
  * <input type="datetime-local" data-nv-date>   日期时间    值 YYYY-MM-DDTHH:mm（本地时间）
  * <input data-nv-date-range name="period">     日期范围    值 YYYY-MM-DD/YYYY-MM-DD（ISO 8601 区间）
@@ -3821,7 +3821,7 @@
 
 ;
 /* src/components/upload/upload.js */
-/* Nova UI · Upload 文件上传
+/* DomSprig-UI · Upload 文件上传
  * <div class="nv-upload" data-multiple data-accept="image/*" data-max-size="5MB" data-max-count="3"></div>
  * 容器里没有触发器时自动生成拖拽区；放一个 <button> 则点按钮选择文件，同时放 .nv-upload-dragger 则两者都可用。
  * 支持点击选择、拖拽、在拖拽区获得焦点时粘贴（Ctrl+V 截图）。
@@ -4168,7 +4168,7 @@
 
 ;
 /* src/components/pagination/pagination.js */
-/* Nova UI · Pagination
+/* DomSprig-UI · Pagination
  * 声明式：<nav class="nv-pagination" data-total="250" data-page="1" data-page-size="10"></nav>（自动渲染）
  * 命令式：const p = Nova.pagination(el, { total, page, pageSize, onChange })
  * 页码算法：首尾各保留 boundaries 个页码，当前页两侧各 siblings 个，其余折叠为省略号（点击省略号跳 siblings*2+3 页）。
@@ -4483,7 +4483,7 @@
 
 ;
 /* src/components/table/table.js */
-/* Nova UI · Table（数据表格）
+/* DomSprig-UI · Table（数据表格）
  * 纯 CSS 用法无需本文件：<div class="nv-table-wrap"><table class="nv-table" data-hover>…</table></div>
  * JS 用法：const t = Nova.table(el, { columns, data, rowKey, selectable, pagination, … })
  *   排序（三态、aria-sort）· 勾选（表头半选、跨页保持、Shift 连选、「已选 N 项」操作栏）· 分页（pagination 组件）
@@ -5182,7 +5182,7 @@
 
 ;
 /* src/components/number-ticker/number-ticker.js */
-/* Nova UI · Number Ticker
+/* DomSprig-UI · Number Ticker
  * <span data-nv-ticker data-value="12890" data-from="0" data-duration="1600" data-decimals="0" data-prefix="¥" data-suffix="+">
  * - 进入视口（Nova.inView）时开始；计数模式用 rAF，结束即停止；里程表模式只切换 transform（CSS 过渡）。
  * - 格式化：Intl.NumberFormat（data-locale，默认 zh-CN，千分位；data-notation="compact" 得到「1.3万」）。
@@ -5391,7 +5391,7 @@
 
 ;
 /* src/components/stat/stat.js */
-/* Nova UI · Stat 迷你走势图
+/* DomSprig-UI · Stat 迷你走势图
  * <svg class="nv-stat-spark" data-values="3 5 4 8 7 9" data-type="area" data-animate></svg>
  * data-values  数字，空格或逗号分隔
  * data-type    line | area（默认）
@@ -5480,7 +5480,7 @@
 
 ;
 /* src/components/accordion/accordion.js */
-/* Nova UI · Accordion
+/* DomSprig-UI · Accordion
  * 基于原生 <details>/<summary>：没有脚本也能展开收起。本文件增强：
  * - 平滑高度动画（Web Animations；减少动态时直接切换）
  * - 默认单开（data-multiple 允许多开）、禁用项、↑ ↓ Home End 在标题间移动焦点
@@ -5684,7 +5684,7 @@
 
 ;
 /* src/components/kbd/kbd.js */
-/* Nova UI · Kbd
+/* DomSprig-UI · Kbd
  * <kbd class="nv-kbd" data-keys="mod+k"></kbd> → 按平台拆成多个按键：
  *   Mac：⌘ K    其他：Ctrl K（mod / ctrl / alt / shift / enter / esc / 方向键等有对应写法）
  * 结果是 <span class="nv-kbd-group"><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">K</kbd></span>，
@@ -5728,7 +5728,7 @@
 
 ;
 /* src/components/alert/alert.js */
-/* Nova UI · Alert
+/* DomSprig-UI · Alert
  * 自动增强 .nv-alert：
  * - 按 data-color 插入默认图标（data-icon="none" 关闭，data-icon="bell" 换成其它图标）；
  * - 补齐 role：danger / warning → alert（立即播报），其它 → status（礼貌播报）；已写 role 的保持不变；
@@ -5880,7 +5880,7 @@
 
 ;
 /* src/components/progress/progress.js */
-/* Nova UI · Progress
+/* DomSprig-UI · Progress
  * 增强 .nv-progress（线性）与 .nv-progress-circle（环形）：
  * - 写入 role="progressbar"、aria-valuemin/max/now（不确定态移除 valuenow）与 --value；
  * - 同一 .nv-progress-field 内的 .nv-progress-label 自动关联为 aria-labelledby，.nv-progress-value 自动显示数值（数字滚动过渡）；
@@ -6130,7 +6130,7 @@
 
 ;
 /* src/components/toast/toast.js */
-/* Nova UI · Toast —— 轻量、非阻断的操作反馈
+/* DomSprig-UI · Toast —— 轻量、非阻断的操作反馈
  * Nova.toast('已保存')                         Nova.toast.success('已保存') / .error / .warning / .info / .loading
  * Nova.toast.show({ title, description, type, duration, position, id, closable, action: { label, onClick }, icon, onClose })
  * const t = Nova.toast.loading('上传中…'); t.update({ type: 'success', title: '上传完成' }); t.dismiss()
@@ -6439,7 +6439,7 @@
 
 ;
 /* src/components/spinner/spinner.js */
-/* Nova UI · Spinner / Loader
+/* DomSprig-UI · Spinner / Loader
  * 1. .nv-loader：自动补齐动画所需的子元素；没有名称时补 role="status" 与 aria-label（data-label 覆盖，默认「加载中」）。
  * 2. Nova.loading(container, { text, desc, fullscreen }) → { update(text), hide() }
  *    在容器上盖加载遮罩（容器会被设为 position:relative 与 aria-busy="true"），返回控制对象。
@@ -6543,7 +6543,7 @@
 
 ;
 /* src/components/skeleton/skeleton.js */
-/* Nova UI · Skeleton
+/* DomSprig-UI · Skeleton
  * 纯 CSS 即可使用；本文件提供：
  * 1. data-lines="N" 生成 N 行文本占位；data-width / data-height / data-size(数字) / data-ratio 写入尺寸变量
  * 2. 占位骨架自动加 aria-hidden="true"（包裹模式除外）
@@ -6670,7 +6670,7 @@
 
 ;
 /* src/components/empty/empty.js */
-/* Nova UI · Empty
+/* DomSprig-UI · Empty
  * - 按 data-image 注入内置线性插画（装饰性，aria-hidden）；已有 .nv-empty-image / .nv-empty-icon 时保留作者内容
  * - 没写标题/描述时补上该类型的默认文案；data-title / data-description 或 Nova.empty.texts 可覆盖
  * - data-image / data-title / data-description 变化时自动重绘
@@ -6815,7 +6815,7 @@
 
 ;
 /* src/components/modal/modal.js */
-/* Nova UI · Modal 对话框
+/* DomSprig-UI · Modal 对话框
  * 声明式：<div class="nv-modal" id="m1" hidden aria-labelledby="m1-title"><div class="nv-modal-panel">…</div></div>
  *   打开：[data-nv-modal-open="#m1"]；关闭：[data-nv-modal-close] / .nv-modal-close、Esc、点击遮罩（data-static 时不关闭）
  * 命令式：Nova.modal.open(el) / close(el) / toggle(el) / isOpen(el)
@@ -7079,7 +7079,7 @@
 
 ;
 /* src/components/drawer/drawer.js */
-/* Nova UI · Drawer 抽屉
+/* DomSprig-UI · Drawer 抽屉
  * 与 Modal 共用同一套模态内核（Nova.modal._register）：焦点陷阱、滚动锁定、Esc / 遮罩关闭、嵌套、还焦、退场动画。
  * <div class="nv-drawer" id="d1" data-side="right" hidden aria-labelledby="d1-title"><div class="nv-drawer-panel">…</div></div>
  * 打开：[data-nv-drawer-open="#d1"] 或 Nova.drawer.open(el)；关闭：[data-nv-drawer-close] / .nv-drawer-close、Esc、遮罩
@@ -7092,7 +7092,7 @@
 
 ;
 /* src/components/popover/popover.js */
-/* Nova UI · Popover 弹出层
+/* DomSprig-UI · Popover 弹出层
  * <button data-nv-popover="#pop1" data-placement="bottom" data-arrow>…</button>
  * <div class="nv-popover" id="pop1" hidden>任意可交互内容 <button data-nv-popover-close>…</button></div>
  * data-trigger="click|hover"（hover：带开关延迟，鼠标可移入面板；点击 / 键盘聚焦同样可用）
@@ -7271,7 +7271,7 @@
 
 ;
 /* src/components/tooltip/tooltip.js */
-/* Nova UI · Tooltip
+/* DomSprig-UI · Tooltip
  * 事件委托，无需初始化：任意元素加 data-tip="说明" 即可，动态渲染的内容也自动生效。
  * - 悬停 / 键盘聚焦 300ms 后显示（data-tip-delay 覆盖）；刚关闭 500ms 内移到下一个目标立即显示。
  * - 移出、失焦、Esc、按下、滚动、缩放时立即隐藏；全页只有一个提示节点（role=tooltip）。
@@ -7456,7 +7456,7 @@
 
 ;
 /* src/components/dropdown/dropdown.js */
-/* Nova UI · Dropdown 下拉菜单（WAI-ARIA APG Menu Button）
+/* DomSprig-UI · Dropdown 下拉菜单（WAI-ARIA APG Menu Button）
  * <button data-nv-dropdown="#m1">操作</button>
  * <div class="nv-menu" id="m1" hidden>
  *   <div class="nv-panel-label">分组标题</div>
@@ -7873,7 +7873,7 @@
 
 ;
 /* src/components/command/command.js */
-/* Nova UI · Command 命令面板
+/* DomSprig-UI · Command 命令面板
  * 命令式：const h = Nova.command.open({ items, placeholder, emptyText }); h.close()
  *   items: [{ id, label, group, icon, keywords, shortcut, desc, disabled, onSelect }]
  * 内嵌：<div class="nv-command" data-nv-command> <input class="nv-command-input"> <div class="nv-command-list"> .nv-item[data-value]… </div></div>
@@ -8404,7 +8404,7 @@
 
 ;
 /* src/components/breadcrumb/breadcrumb.js */
-/* Nova UI · Breadcrumb
+/* DomSprig-UI · Breadcrumb
  * - 最后一项没有 aria-current 时自动补上（最后一个 li 里的链接或文字视为当前页）。
  * - data-max="N"：项目数超过 N 时保留第一项和最后 N-2 项，中间折叠成「…」按钮。
  *   有 Dropdown 组件时点开是菜单（被折叠的链接依次列出）；没有时点击直接展开全部。
@@ -8487,7 +8487,7 @@
 
 ;
 /* src/components/tabs/tabs.js */
-/* Nova UI · Tabs
+/* DomSprig-UI · Tabs
  * 作者只写 .nv-tabs > .nv-tabs-list > .nv-tab[data-value] 与 .nv-tab-panel[data-value]；
  * 本文件补齐 role / id / aria-*、滑动指示器、WAI-ARIA APG 键盘、溢出渐隐与面板淡入。
  *
@@ -8726,7 +8726,7 @@
 
 ;
 /* src/components/steps/steps.js */
-/* Nova UI · Steps
+/* DomSprig-UI · Steps
  * 整理结构（图标 + 文字）、推导状态、可点击切换、窄屏自动转纵向。
  * 根元素配置：data-current（从 0 开始；等于步骤数表示全部完成）· data-current-status="error"
  *            data-clickable（"" 全部可点 | "finished" 只能回到已完成步骤）· data-responsive="false" 关闭自动纵向
@@ -8922,7 +8922,7 @@
 
 ;
 /* src/components/shimmer-button/shimmer-button.js */
-/* Nova UI · Shimmer Button
+/* DomSprig-UI · Shimmer Button
  * .nv-shimmer 与 [data-glow] 是纯 CSS；本文件只为 [data-shine] 注入装饰光层：
  * <span class="nv-shine" aria-hidden="true"></span>（放在元素末尾，不参与布局，不影响读屏）
  */
@@ -8942,7 +8942,7 @@
 
 ;
 /* src/components/border-beam/border-beam.js */
-/* Nova UI · Border Beam
+/* DomSprig-UI · Border Beam
  * 为 .nv-border-beam 注入装饰层（aria-hidden）：
  * <span class="nv-border-beam-track"><span class="nv-border-beam-light"></span>…</span>
  * - 读取卡片圆角，让光束路径与边框贴合（ResizeObserver 触发时重新读取，兼容隐藏容器内初始化）
@@ -8991,7 +8991,7 @@
 
 ;
 /* src/components/spotlight/spotlight.js */
-/* Nova UI · Spotlight
+/* DomSprig-UI · Spotlight
  * - 单张 .nv-spotlight：监听自身指针。
  * - .nv-spotlight-group：监听容器，一帧内先批量读取所有卡片位置、再批量写入 --_x/--_y，避免读写交错导致布局抖动。
  * - 指针移动与滚动都用 rAF 合并为每帧一次。
@@ -9055,7 +9055,7 @@
 
 ;
 /* src/components/tilt/tilt.js */
-/* Nova UI · Tilt / Magnetic
+/* DomSprig-UI · Tilt / Magnetic
  * 两者都用同一个阻尼弹簧在 rAF 中积分：指针静止且弹簧到位后循环立即停止，离开时弹回原位。
  * - 倾斜写 transform（复位后清空，恢复元素原有样式）；磁吸写独立的 translate 属性，可与 transform 叠加。
  * - 每帧先读位置、后写样式；触屏指针与减少动态时不做任何运动。
@@ -9255,7 +9255,7 @@
 
 ;
 /* src/components/text-fx/text-fx.js */
-/* Nova UI · Text FX
+/* DomSprig-UI · Text FX
  * 拆分类特效（blur-in / scramble）共用一个模式：动画期间把原文节点暂存起来，显示拆分后的副本（aria-hidden），
  * 并放一份 .nv-sr-only 原文供读屏；动画结束后把原始节点放回去，DOM 恢复成作者写的样子（字距、换行、选中复制都正常）。
  * 打字机 / 轮换：读屏读 .nv-sr-only 中的完整文案（或 data-label），动画层 aria-hidden。
@@ -9546,7 +9546,7 @@
 
 ;
 /* src/components/marquee/marquee.js */
-/* Nova UI · Marquee
+/* DomSprig-UI · Marquee
  * - 首次初始化把子元素包进 .nv-marquee-track > .nv-marquee-group（也可以自己写好这两层）。
  * - ResizeObserver 在可见时测量：副本数 = ceil(容器 / 一组) + 1，至少 2 份；副本 aria-hidden + inert，并去掉 id。
  * - data-speed（px/s）按一组的长度换算动画时长。离开视口时暂停（data-paused）。
@@ -9612,7 +9612,7 @@
 
 ;
 /* src/components/confetti/confetti.js */
-/* Nova UI · Confetti 彩带
+/* DomSprig-UI · Confetti 彩带
  * Nova.confetti({ x, y, particleCount, spread, angle, velocity, gravity, drag, scalar, colors, shapes }) → Promise
  *   x / y 是视口比例（0–1），默认 0.5 / 0.6（屏幕中央偏下）；angle 90 表示朝上，spread 为扇形张角（度）。
  * Nova.confetti.burst(el, opts)   从元素中心喷出（颜色读取该元素所在处的 --nv-hue）
@@ -9829,7 +9829,7 @@
 
 ;
 /* src/components/backdrop/backdrop.js */
-/* Nova UI · Backdrop
+/* DomSprig-UI · Backdrop
  * [data-nv-meteors="12"]  生成 12 颗流星（.nv-meteor，aria-hidden）；起点、时长、延迟随机，
  *                         飞行距离按容器尺寸计算（ResizeObserver 更新）；离开视口暂停（data-paused）。
  *                         可选 data-speed（时长倍率，默认 1，越大越慢）。实例方法：refresh() / destroy()

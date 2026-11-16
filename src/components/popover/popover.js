@@ -1,4 +1,4 @@
-/* Nova UI · Popover 弹出层
+/* DomSprig-UI · Popover 弹出层
  * <button data-nv-popover="#pop1" data-placement="bottom" data-arrow>…</button>
  * <div class="nv-popover" id="pop1" hidden>任意可交互内容 <button data-nv-popover-close>…</button></div>
  * data-trigger="click|hover"（hover：带开关延迟，鼠标可移入面板；点击 / 键盘聚焦同样可用）

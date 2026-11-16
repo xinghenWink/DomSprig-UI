@@ -1,4 +1,4 @@
-/* Nova UI · Spotlight 聚光卡片
+/* DomSprig-UI · Spotlight 聚光卡片
  * .nv-spotlight            卡片：指针处出现柔和光斑，同时附近的边框被照亮
  * .nv-spotlight-group      容器：内部所有 .nv-spotlight 共享同一个光源（光标附近的卡片边框都会亮起）
  * 可定制：--nv-spotlight-color（光色）--nv-spotlight-size（光斑直径）--nv-spotlight-bg（卡片底色）

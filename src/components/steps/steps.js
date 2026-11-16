@@ -1,4 +1,4 @@
-/* Nova UI · Steps
+/* DomSprig-UI · Steps
  * 整理结构（图标 + 文字）、推导状态、可点击切换、窄屏自动转纵向。
  * 根元素配置：data-current（从 0 开始；等于步骤数表示全部完成）· data-current-status="error"
  *            data-clickable（"" 全部可点 | "finished" 只能回到已完成步骤）· data-responsive="false" 关闭自动纵向

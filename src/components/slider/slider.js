@@ -1,4 +1,4 @@
-/* Nova UI · Slider
+/* DomSprig-UI · Slider
  * 单值 input[type=range].nv-slider：包进 .nv-slider-box，写入填充比例、数值气泡、刻度。原生 input / change 照常。
  * 范围 .nv-slider-range：两个 role="slider" 拇指（方向键、Shift ×10、PageUp/Down、Home/End），不会交叉；
  *      data-name 时生成隐藏 input（值 "20,80"）；拖动时派发 input，松手 / 键盘派发 change 与 nv:change（detail.value = [a, b]）。

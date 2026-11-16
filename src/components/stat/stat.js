@@ -1,4 +1,4 @@
-/* Nova UI · Stat 迷你走势图
+/* DomSprig-UI · Stat 迷你走势图
  * <svg class="nv-stat-spark" data-values="3 5 4 8 7 9" data-type="area" data-animate></svg>
  * data-values  数字，空格或逗号分隔
  * data-type    line | area（默认）

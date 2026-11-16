@@ -1,4 +1,4 @@
-/* Nova UI · Tag 标签
+/* DomSprig-UI · Tag 标签
  * 与 Badge 的区别：Tag 是可交互的「内容标签」，可关闭、可选中，能带图标或头像；Badge 只做状态标记。
  * <span class="nv-tag">设计</span>
  * <span class="nv-tag" data-closable>可关闭</span>                    需 tag.js：追加关闭按钮

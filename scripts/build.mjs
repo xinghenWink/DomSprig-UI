@@ -19,7 +19,7 @@ export function buildPreview(names) {
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(names.join(', '))} · Nova UI 预览</title>
+<title>${esc(names.join(', '))} · DomSprig-UI 预览</title>
 ${THEME_BOOT}
 ${css}
 <link rel="stylesheet" href="../docs/docs.css">
@@ -41,7 +41,7 @@ ${pages.join('\n')}
 function buildAll() {
   const all = loadComponents();
   const ordered = resolve(all.map((c) => c.name), all);
-  const banner = `/*! Nova UI v${pkg.version} · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */\n`;
+  const banner = `/*! DomSprig-UI v${pkg.version} · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */\n`;
 
   // 1. 全量包
   mkdirSync(join(ROOT, 'dist'), { recursive: true });
@@ -53,7 +53,7 @@ function buildAll() {
   // 2. Registry（shadcn 式：按名称取源码，自动带上依赖）
   const registry = {
     $schema: './registry.schema.json',
-    name: 'nova-ui',
+    name: pkg.name,
     version: pkg.version,
     core: { description: '设计变量、基础样式与运行时，所有组件都需要', files: CORE_FILES },
     items: ordered.map((c) => ({
@@ -104,7 +104,7 @@ function buildAll() {
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nova UI · 组件库</title>
+<title>DomSprig-UI · 组件库</title>
 <meta name="description" content="零依赖、源码分发的现代 UI 组件库">
 ${THEME_BOOT}
 <link rel="stylesheet" href="../dist/nova.css">
@@ -115,7 +115,7 @@ ${THEME_BOOT}
 <a class="doc-skip" href="#doc-main">跳到正文</a>
 <header class="doc-header">
   <button type="button" class="doc-menu-btn" aria-label="打开导航" aria-expanded="false">${'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>'}</button>
-  <a class="doc-logo" href="#/"><span class="doc-logo-mark" aria-hidden="true"></span>Nova UI<span class="doc-version">v${pkg.version}</span></a>
+  <a class="doc-logo" href="#/"><span class="doc-logo-mark" aria-hidden="true"></span>DomSprig-UI<span class="doc-version">v${pkg.version}</span></a>
   <button type="button" class="doc-search" data-doc-search><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>搜索组件…</span><kbd>Ctrl K</kbd></button>
   <div class="doc-header-actions">
     <div class="doc-hues" role="radiogroup" aria-label="主色"></div>

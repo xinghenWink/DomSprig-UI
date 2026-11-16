@@ -1,4 +1,4 @@
-/* Nova UI · Pagination
+/* DomSprig-UI · Pagination
  * 声明式：<nav class="nv-pagination" data-total="250" data-page="1" data-page-size="10"></nav>（自动渲染）
  * 命令式：const p = Nova.pagination(el, { total, page, pageSize, onChange })
  * 页码算法：首尾各保留 boundaries 个页码，当前页两侧各 siblings 个，其余折叠为省略号（点击省略号跳 siblings*2+3 页）。

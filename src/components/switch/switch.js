@@ -1,4 +1,4 @@
-/* Nova UI · Switch
+/* DomSprig-UI · Switch
  * 纯 CSS 即可使用；本文件只提供：
  * 1. data-loading 时拦截点击与空格键（保持当前状态），并同步 aria-busy
  * 2. Nova.switch.loading(el, true|false)

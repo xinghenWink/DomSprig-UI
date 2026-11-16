@@ -1,4 +1,4 @@
-/* Nova UI · Progress
+/* DomSprig-UI · Progress
  * 增强 .nv-progress（线性）与 .nv-progress-circle（环形）：
  * - 写入 role="progressbar"、aria-valuemin/max/now（不确定态移除 valuenow）与 --value；
  * - 同一 .nv-progress-field 内的 .nv-progress-label 自动关联为 aria-labelledby，.nv-progress-value 自动显示数值（数字滚动过渡）；

@@ -1,4 +1,4 @@
-/* Nova UI · Pin Input
+/* DomSprig-UI · Pin Input
  * <input class="nv-pin" name="code" data-length="6" aria-label="验证码">
  * 只有一个真实 input（透明地盖在格子上），所以下面这些都由浏览器原生完成：
  *   表单提交与校验、短信验证码自动填充（autocomplete="one-time-code"）、撤销、读屏朗读。

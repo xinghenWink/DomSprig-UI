@@ -1,4 +1,4 @@
-/* Nova UI · Rating
+/* DomSprig-UI · Rating
  * <div class="nv-rating" data-name="score" data-value="3.5" data-half aria-label="评分"></div>
  * 每颗星是一个原生 radio（半星模式左右各一个，值为 n-0.5 和 n），表单提交、方向键、读屏都由浏览器完成。
  * JS 只做三件事：按 data-value 生成 radio、用 --_fill 画填充比例、悬停时预览。

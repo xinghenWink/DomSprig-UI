@@ -2,7 +2,7 @@
 //
 //   node scripts/add.mjs --list                          列出全部组件
 //   node scripts/add.mjs select toast                    复制到 ./nova（默认）
-//   node scripts/add.mjs select --out ../app/src/ui/nova 指定目录
+//   node scripts/add.mjs select --out ../app/src/ui/domsprig-ui 指定目录
 //   node scripts/add.mjs --all --bundle                  全部组件，并额外合并出 nova.css / nova.js
 //   --force                                              覆盖已存在的文件（默认跳过，保护你的修改）
 import { mkdirSync, copyFileSync, existsSync, writeFileSync, readFileSync } from 'node:fs';
@@ -56,7 +56,7 @@ for (const c of comps) for (const f of c.files) copy(f, outName(f));
 // 入口文件：按依赖顺序引入（不覆盖：重复执行 add 时追加新组件）
 const files = [...CORE_FILES, ...comps.flatMap((c) => c.files)].map(outName);
 const cssEntry = join(outDir, 'nova.css');
-const prevCss = existsSync(cssEntry) ? readFileSync(cssEntry, 'utf8') : '/* Nova UI 样式入口（由 add.mjs 维护，可手动增删） */\n';
+const prevCss = existsSync(cssEntry) ? readFileSync(cssEntry, 'utf8') : '/* DomSprig-UI 样式入口（由 add.mjs 维护，可手动增删） */\n';
 const cssLines = files.filter((f) => f.endsWith('.css')).map((f) => `@import "./${f}";`).filter((l) => !prevCss.includes(l));
 writeFileSync(cssEntry, prevCss + (cssLines.length ? `${cssLines.join('\n')}\n` : ''));
 

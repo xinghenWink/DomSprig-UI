@@ -1,4 +1,4 @@
-/* Nova UI · Dropdown 下拉菜单（WAI-ARIA APG Menu Button）
+/* DomSprig-UI · Dropdown 下拉菜单（WAI-ARIA APG Menu Button）
  * <button data-nv-dropdown="#m1">操作</button>
  * <div class="nv-menu" id="m1" hidden>
  *   <div class="nv-panel-label">分组标题</div>

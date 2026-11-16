@@ -1,4 +1,4 @@
-/* Nova UI · Textarea 多行输入
+/* DomSprig-UI · Textarea 多行输入
  * <textarea class="nv-textarea" rows="3"></textarea>       外观、聚焦、错误、禁用与 .nv-control 一致
  * data-size="sm|md|lg"   data-variant="filled"   aria-invalid="true"   disabled   readonly
  * 需要 textarea.js：data-autosize（data-min-rows / data-max-rows）· maxlength + data-count 右下角字数

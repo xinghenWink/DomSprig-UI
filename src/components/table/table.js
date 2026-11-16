@@ -1,4 +1,4 @@
-/* Nova UI · Table（数据表格）
+/* DomSprig-UI · Table（数据表格）
  * 纯 CSS 用法无需本文件：<div class="nv-table-wrap"><table class="nv-table" data-hover>…</table></div>
  * JS 用法：const t = Nova.table(el, { columns, data, rowKey, selectable, pagination, … })
  *   排序（三态、aria-sort）· 勾选（表头半选、跨页保持、Shift 连选、「已选 N 项」操作栏）· 分页（pagination 组件）

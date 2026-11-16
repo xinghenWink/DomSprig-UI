@@ -1,4 +1,4 @@
-/* Nova UI · Popover 弹出层
+/* DomSprig-UI · Popover 弹出层
  * <div class="nv-popover" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）
  *   .nv-popover-title / .nv-popover-desc / .nv-popover-footer   可选的内容部件
  *   .nv-popover-arrow                                           data-arrow 时自动插入

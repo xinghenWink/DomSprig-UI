@@ -1,4 +1,4 @@
-/* Nova UI · Textarea
+/* DomSprig-UI · Textarea
  * data-autosize                 随内容自动增高；data-min-rows（默认取 rows 或 2）/ data-max-rows（超过后出现滚动条）
  * maxlength + data-count         右下角字数统计
  * 实例：Nova.get(el, 'textarea') → { resize, refresh, destroy }；Nova.textarea.resize(el) 脚本改值后调用

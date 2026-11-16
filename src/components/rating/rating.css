@@ -1,4 +1,4 @@
-/* Nova UI · Rating 评分
+/* DomSprig-UI · Rating 评分
  * <div class="nv-rating" data-name="score" data-value="3" aria-label="评分"></div>   需 rating.js
  * 每个星是一个原生 radio，表单提交和方向键照常工作；JS 只负责半星的视觉裁切和悬停预览。
  * data-max     几颗星，默认 5

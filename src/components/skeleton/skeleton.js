@@ -1,4 +1,4 @@
-/* Nova UI · Skeleton
+/* DomSprig-UI · Skeleton
  * 纯 CSS 即可使用；本文件提供：
  * 1. data-lines="N" 生成 N 行文本占位；data-width / data-height / data-size(数字) / data-ratio 写入尺寸变量
  * 2. 占位骨架自动加 aria-hidden="true"（包裹模式除外）

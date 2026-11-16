@@ -1,4 +1,4 @@
-/* Nova UI · Segmented 分段控制器
+/* DomSprig-UI · Segmented 分段控制器
  * 基于原生 radio：表单提交、方向键切换、读屏都按 radio 组工作。
  * <div class="nv-segmented" role="radiogroup" aria-label="视图">
  *   <label><input type="radio" name="view" value="list" checked><i data-nv-icon="list"></i>列表</label>

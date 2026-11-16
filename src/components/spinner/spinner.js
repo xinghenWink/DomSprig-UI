@@ -1,4 +1,4 @@
-/* Nova UI · Spinner / Loader
+/* DomSprig-UI · Spinner / Loader
  * 1. .nv-loader：自动补齐动画所需的子元素；没有名称时补 role="status" 与 aria-label（data-label 覆盖，默认「加载中」）。
  * 2. Nova.loading(container, { text, desc, fullscreen }) → { update(text), hide() }
  *    在容器上盖加载遮罩（容器会被设为 position:relative 与 aria-busy="true"），返回控制对象。

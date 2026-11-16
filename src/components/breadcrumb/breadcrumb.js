@@ -1,4 +1,4 @@
-/* Nova UI · Breadcrumb
+/* DomSprig-UI · Breadcrumb
  * - 最后一项没有 aria-current 时自动补上（最后一个 li 里的链接或文字视为当前页）。
  * - data-max="N"：项目数超过 N 时保留第一项和最后 N-2 项，中间折叠成「…」按钮。
  *   有 Dropdown 组件时点开是菜单（被折叠的链接依次列出）；没有时点击直接展开全部。

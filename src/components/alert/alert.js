@@ -1,4 +1,4 @@
-/* Nova UI · Alert
+/* DomSprig-UI · Alert
  * 自动增强 .nv-alert：
  * - 按 data-color 插入默认图标（data-icon="none" 关闭，data-icon="bell" 换成其它图标）；
  * - 补齐 role：danger / warning → alert（立即播报），其它 → status（礼貌播报）；已写 role 的保持不变；

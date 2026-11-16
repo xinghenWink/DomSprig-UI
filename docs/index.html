@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nova UI · 组件库</title>
+<title>DomSprig-UI · 组件库</title>
 <meta name="description" content="零依赖、源码分发的现代 UI 组件库">
 <script>(function(){try{var q=new URLSearchParams(location.search),d=document.documentElement,t=q.get('theme')||localStorage.getItem('nova-theme');if(t&&t!=='system')d.dataset.theme=t;var h=q.get('hue')||localStorage.getItem('nova-hue');if(h)d.style.setProperty('--nv-hue',h);var r=q.get('radius')||localStorage.getItem('nova-radius');if(r)d.style.setProperty('--nv-radius',r+'px');if(q.has('motion'))d.dataset.motion=q.get('motion')}catch(e){}})();</script>
 <link rel="stylesheet" href="../dist/nova.css">
@@ -13,7 +13,7 @@
 <a class="doc-skip" href="#doc-main">跳到正文</a>
 <header class="doc-header">
   <button type="button" class="doc-menu-btn" aria-label="打开导航" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-  <a class="doc-logo" href="#/"><span class="doc-logo-mark" aria-hidden="true"></span>Nova UI<span class="doc-version">v1.0.0</span></a>
+  <a class="doc-logo" href="#/"><span class="doc-logo-mark" aria-hidden="true"></span>DomSprig-UI<span class="doc-version">v1.0.0</span></a>
   <button type="button" class="doc-search" data-doc-search><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>搜索组件…</span><kbd>Ctrl K</kbd></button>
   <div class="doc-header-actions">
     <div class="doc-hues" role="radiogroup" aria-label="主色"></div>
@@ -37,7 +37,7 @@
     <a class="nv-btn nv-shimmer" data-size="lg" href="#/button">浏览组件<i data-nv-icon="arrow-right"></i></a>
     <a class="nv-btn" data-variant="outline" data-size="lg" href="#quickstart" data-doc-scroll>快速开始</a>
   </div>
-  <div class="doc-hero-install"><code>node scripts/add.mjs select toast --out src/ui/nova</code></div>
+  <div class="doc-hero-install"><code>node scripts/add.mjs select toast --out src/ui/domsprig-ui</code></div>
 </div>
 
 <div class="doc-stats">
@@ -557,7 +557,7 @@
   </nav>
   <div class="doc-stack" style="gap:10px; min-width:240px">
     <h4 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px">智能摘要 <span class="nv-badge" data-variant="solid" data-size="sm">新</span></h4>
-    <h4 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px">Nova UI <span class="nv-badge" data-variant="outline" data-shape="square" data-size="sm">v2.4.0</span></h4>
+    <h4 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px">DomSprig-UI <span class="nv-badge" data-variant="outline" data-shape="square" data-size="sm">v2.4.0</span></h4>
     <div class="badge-demo-plan">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
         <strong>专业版</strong><span class="nv-badge" data-color="primary" data-variant="surface"><i data-nv-icon="zap"></i>最受欢迎</span>
@@ -587,7 +587,7 @@
   <span class="tk-p">&lt;/</span><span class="tk-t">nav</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;doc-stack&quot;</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;gap:10px; min-width:240px&quot;</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">h4</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;margin:0; display:flex; align-items:center; gap:8px; font-size:16px&quot;</span><span class="tk-p">&gt;</span>智能摘要 <span class="tk-p">&lt;</span><span class="tk-t">span</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-badge&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;solid&quot;</span> <span class="tk-a">data-size</span>=<span class="tk-s">&quot;sm&quot;</span><span class="tk-p">&gt;</span>新<span class="tk-p">&lt;/</span><span class="tk-t">span</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">h4</span><span class="tk-p">&gt;</span>
-    <span class="tk-p">&lt;</span><span class="tk-t">h4</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;margin:0; display:flex; align-items:center; gap:8px; font-size:16px&quot;</span><span class="tk-p">&gt;</span>Nova UI <span class="tk-p">&lt;</span><span class="tk-t">span</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-badge&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;outline&quot;</span> <span class="tk-a">data-shape</span>=<span class="tk-s">&quot;square&quot;</span> <span class="tk-a">data-size</span>=<span class="tk-s">&quot;sm&quot;</span><span class="tk-p">&gt;</span>v2.4.0<span class="tk-p">&lt;/</span><span class="tk-t">span</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">h4</span><span class="tk-p">&gt;</span>
+    <span class="tk-p">&lt;</span><span class="tk-t">h4</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;margin:0; display:flex; align-items:center; gap:8px; font-size:16px&quot;</span><span class="tk-p">&gt;</span>DomSprig-UI <span class="tk-p">&lt;</span><span class="tk-t">span</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-badge&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;outline&quot;</span> <span class="tk-a">data-shape</span>=<span class="tk-s">&quot;square&quot;</span> <span class="tk-a">data-size</span>=<span class="tk-s">&quot;sm&quot;</span><span class="tk-p">&gt;</span>v2.4.0<span class="tk-p">&lt;/</span><span class="tk-t">span</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">h4</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;badge-demo-plan&quot;</span><span class="tk-p">&gt;</span>
       <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;display:flex; align-items:center; justify-content:space-between; gap:8px&quot;</span><span class="tk-p">&gt;</span>
         <span class="tk-p">&lt;</span><span class="tk-t">strong</span><span class="tk-p">&gt;</span>专业版<span class="tk-p">&lt;/</span><span class="tk-t">strong</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">span</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-badge&quot;</span> <span class="tk-a">data-color</span>=<span class="tk-s">&quot;primary&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;surface&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">i</span> <span class="tk-a">data-nv-icon</span>=<span class="tk-s">&quot;zap&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">i</span><span class="tk-p">&gt;</span>最受欢迎<span class="tk-p">&lt;/</span><span class="tk-t">span</span><span class="tk-p">&gt;</span>
@@ -5931,7 +5931,7 @@
   <div class="doc-preview is-block">
 <div class="nv-accordion doc-mid">
   <details class="nv-accordion-item" open>
-    <summary>Nova UI 需要构建工具吗？</summary>
+    <summary>DomSprig-UI 需要构建工具吗？</summary>
     <div class="nv-accordion-content">不需要。引入 CSS 与 JS 文件即可使用，组件以源码分发，可直接复制到项目里修改。</div>
   </details>
   <details class="nv-accordion-item">
@@ -5948,7 +5948,7 @@
     <div class="doc-code-bar"><span>HTML</span><button type="button" class="doc-code-toggle">展开代码</button><button type="button" class="doc-copy" aria-label="复制代码">复制</button></div>
     <pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-accordion doc-mid&quot;</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">details</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-accordion-item&quot;</span> <span class="tk-a">open</span><span class="tk-p">&gt;</span>
-    <span class="tk-p">&lt;</span><span class="tk-t">summary</span><span class="tk-p">&gt;</span>Nova UI 需要构建工具吗？<span class="tk-p">&lt;/</span><span class="tk-t">summary</span><span class="tk-p">&gt;</span>
+    <span class="tk-p">&lt;</span><span class="tk-t">summary</span><span class="tk-p">&gt;</span>DomSprig-UI 需要构建工具吗？<span class="tk-p">&lt;/</span><span class="tk-t">summary</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-accordion-content&quot;</span><span class="tk-p">&gt;</span>不需要。引入 CSS 与 JS 文件即可使用，组件以源码分发，可直接复制到项目里修改。<span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;/</span><span class="tk-t">details</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">details</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-accordion-item&quot;</span><span class="tk-p">&gt;</span>
@@ -6383,7 +6383,7 @@
   <div class="doc-preview is-block">
 <div class="doc-stack" style="width: 100%; gap: 24px">
   <dl class="nv-desc" data-layout="vertical" data-cols="4">
-    <div class="nv-desc-item"><dt>项目</dt><dd>Nova UI</dd></div>
+    <div class="nv-desc-item"><dt>项目</dt><dd>DomSprig-UI</dd></div>
     <div class="nv-desc-item"><dt>负责人</dt><dd>林夏</dd></div>
     <div class="nv-desc-item"><dt>版本</dt><dd data-mono>1.0.0</dd></div>
     <div class="nv-desc-item"><dt>许可证</dt><dd>MIT</dd></div>
@@ -6399,7 +6399,7 @@
     <div class="doc-code-bar"><span>HTML</span><button type="button" class="doc-code-toggle">展开代码</button><button type="button" class="doc-copy" aria-label="复制代码">复制</button></div>
     <pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;doc-stack&quot;</span> <span class="tk-a">style</span>=<span class="tk-s">&quot;width: 100%; gap: 24px&quot;</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">dl</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc&quot;</span> <span class="tk-a">data-layout</span>=<span class="tk-s">&quot;vertical&quot;</span> <span class="tk-a">data-cols</span>=<span class="tk-s">&quot;4&quot;</span><span class="tk-p">&gt;</span>
-    <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc-item&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span>项目<span class="tk-p">&lt;/</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span>Nova UI<span class="tk-p">&lt;/</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
+    <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc-item&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span>项目<span class="tk-p">&lt;/</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span>DomSprig-UI<span class="tk-p">&lt;/</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc-item&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span>负责人<span class="tk-p">&lt;/</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span>林夏<span class="tk-p">&lt;/</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc-item&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span>版本<span class="tk-p">&lt;/</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dd</span> <span class="tk-a">data-mono</span><span class="tk-p">&gt;</span>1.0.0<span class="tk-p">&lt;/</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-desc-item&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span>许可证<span class="tk-p">&lt;/</span><span class="tk-t">dt</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span>MIT<span class="tk-p">&lt;/</span><span class="tk-t">dd</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
@@ -8514,7 +8514,7 @@
     </div>
   </article>
   <template id="skeleton-feed-tpl">
-    <b>Nova UI 1.0 正式发布</b>
+    <b>DomSprig-UI 1.0 正式发布</b>
     <div class="nv-muted">零依赖、源码分发的组件库：复制即用，按需裁剪。本次发布包含导航、反馈、数据录入等 60 余个组件，全部支持亮暗主题与完整键盘操作。</div>
     <div class="doc-row">
       <button class="nv-btn" data-size="sm">阅读全文</button>
@@ -8557,7 +8557,7 @@
     <span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;/</span><span class="tk-t">article</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">template</span> <span class="tk-a">id</span>=<span class="tk-s">&quot;skeleton-feed-tpl&quot;</span><span class="tk-p">&gt;</span>
-    <span class="tk-p">&lt;</span><span class="tk-t">b</span><span class="tk-p">&gt;</span>Nova UI 1.0 正式发布<span class="tk-p">&lt;/</span><span class="tk-t">b</span><span class="tk-p">&gt;</span>
+    <span class="tk-p">&lt;</span><span class="tk-t">b</span><span class="tk-p">&gt;</span>DomSprig-UI 1.0 正式发布<span class="tk-p">&lt;/</span><span class="tk-t">b</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-muted&quot;</span><span class="tk-p">&gt;</span>零依赖、源码分发的组件库：复制即用，按需裁剪。本次发布包含导航、反馈、数据录入等 60 余个组件，全部支持亮暗主题与完整键盘操作。<span class="tk-p">&lt;/</span><span class="tk-t">div</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;doc-row&quot;</span><span class="tk-p">&gt;</span>
       <span class="tk-p">&lt;</span><span class="tk-t">button</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-btn&quot;</span> <span class="tk-a">data-size</span>=<span class="tk-s">&quot;sm&quot;</span><span class="tk-p">&gt;</span>阅读全文<span class="tk-p">&lt;/</span><span class="tk-t">button</span><span class="tk-p">&gt;</span>
@@ -9897,7 +9897,7 @@
   <div class="doc-preview ">
 <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-basic"><i data-nv-icon="sparkles"></i>本周更新</button>
 <div class="nv-popover" id="popover-basic" hidden>
-  <h3 class="nv-popover-title">Nova UI 1.0 已发布</h3>
+  <h3 class="nv-popover-title">DomSprig-UI 1.0 已发布</h3>
   <p class="nv-popover-desc">新增 Command 命令面板、Drawer 抽屉与 6 套主色，所有浮层统一使用弹性动效。</p>
   <div class="nv-popover-footer">
     <button class="nv-btn" data-size="sm" data-variant="ghost" data-nv-popover-close>稍后再看</button>
@@ -9909,7 +9909,7 @@
     <div class="doc-code-bar"><span>HTML</span><button type="button" class="doc-code-toggle">展开代码</button><button type="button" class="doc-copy" aria-label="复制代码">复制</button></div>
     <pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">button</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-btn&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;outline&quot;</span> <span class="tk-a">data-nv-popover</span>=<span class="tk-s">&quot;#popover-basic&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">i</span> <span class="tk-a">data-nv-icon</span>=<span class="tk-s">&quot;sparkles&quot;</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">i</span><span class="tk-p">&gt;</span>本周更新<span class="tk-p">&lt;/</span><span class="tk-t">button</span><span class="tk-p">&gt;</span>
 <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover&quot;</span> <span class="tk-a">id</span>=<span class="tk-s">&quot;popover-basic&quot;</span> <span class="tk-a">hidden</span><span class="tk-p">&gt;</span>
-  <span class="tk-p">&lt;</span><span class="tk-t">h3</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-title&quot;</span><span class="tk-p">&gt;</span>Nova UI 1.0 已发布<span class="tk-p">&lt;/</span><span class="tk-t">h3</span><span class="tk-p">&gt;</span>
+  <span class="tk-p">&lt;</span><span class="tk-t">h3</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-title&quot;</span><span class="tk-p">&gt;</span>DomSprig-UI 1.0 已发布<span class="tk-p">&lt;/</span><span class="tk-t">h3</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">p</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-desc&quot;</span><span class="tk-p">&gt;</span>新增 Command 命令面板、Drawer 抽屉与 6 套主色，所有浮层统一使用弹性动效。<span class="tk-p">&lt;/</span><span class="tk-t">p</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-footer&quot;</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">button</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-btn&quot;</span> <span class="tk-a">data-size</span>=<span class="tk-s">&quot;sm&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;ghost&quot;</span> <span class="tk-a">data-nv-popover-close</span><span class="tk-p">&gt;</span>稍后再看<span class="tk-p">&lt;/</span><span class="tk-t">button</span><span class="tk-p">&gt;</span>
@@ -10078,7 +10078,7 @@
 <p>由 <a href="#/popover" class="nv-btn" data-variant="link" data-nv-popover="#popover-card" data-trigger="hover" data-placement="top" data-arrow>@nova-team</a> 维护，欢迎参与贡献。</p>
 <div class="nv-popover" id="popover-card" hidden>
   <h3 class="nv-popover-title">Nova Team</h3>
-  <p class="nv-popover-desc">专注零依赖、源码分发的 Web 组件。负责 Nova UI、Nova Icons 与设计变量规范。</p>
+  <p class="nv-popover-desc">专注零依赖、源码分发的 Web 组件。负责 DomSprig-UI、内置图标与设计变量规范。</p>
   <hr class="nv-panel-sep">
   <div class="doc-row">
     <span class="doc-hint">32 个仓库 · 1.2 万关注者</span>
@@ -10091,7 +10091,7 @@
     <pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">p</span><span class="tk-p">&gt;</span>由 <span class="tk-p">&lt;</span><span class="tk-t">a</span> <span class="tk-a">href</span>=<span class="tk-s">&quot;#/popover&quot;</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-btn&quot;</span> <span class="tk-a">data-variant</span>=<span class="tk-s">&quot;link&quot;</span> <span class="tk-a">data-nv-popover</span>=<span class="tk-s">&quot;#popover-card&quot;</span> <span class="tk-a">data-trigger</span>=<span class="tk-s">&quot;hover&quot;</span> <span class="tk-a">data-placement</span>=<span class="tk-s">&quot;top&quot;</span> <span class="tk-a">data-arrow</span><span class="tk-p">&gt;</span>@nova-team<span class="tk-p">&lt;/</span><span class="tk-t">a</span><span class="tk-p">&gt;</span> 维护，欢迎参与贡献。<span class="tk-p">&lt;/</span><span class="tk-t">p</span><span class="tk-p">&gt;</span>
 <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover&quot;</span> <span class="tk-a">id</span>=<span class="tk-s">&quot;popover-card&quot;</span> <span class="tk-a">hidden</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">h3</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-title&quot;</span><span class="tk-p">&gt;</span>Nova Team<span class="tk-p">&lt;/</span><span class="tk-t">h3</span><span class="tk-p">&gt;</span>
-  <span class="tk-p">&lt;</span><span class="tk-t">p</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-desc&quot;</span><span class="tk-p">&gt;</span>专注零依赖、源码分发的 Web 组件。负责 Nova UI、Nova Icons 与设计变量规范。<span class="tk-p">&lt;/</span><span class="tk-t">p</span><span class="tk-p">&gt;</span>
+  <span class="tk-p">&lt;</span><span class="tk-t">p</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-popover-desc&quot;</span><span class="tk-p">&gt;</span>专注零依赖、源码分发的 Web 组件。负责 DomSprig-UI、内置图标与设计变量规范。<span class="tk-p">&lt;/</span><span class="tk-t">p</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">hr</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;nv-panel-sep&quot;</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;</span><span class="tk-t">div</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;doc-row&quot;</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">span</span> <span class="tk-a">class</span>=<span class="tk-s">&quot;doc-hint&quot;</span><span class="tk-p">&gt;</span>32 个仓库 · 1.2 万关注者<span class="tk-p">&lt;/</span><span class="tk-t">span</span><span class="tk-p">&gt;</span>
@@ -11030,7 +11030,7 @@
   <ol>
     <li><a href="#/breadcrumb">控制台</a></li>
     <li><a href="#/breadcrumb">项目</a></li>
-    <li>nova-ui</li>
+    <li>domsprig-ui</li>
   </ol>
 </nav>
   </div>
@@ -11048,7 +11048,7 @@
   <span class="tk-p">&lt;</span><span class="tk-t">ol</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">li</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">a</span> <span class="tk-a">href</span>=<span class="tk-s">&quot;#/breadcrumb&quot;</span><span class="tk-p">&gt;</span>控制台<span class="tk-p">&lt;/</span><span class="tk-t">a</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>
     <span class="tk-p">&lt;</span><span class="tk-t">li</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;</span><span class="tk-t">a</span> <span class="tk-a">href</span>=<span class="tk-s">&quot;#/breadcrumb&quot;</span><span class="tk-p">&gt;</span>项目<span class="tk-p">&lt;/</span><span class="tk-t">a</span><span class="tk-p">&gt;</span><span class="tk-p">&lt;/</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>
-    <span class="tk-p">&lt;</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>nova-ui<span class="tk-p">&lt;/</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>
+    <span class="tk-p">&lt;</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>domsprig-ui<span class="tk-p">&lt;/</span><span class="tk-t">li</span><span class="tk-p">&gt;</span>
   <span class="tk-p">&lt;/</span><span class="tk-t">ol</span><span class="tk-p">&gt;</span>
 <span class="tk-p">&lt;/</span><span class="tk-t">nav</span><span class="tk-p">&gt;</span></code></pre>
   </div>

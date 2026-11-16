@@ -1,4 +1,4 @@
-/* Nova UI · Number Ticker 数字滚动
+/* DomSprig-UI · Number Ticker 数字滚动
  * <span data-nv-ticker data-value="12890" data-prefix="¥" data-suffix="+">
  * 进入视口时从 data-from 滚动到 data-value；Nova.ticker.set(el, v) 平滑滚到新值。
  * data-variant="odometer"  里程表：每一位数字独立纵向滚动（只动画 transform）

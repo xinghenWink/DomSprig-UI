@@ -1,4 +1,4 @@
-/* Nova UI · Text FX
+/* DomSprig-UI · Text FX
  * 拆分类特效（blur-in / scramble）共用一个模式：动画期间把原文节点暂存起来，显示拆分后的副本（aria-hidden），
  * 并放一份 .nv-sr-only 原文供读屏；动画结束后把原始节点放回去，DOM 恢复成作者写的样子（字距、换行、选中复制都正常）。
  * 打字机 / 轮换：读屏读 .nv-sr-only 中的完整文案（或 data-label），动画层 aria-hidden。

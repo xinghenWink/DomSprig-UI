@@ -1,4 +1,4 @@
-/* Nova UI · Number Input 数字输入框
+/* DomSprig-UI · Number Input 数字输入框
  * <input type="number" class="nv-number" min max step>   需 number-input.js：包进 .nv-control.nv-number-box 并追加按钮
  * 外框沿用 .nv-control（data-size / data-variant / aria-invalid / disabled 都照常生效）
  * data-controls stacked（默认）| sides | none

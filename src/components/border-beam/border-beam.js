@@ -1,4 +1,4 @@
-/* Nova UI · Border Beam
+/* DomSprig-UI · Border Beam
  * 为 .nv-border-beam 注入装饰层（aria-hidden）：
  * <span class="nv-border-beam-track"><span class="nv-border-beam-light"></span>…</span>
  * - 读取卡片圆角，让光束路径与边框贴合（ResizeObserver 触发时重新读取，兼容隐藏容器内初始化）

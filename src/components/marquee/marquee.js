@@ -1,4 +1,4 @@
-/* Nova UI · Marquee
+/* DomSprig-UI · Marquee
  * - 首次初始化把子元素包进 .nv-marquee-track > .nv-marquee-group（也可以自己写好这两层）。
  * - ResizeObserver 在可见时测量：副本数 = ceil(容器 / 一组) + 1，至少 2 份；副本 aria-hidden + inert，并去掉 id。
  * - data-speed（px/s）按一组的长度换算动画时长。离开视口时暂停（data-paused）。

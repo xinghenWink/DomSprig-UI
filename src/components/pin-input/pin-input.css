@@ -1,4 +1,4 @@
-/* Nova UI · Pin Input 验证码输入
+/* DomSprig-UI · Pin Input 验证码输入
  * <input class="nv-pin" name="code" data-length="6" aria-label="验证码">   需 pin-input.js
  * 一个真实的 input 盖在格子上，负责输入、粘贴、短信验证码自动填充和表单提交；格子只负责显示。
  * data-size     sm | md（默认）| lg

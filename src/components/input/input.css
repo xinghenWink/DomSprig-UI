@@ -1,4 +1,4 @@
-/* Nova UI · Input 输入框
+/* DomSprig-UI · Input 输入框
  * 独立写法     <input class="nv-input" placeholder="…">           （外观与 .nv-control 完全一致）
  * 包装写法     <div class="nv-control"><span class="nv-control-affix">图标</span><input …></div>
  * 附加块       <div class="nv-input-group"><span class="nv-input-addon">https://</span><input class="nv-input"></div>

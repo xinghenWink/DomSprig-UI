@@ -1,4 +1,4 @@
-/* Nova UI · DatePicker
+/* DomSprig-UI · DatePicker
  * <input data-nv-date> / <input data-nv-date-range> → 原生 input（视觉隐藏）+ .nv-control.nv-date + 浮层 .nv-panel.nv-date-panel
  * 可定制：--nv-date-width（控件宽）  --nv-date-cell（日期格边长）  --nv-date-time-col（时间列宽）
  */

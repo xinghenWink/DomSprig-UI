@@ -1,4 +1,4 @@
-/* Nova UI · Tilt 3D 倾斜 / 磁吸
+/* DomSprig-UI · Tilt 3D 倾斜 / 磁吸
  * [data-nv-tilt]           指针悬停时 3D 倾斜，离开后弹性复位（JS 弹簧，transform 写在元素上）
  *   data-max="10"          最大倾斜角（度）      data-perspective="900"  透视距离（px）
  *   data-scale="1.03"      悬停放大              data-spring="0.5"       复位弹性 0（无回弹）–1（强回弹）

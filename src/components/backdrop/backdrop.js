@@ -1,4 +1,4 @@
-/* Nova UI · Backdrop
+/* DomSprig-UI · Backdrop
  * [data-nv-meteors="12"]  生成 12 颗流星（.nv-meteor，aria-hidden）；起点、时长、延迟随机，
  *                         飞行距离按容器尺寸计算（ResizeObserver 更新）；离开视口暂停（data-paused）。
  *                         可选 data-speed（时长倍率，默认 1，越大越慢）。实例方法：refresh() / destroy()

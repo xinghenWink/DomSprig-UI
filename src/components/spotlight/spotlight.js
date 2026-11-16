@@ -1,4 +1,4 @@
-/* Nova UI · Spotlight
+/* DomSprig-UI · Spotlight
  * - 单张 .nv-spotlight：监听自身指针。
  * - .nv-spotlight-group：监听容器，一帧内先批量读取所有卡片位置、再批量写入 --_x/--_y，避免读写交错导致布局抖动。
  * - 指针移动与滚动都用 rAF 合并为每帧一次。

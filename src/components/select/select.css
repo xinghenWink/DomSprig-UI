@@ -1,4 +1,4 @@
-/* Nova UI · Select
+/* DomSprig-UI · Select
  * <select data-nv-select> → 原生 select（视觉隐藏）+ .nv-select-trigger（.nv-control 按钮）+ 浮层 .nv-select-panel（.nv-panel）
  * 可定制：--nv-select-width  --nv-select-min-width  --nv-select-max-height  --nv-select-panel-max-width
  */

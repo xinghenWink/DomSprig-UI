@@ -1,4 +1,4 @@
-/* Nova UI · Accordion
+/* DomSprig-UI · Accordion
  * 基于原生 <details>/<summary>：没有脚本也能展开收起。本文件增强：
  * - 平滑高度动画（Web Animations；减少动态时直接切换）
  * - 默认单开（data-multiple 允许多开）、禁用项、↑ ↓ Home End 在标题间移动焦点

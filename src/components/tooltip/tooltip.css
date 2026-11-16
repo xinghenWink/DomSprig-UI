@@ -1,4 +1,4 @@
-/* Nova UI · Tooltip
+/* DomSprig-UI · Tooltip
  * 任意元素加 data-tip="说明文字" 即可（事件委托，动态插入的元素自动生效，无需初始化）
  * data-tip-title      加粗标题                 data-tip-placement  top | bottom | left | right（可加 -start / -end）
  * data-tip-delay      显示延迟 ms（默认 300）    data-tip-overflow   仅在文字被截断时显示，内容默认取元素文字

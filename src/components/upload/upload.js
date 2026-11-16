@@ -1,4 +1,4 @@
-/* Nova UI · Upload 文件上传
+/* DomSprig-UI · Upload 文件上传
  * <div class="nv-upload" data-multiple data-accept="image/*" data-max-size="5MB" data-max-count="3"></div>
  * 容器里没有触发器时自动生成拖拽区；放一个 <button> 则点按钮选择文件，同时放 .nv-upload-dragger 则两者都可用。
  * 支持点击选择、拖拽、在拖拽区获得焦点时粘贴（Ctrl+V 截图）。

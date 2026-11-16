@@ -1,4 +1,4 @@
-/* Nova UI · Combobox 自动补全
+/* DomSprig-UI · Combobox 自动补全
  * <input class="nv-combobox" list="cities" aria-label="城市">   需 combobox.js
  * 关联一个 <datalist id="cities">，输入时弹出过滤后的建议；也可以不关联，纯当普通输入框。
  * 浮层复用 .nv-panel / .nv-item，定位走 Nova.floating。

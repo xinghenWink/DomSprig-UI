@@ -1,4 +1,4 @@
-/* Nova UI · Upload 文件上传   需 upload.js（属性、事件见 upload.js 头注释）
+/* DomSprig-UI · Upload 文件上传   需 upload.js（属性、事件见 upload.js 头注释）
  * 结构：.nv-upload > .nv-upload-dragger（拖拽区，可选）+ 按钮触发器（可选）+ ul.nv-upload-list
  * 列表项 .nv-upload-item[data-status=ready|uploading|done|error]，底部细进度条由 --value（0–100）驱动
  * 拖入文件时容器带 [data-dragover]；data-list="picture" 时列表是缩略图网格

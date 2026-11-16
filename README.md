@@ -1,4 +1,4 @@
-# Nova UI
+# DomSprig-UI
 
 零依赖、源码分发的现代 UI 组件库。原生 JS + CSS，双击 HTML 就能运行，React / Vue / 后端模板里都能直接使用。
 
@@ -23,12 +23,14 @@
 
 ```bash
 node scripts/add.mjs --list                          # 查看全部组件
-node scripts/add.mjs select datepicker toast --out ../my-app/src/ui/nova
+node scripts/add.mjs select datepicker toast --out ../my-app/src/ui/domsprig-ui
 ```
 
 命令会复制 `tokens.css`、`base.css`、`core.js` 与所选组件（含依赖），生成样式入口 `nova.css`，并打印需要按顺序引入的 `<script>`。加 `--bundle` 额外生成单文件 `nova.bundle.css` / `nova.bundle.js`；已存在的文件默认跳过，`--force` 覆盖。
 
 **使用**
+
+浏览器中的 JavaScript API 通过 `window.Nova` 提供。
 
 ```html
 <button class="nv-btn" data-variant="soft">保存</button>

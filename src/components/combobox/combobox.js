@@ -1,4 +1,4 @@
-/* Nova UI · Combobox 自动补全
+/* DomSprig-UI · Combobox 自动补全
  * <input class="nv-combobox" list="cities" aria-label="城市">  +  <datalist id="cities"><option value="北京">首都</option></datalist>
  * 增强后 input 包进 .nv-control.nv-combobox-box，浏览器原生的 datalist 下拉换成 .nv-panel 建议面板。
  * 按 option 的 value 做不区分大小写的包含匹配，匹配段加粗；option 的文字或 label 作为右侧说明，data-icon 显示图标。

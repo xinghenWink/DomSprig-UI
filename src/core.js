@@ -1,5 +1,5 @@
 /*!
- * Nova UI · Core runtime（无依赖，挂到 window.Nova）
+ * DomSprig-UI · Core runtime（无依赖，挂到 window.Nova）
  * 所有组件共享：注册与自动初始化、浮层定位、浮层栈（Esc / 点击外部）、焦点陷阱、滚动锁定、
  * 列表键盘导航、图标、主题。组件文件只依赖这里的 API。
  */

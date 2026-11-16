@@ -1,4 +1,4 @@
-/* Nova UI · Field
+/* DomSprig-UI · Field
  * 自动关联：label[for] ↔ 控件 id；说明 / 错误的 id → 控件 aria-describedby；有错误文字 → aria-invalid="true"。
  * 错误文字可随时改写（textContent / hidden），MutationObserver 自动同步。
  * 控件查找：[data-field-control] 优先，否则取字段内第一个可见输入元素或复合控件。

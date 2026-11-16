@@ -1,4 +1,4 @@
-/* Nova UI · Avatar
+/* DomSprig-UI · Avatar
  * - data-name：生成文字头像。中文取最后两个字（xs 尺寸取一个），英文取前两个单词的首字母；
  *   色相由名字哈希得出，同名同色。写了 data-color 则不自动配色。
  * - 图片加载失败：回退为文字头像（名字取 data-name 或 img 的 alt），都没有时显示 user 图标。

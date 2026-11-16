@@ -1,4 +1,4 @@
-/* Nova UI · Tooltip
+/* DomSprig-UI · Tooltip
  * 事件委托，无需初始化：任意元素加 data-tip="说明" 即可，动态渲染的内容也自动生效。
  * - 悬停 / 键盘聚焦 300ms 后显示（data-tip-delay 覆盖）；刚关闭 500ms 内移到下一个目标立即显示。
  * - 移出、失焦、Esc、按下、滚动、缩放时立即隐藏；全页只有一个提示节点（role=tooltip）。

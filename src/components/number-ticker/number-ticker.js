@@ -1,4 +1,4 @@
-/* Nova UI · Number Ticker
+/* DomSprig-UI · Number Ticker
  * <span data-nv-ticker data-value="12890" data-from="0" data-duration="1600" data-decimals="0" data-prefix="¥" data-suffix="+">
  * - 进入视口（Nova.inView）时开始；计数模式用 rAF，结束即停止；里程表模式只切换 transform（CSS 过渡）。
  * - 格式化：Intl.NumberFormat（data-locale，默认 zh-CN，千分位；data-notation="compact" 得到「1.3万」）。

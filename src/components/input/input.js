@@ -1,4 +1,4 @@
-/* Nova UI · Input
+/* DomSprig-UI · Input
  * 增强 <input> 的三项能力（纯外观无需 JS）：
  *   data-clearable                 有内容时显示清除按钮（data-clear-label 覆盖文案）
  *   type="password" data-toggle     显示/隐藏密码（data-show-label / data-hide-label）

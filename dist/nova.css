@@ -1,7 +1,7 @@
-/*! Nova UI v1.0.0 · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */
+/*! DomSprig-UI v1.0.0 · MIT · 由 scripts/build.mjs 生成，请勿直接修改 */
 /* src/tokens.css */
 /*!
- * Nova UI · Design Tokens
+ * DomSprig-UI · Design Tokens
  * 所有组件只读这里的变量：改主题 = 改变量，不改组件源码。
  *
  * 明暗主题：<html data-theme="light|dark">；不设置时跟随系统。
@@ -116,7 +116,7 @@
 
 /* src/base.css */
 /*!
- * Nova UI · Base
+ * DomSprig-UI · Base
  * 只作用于 nv- 组件，不重置宿主页面。包含：盒模型、焦点环、共享的「控件框」「浮层面板」「列表项」样式与动画。
  */
 
@@ -377,7 +377,7 @@
 ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 
 /* src/components/button/button.css */
-/* Nova UI · Button
+/* DomSprig-UI · Button
  * <button class="nv-btn">           实心主色（默认）
  * data-variant  solid | soft | outline | ghost | link | gradient
  * data-color    primary | neutral | danger | success | warning
@@ -588,7 +588,7 @@
 @keyframes nv-ripple { to { transform: scale(1); opacity: 0; } }
 
 /* src/components/badge/badge.css */
-/* Nova UI · Badge 徽标 / Indicator 角标
+/* DomSprig-UI · Badge 徽标 / Indicator 角标
  * <span class="nv-badge" data-color="success">已激活</span>
  * data-variant  soft（默认）| solid | outline | surface
  * data-color    neutral（默认）| primary | success | warning | danger | info
@@ -746,7 +746,7 @@
 }
 
 /* src/components/input/input.css */
-/* Nova UI · Input 输入框
+/* DomSprig-UI · Input 输入框
  * 独立写法     <input class="nv-input" placeholder="…">           （外观与 .nv-control 完全一致）
  * 包装写法     <div class="nv-control"><span class="nv-control-affix">图标</span><input …></div>
  * 附加块       <div class="nv-input-group"><span class="nv-input-addon">https://</span><input class="nv-input"></div>
@@ -899,7 +899,7 @@
 .nv-input-group:has(:disabled) > .nv-input-addon { color: var(--nv-fg-3); }
 
 /* src/components/field/field.css */
-/* Nova UI · Field 表单项
+/* DomSprig-UI · Field 表单项
  * <div class="nv-field" data-required>
  *   <label class="nv-field-label" for="email">邮箱</label>
  *   <input class="nv-input" id="email">
@@ -1048,7 +1048,7 @@ fieldset.nv-form { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
 legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 
 /* src/components/textarea/textarea.css */
-/* Nova UI · Textarea 多行输入
+/* DomSprig-UI · Textarea 多行输入
  * <textarea class="nv-textarea" rows="3"></textarea>       外观、聚焦、错误、禁用与 .nv-control 一致
  * data-size="sm|md|lg"   data-variant="filled"   aria-invalid="true"   disabled   readonly
  * 需要 textarea.js：data-autosize（data-min-rows / data-max-rows）· maxlength + data-count 右下角字数
@@ -1126,7 +1126,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-textarea-box:has(> :disabled) > .nv-textarea-count { opacity: 0.6; }
 
 /* src/components/checkbox/checkbox.css */
-/* Nova UI · Checkbox 复选框（纯 CSS）
+/* DomSprig-UI · Checkbox 复选框（纯 CSS）
  * <input type="checkbox" class="nv-checkbox">            对勾描边绘制动画；el.indeterminate = true 为半选
  * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
  * <label class="nv-check"><input …><span class="nv-check-text"><span class="nv-check-label">标题</span><span class="nv-check-desc">说明</span></span></label>
@@ -1323,7 +1323,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-check-card-extra { margin-left: auto; font-weight: 600; color: var(--nv-fg); white-space: nowrap; }
 
 /* src/components/radio/radio.css */
-/* Nova UI · Radio 单选框（纯 CSS，依赖 checkbox.css 中的 .nv-check / .nv-check-group / .nv-check-card 与颜色变量）
+/* DomSprig-UI · Radio 单选框（纯 CSS，依赖 checkbox.css 中的 .nv-check / .nv-check-group / .nv-check-card 与颜色变量）
  * <input type="radio" class="nv-radio" name="plan">     圆点弹性缩放动画
  * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
  */
@@ -1386,7 +1386,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-check-group[aria-invalid="true"] .nv-radio:not(:checked) { border-color: var(--nv-danger); }
 
 /* src/components/switch/switch.css */
-/* Nova UI · Switch 开关
+/* DomSprig-UI · Switch 开关
  * <input type="checkbox" role="switch" class="nv-switch">   滑块弹性滑动，按住时拉伸
  * data-size="sm|md|lg"  data-color="primary|success|warning|danger|neutral"
  * data-loading           滑块显示加载圈并阻止切换（需 switch.js 拦截键盘）
@@ -1503,7 +1503,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-switch[data-icons][data-size="lg"] { --_w: 50px; }
 
 /* src/components/slider/slider.css */
-/* Nova UI · Slider 滑块
+/* DomSprig-UI · Slider 滑块
  * 单值   <input type="range" class="nv-slider" min max step value>   无 JS 时也有完整外观（无填充色）
  *        slider.js 会包进 .nv-slider-box：写入填充比例、数值气泡（data-tooltip）、刻度（data-marks）
  * 范围   <div class="nv-slider-range" data-min="0" data-max="100" data-step="1" data-value="20,80" data-name="price">
@@ -1737,7 +1737,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-slider-range[data-disabled] .nv-slider-thumb { cursor: not-allowed; --_ring: 0 0 0 0 transparent; }
 
 /* src/components/segmented/segmented.css */
-/* Nova UI · Segmented 分段控制器
+/* DomSprig-UI · Segmented 分段控制器
  * 基于原生 radio：表单提交、方向键切换、读屏都按 radio 组工作。
  * <div class="nv-segmented" role="radiogroup" aria-label="视图">
  *   <label><input type="radio" name="view" value="list" checked><i data-nv-icon="list"></i>列表</label>
@@ -1828,7 +1828,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/number-input/number-input.css */
-/* Nova UI · Number Input 数字输入框
+/* DomSprig-UI · Number Input 数字输入框
  * <input type="number" class="nv-number" min max step>   需 number-input.js：包进 .nv-control.nv-number-box 并追加按钮
  * 外框沿用 .nv-control（data-size / data-variant / aria-invalid / disabled 都照常生效）
  * data-controls stacked（默认）| sides | none
@@ -1887,7 +1887,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-number-box[data-controls="sides"] > .nv-number-btn > svg { width: 15px; height: 15px; }
 
 /* src/components/pin-input/pin-input.css */
-/* Nova UI · Pin Input 验证码输入
+/* DomSprig-UI · Pin Input 验证码输入
  * <input class="nv-pin" name="code" data-length="6" aria-label="验证码">   需 pin-input.js
  * 一个真实的 input 盖在格子上，负责输入、粘贴、短信验证码自动填充和表单提交；格子只负责显示。
  * data-size     sm | md（默认）| lg
@@ -2036,7 +2036,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/avatar/avatar.css */
-/* Nova UI · Avatar 头像
+/* DomSprig-UI · Avatar 头像
  * <span class="nv-avatar"><img src="…" alt="林夏"></span>       图片（加载失败自动回退为首字母）
  * <span class="nv-avatar" data-name="林夏"></span>                 首字母 + 由名字推导的稳定配色（需 avatar.js）
  * <span class="nv-avatar"><i data-nv-icon="user"></i></span>      图标
@@ -2122,7 +2122,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 :is(a, button).nv-avatar:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
 
 /* src/components/tag/tag.css */
-/* Nova UI · Tag 标签
+/* DomSprig-UI · Tag 标签
  * 与 Badge 的区别：Tag 是可交互的「内容标签」，可关闭、可选中，能带图标或头像；Badge 只做状态标记。
  * <span class="nv-tag">设计</span>
  * <span class="nv-tag" data-closable>可关闭</span>                    需 tag.js：追加关闭按钮
@@ -2229,7 +2229,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-tag-group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
 /* src/components/tag-input/tag-input.css */
-/* Nova UI · Tag Input 标签输入
+/* DomSprig-UI · Tag Input 标签输入
  * <div class="nv-tag-input" data-name="tags" data-value="设计,前端" data-placeholder="输入后回车"></div>
  * 需 tag-input.js 与 tag.css：增强成 .nv-control，回车 / 逗号把输入变成标签，退格删除最后一个。
  * data-name         隐藏 input 的 name，随表单提交（多个同名 input）
@@ -2288,7 +2288,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-tag-input.is-dragover { border-color: var(--nv-primary); box-shadow: 0 0 0 3px var(--nv-ring); }
 
 /* src/components/rating/rating.css */
-/* Nova UI · Rating 评分
+/* DomSprig-UI · Rating 评分
  * <div class="nv-rating" data-name="score" data-value="3" aria-label="评分"></div>   需 rating.js
  * 每个星是一个原生 radio，表单提交和方向键照常工作；JS 只负责半星的视觉裁切和悬停预览。
  * data-max     几颗星，默认 5
@@ -2382,7 +2382,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/select/select.css */
-/* Nova UI · Select
+/* DomSprig-UI · Select
  * <select data-nv-select> → 原生 select（视觉隐藏）+ .nv-select-trigger（.nv-control 按钮）+ 浮层 .nv-select-panel（.nv-panel）
  * 可定制：--nv-select-width  --nv-select-min-width  --nv-select-max-height  --nv-select-panel-max-width
  */
@@ -2580,7 +2580,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-select-panel[data-size="lg"] .nv-item { min-height: 38px; font-size: var(--nv-text-lg); }
 
 /* src/components/combobox/combobox.css */
-/* Nova UI · Combobox 自动补全
+/* DomSprig-UI · Combobox 自动补全
  * <input class="nv-combobox" list="cities" aria-label="城市">   需 combobox.js
  * 关联一个 <datalist id="cities">，输入时弹出过滤后的建议；也可以不关联，纯当普通输入框。
  * 浮层复用 .nv-panel / .nv-item，定位走 Nova.floating。
@@ -2642,7 +2642,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/datepicker/datepicker.css */
-/* Nova UI · DatePicker
+/* DomSprig-UI · DatePicker
  * <input data-nv-date> / <input data-nv-date-range> → 原生 input（视觉隐藏）+ .nv-control.nv-date + 浮层 .nv-panel.nv-date-panel
  * 可定制：--nv-date-width（控件宽）  --nv-date-cell（日期格边长）  --nv-date-time-col（时间列宽）
  */
@@ -2921,7 +2921,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/upload/upload.css */
-/* Nova UI · Upload 文件上传   需 upload.js（属性、事件见 upload.js 头注释）
+/* DomSprig-UI · Upload 文件上传   需 upload.js（属性、事件见 upload.js 头注释）
  * 结构：.nv-upload > .nv-upload-dragger（拖拽区，可选）+ 按钮触发器（可选）+ ul.nv-upload-list
  * 列表项 .nv-upload-item[data-status=ready|uploading|done|error]，底部细进度条由 --value（0–100）驱动
  * 拖入文件时容器带 [data-dragover]；data-list="picture" 时列表是缩略图网格
@@ -3099,7 +3099,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/pagination/pagination.css */
-/* Nova UI · Pagination
+/* DomSprig-UI · Pagination
  * <nav class="nv-pagination" data-total="250" data-page="1" data-page-size="10">（由 pagination.js 渲染）
  * data-variant  soft（默认）| solid | outline        data-size  sm | md | lg
  * data-show-total · data-size-options="10,20,50" · data-jumper · data-simple · data-disabled
@@ -3258,7 +3258,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-pagination[aria-disabled="true"] .nv-pagination-item[aria-current="page"] { opacity: 0.5; }
 
 /* src/components/table/table.css */
-/* Nova UI · Table
+/* DomSprig-UI · Table
  * 纯 CSS：<div class="nv-table-wrap"><table class="nv-table">…</table></div>
  *   data-striped 斑马纹 · data-bordered 单元格边框 · data-hover 行悬停 · data-size="sm|lg"
  *   .nv-table-wrap[data-sticky-header] + --nv-table-max-height：表头吸顶（容器内滚动）
@@ -3655,7 +3655,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 .nv-table-action:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* src/components/number-ticker/number-ticker.css */
-/* Nova UI · Number Ticker 数字滚动
+/* DomSprig-UI · Number Ticker 数字滚动
  * <span data-nv-ticker data-value="12890" data-prefix="¥" data-suffix="+">
  * 进入视口时从 data-from 滚动到 data-value；Nova.ticker.set(el, v) 平滑滚到新值。
  * data-variant="odometer"  里程表：每一位数字独立纵向滚动（只动画 transform）
@@ -3704,7 +3704,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/stat/stat.css */
-/* Nova UI · Stat 统计数值
+/* DomSprig-UI · Stat 统计数值
  * <div class="nv-stat">
  *   <div class="nv-stat-label"><i data-nv-icon="users"></i>活跃用户</div>
  *   <div class="nv-stat-value">12,890<small>人</small></div>
@@ -3867,7 +3867,7 @@ legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }
 }
 
 /* src/components/card/card.css */
-/* Nova UI · Card 卡片（纯 CSS）
+/* DomSprig-UI · Card 卡片（纯 CSS）
  * <article class="nv-card">
  *   <div class="nv-card-media"><img …></div>                  可选：封面，贴边显示
  *   <header class="nv-card-header">
@@ -3991,7 +3991,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 }
 
 /* src/components/accordion/accordion.css */
-/* Nova UI · Accordion
+/* DomSprig-UI · Accordion
  * <div class="nv-accordion">
  *   <details class="nv-accordion-item" open><summary>标题</summary><div class="nv-accordion-content">内容</div></details>
  * </div>
@@ -4124,7 +4124,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 .nv-accordion-item:has(> summary > .nv-icon:first-child:not(.nv-accordion-chevron)) > .nv-accordion-content { padding-left: calc(var(--_px) + 28px); }
 
 /* src/components/descriptions/descriptions.css */
-/* Nova UI · Descriptions 描述列表（纯 CSS）
+/* DomSprig-UI · Descriptions 描述列表（纯 CSS）
  * <dl class="nv-desc" data-cols="3">
  *   <div class="nv-desc-item"><dt>姓名</dt><dd>林夏</dd></div>
  *   <div class="nv-desc-item" data-span="2"><dt>地址</dt><dd>…</dd></div>     data-span 2 | 3 | full
@@ -4217,7 +4217,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 }
 
 /* src/components/kbd/kbd.css */
-/* Nova UI · Kbd 键盘按键
+/* DomSprig-UI · Kbd 键盘按键
  * <kbd class="nv-kbd">Ctrl</kbd> + <kbd class="nv-kbd">K</kbd>
  * <span class="nv-kbd-group"><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">K</kbd></span>  紧凑组合
  * <kbd class="nv-kbd" data-keys="mod+shift+p"></kbd>   需 kbd.js：按平台渲染（Mac 显示 ⌘ ⇧，其他显示 Ctrl Shift）
@@ -4252,7 +4252,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 .nv-kbd-group { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
 
 /* src/components/timeline/timeline.css */
-/* Nova UI · Timeline 时间轴（纯 CSS）
+/* DomSprig-UI · Timeline 时间轴（纯 CSS）
  * <ol class="nv-timeline">
  *   <li class="nv-timeline-item" data-color="success">
  *     <span class="nv-timeline-dot"><i data-nv-icon="check"></i></span>   可选：不写显示小圆点，里面放图标或头像则显示为图标圆
@@ -4409,7 +4409,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 }
 
 /* src/components/alert/alert.css */
-/* Nova UI · Alert
+/* DomSprig-UI · Alert
  * <div class="nv-alert" data-color="info">
  *   <div class="nv-alert-title">标题</div>
  *   <div class="nv-alert-desc">描述</div>
@@ -4597,7 +4597,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 }
 
 /* src/components/progress/progress.css */
-/* Nova UI · Progress
+/* DomSprig-UI · Progress
  * 线性：<div class="nv-progress" data-value="40"></div>   纯 CSS：<div class="nv-progress" style="--value:40"></div>
  *   data-size sm | md | lg     data-color primary | success | warning | danger | info | neutral
  *   data-variant gradient      data-striped / data-animated（动态条纹）     data-indeterminate 不确定态
@@ -4835,7 +4835,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 @keyframes nv-progress-breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
 /* src/components/toast/toast.css */
-/* Nova UI · Toast
+/* DomSprig-UI · Toast
  * 由 toast.js 生成，不需要写 HTML：Nova.toast.success('已保存')
  * .nv-toast-region[data-position]   6 个位置的容器（top|bottom × left|center|right），带 data-nv-layer-ignore
  * .nv-toast[data-type]              success | error | warning | info | loading；[data-paused] 计时暂停
@@ -4982,7 +4982,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 }
 
 /* src/components/spinner/spinner.css */
-/* Nova UI · Spinner / Loader
+/* DomSprig-UI · Spinner / Loader
  * .nv-spinner（base.css）  经典旋转圈，尺寸跟随 font-size、颜色跟随 currentColor
  * .nv-loader               更多加载动画：data-variant="dots|bars|ring|pulse"（默认 dots）
  *   data-size sm | md | lg    data-color primary | neutral | success | warning | danger | info | current
@@ -5174,7 +5174,7 @@ label.nv-card[data-indicator]:has(> input:checked)::after {
 @keyframes nv-loader-fade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
 /* src/components/skeleton/skeleton.css */
-/* Nova UI · Skeleton 骨架屏
+/* DomSprig-UI · Skeleton 骨架屏
  * <span class="nv-skeleton"></span>                     一行文本占位
  * <div class="nv-skeleton" data-lines="3"></div>        多行段落，末行变短（需 skeleton.js；纯 CSS 可手写 .nv-skeleton-line）
  * data-shape    text（默认）| circle | rect | button | input
@@ -5337,7 +5337,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 :is(.nv-skeleton, .nv-skeleton-group)[hidden] { display: none; }
 
 /* src/components/empty/empty.css */
-/* Nova UI · Empty 空状态
+/* DomSprig-UI · Empty 空状态
  * <div class="nv-empty" data-image="search">
  *   <div class="nv-empty-title">…</div> <div class="nv-empty-desc">…</div> <div class="nv-empty-actions">…</div>
  * </div>
@@ -5486,7 +5486,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 .nv-empty-extra a:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 2px; }
 
 /* src/components/modal/modal.css */
-/* Nova UI · Modal 对话框
+/* DomSprig-UI · Modal 对话框
  * <div class="nv-modal" id hidden aria-labelledby>      根节点 = 遮罩（打开时移到 body）
  *   <div class="nv-modal-panel">                          面板
  *     <div class="nv-modal-header">  .nv-modal-icon? .nv-modal-title .nv-modal-desc .nv-modal-close
@@ -5672,7 +5672,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 @keyframes nv-modal-sheet-out { to { transform: translateY(100%); } }
 
 /* src/components/drawer/drawer.css */
-/* Nova UI · Drawer 抽屉
+/* DomSprig-UI · Drawer 抽屉
  * <div class="nv-drawer" id hidden data-side="right">   根节点 = 遮罩（打开时移到 body）
  *   <div class="nv-drawer-panel">
  *     <div class="nv-drawer-header">  .nv-drawer-title .nv-drawer-desc .nv-drawer-close
@@ -5851,7 +5851,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 }
 
 /* src/components/popover/popover.css */
-/* Nova UI · Popover 弹出层
+/* DomSprig-UI · Popover 弹出层
  * <div class="nv-popover" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）
  *   .nv-popover-title / .nv-popover-desc / .nv-popover-footer   可选的内容部件
  *   .nv-popover-arrow                                           data-arrow 时自动插入
@@ -5933,7 +5933,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 }
 
 /* src/components/tooltip/tooltip.css */
-/* Nova UI · Tooltip
+/* DomSprig-UI · Tooltip
  * 任意元素加 data-tip="说明文字" 即可（事件委托，动态插入的元素自动生效，无需初始化）
  * data-tip-title      加粗标题                 data-tip-placement  top | bottom | left | right（可加 -start / -end）
  * data-tip-delay      显示延迟 ms（默认 300）    data-tip-overflow   仅在文字被截断时显示，内容默认取元素文字
@@ -6054,7 +6054,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 .nv-tip-truncate:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 2px; }
 
 /* src/components/dropdown/dropdown.css */
-/* Nova UI · Dropdown 下拉菜单 / 右键菜单
+/* DomSprig-UI · Dropdown 下拉菜单 / 右键菜单
  * <div class="nv-menu" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）与 role="menu"
  *   .nv-item[role=menuitem|menuitemcheckbox|menuitemradio]   菜单项（button 或 a）
  *   .nv-item-kbd           快捷键提示（右对齐）
@@ -6195,7 +6195,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 .nv-menu-zone:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
 
 /* src/components/command/command.css */
-/* Nova UI · Command 命令面板
+/* DomSprig-UI · Command 命令面板
  * 命令式：Nova.command.open({ items, placeholder, emptyText }) → 遮罩 .nv-command-dialog > .nv-command[role=dialog]
  * 内嵌：  <div class="nv-command" data-nv-command> .nv-command-input + .nv-command-list > .nv-item[data-value] </div>
  * 可定制：--nv-command-width（面板宽 640px）  --nv-command-top（面板距顶 12vh）  --nv-command-max-height（列表最大高度）
@@ -6403,7 +6403,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 }
 
 /* src/components/breadcrumb/breadcrumb.css */
-/* Nova UI · Breadcrumb 面包屑
+/* DomSprig-UI · Breadcrumb 面包屑
  * <nav class="nv-breadcrumb" aria-label="面包屑">
  *   <ol>
  *     <li><a href="/">首页</a></li>
@@ -6500,7 +6500,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 .nv-breadcrumb[data-variant="pill"] > ol { flex-wrap: nowrap; overflow: hidden; }
 
 /* src/components/tabs/tabs.css */
-/* Nova UI · Tabs
+/* DomSprig-UI · Tabs
  * <div class="nv-tabs">
  *   <div class="nv-tabs-list"><button class="nv-tab" data-value="a">…</button>…</div>
  *   <div class="nv-tab-panel" data-value="a">…</div>…
@@ -6769,7 +6769,7 @@ span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-ali
 }
 
 /* src/components/steps/steps.css */
-/* Nova UI · Steps
+/* DomSprig-UI · Steps
  * <ol class="nv-steps" data-current="1" aria-label="下单流程">
  *   <li class="nv-step"><span class="nv-step-title">标题</span><span class="nv-step-desc">说明</span></li>…
  * </ol>
@@ -6980,7 +6980,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 .nv-steps[data-variant="dot"] .nv-step-icon { transition: background-color var(--nv-dur-3) var(--nv-ease), box-shadow var(--nv-dur-3) var(--nv-ease), transform var(--nv-dur-3) var(--nv-ease-spring); }
 
 /* src/components/shimmer-button/shimmer-button.css */
-/* Nova UI · Shimmer Button 流光按钮 / 扫光 / 发光
+/* DomSprig-UI · Shimmer Button 流光按钮 / 扫光 / 发光
  * .nv-shimmer           流光按钮：一束光沿边框环绕，表面有高光扫过。可单独使用，也可叠加在 .nv-btn 上
  *   data-size           sm | md | lg（仅单独使用时；叠加 .nv-btn 时沿用按钮尺寸）
  * [data-shine]          扫光：悬停 / 键盘聚焦 / 触屏按下时一道高光扫过，任意容器元素可用（光层由 JS 注入）
@@ -7160,7 +7160,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/border-beam/border-beam.css */
-/* Nova UI · Border Beam 光束边框 / 流动渐变描边
+/* DomSprig-UI · Border Beam 光束边框 / 流动渐变描边
  * .nv-border-beam         给任意卡片加一束沿边框循环运动的光（光层由 border-beam.js 注入）
  *   data-beams="2"        同时运行的光束数（1–4，均匀错开）
  *   data-reverse          逆时针
@@ -7264,7 +7264,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/spotlight/spotlight.css */
-/* Nova UI · Spotlight 聚光卡片
+/* DomSprig-UI · Spotlight 聚光卡片
  * .nv-spotlight            卡片：指针处出现柔和光斑，同时附近的边框被照亮
  * .nv-spotlight-group      容器：内部所有 .nv-spotlight 共享同一个光源（光标附近的卡片边框都会亮起）
  * 可定制：--nv-spotlight-color（光色）--nv-spotlight-size（光斑直径）--nv-spotlight-bg（卡片底色）
@@ -7312,7 +7312,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/tilt/tilt.css */
-/* Nova UI · Tilt 3D 倾斜 / 磁吸
+/* DomSprig-UI · Tilt 3D 倾斜 / 磁吸
  * [data-nv-tilt]           指针悬停时 3D 倾斜，离开后弹性复位（JS 弹簧，transform 写在元素上）
  *   data-max="10"          最大倾斜角（度）      data-perspective="900"  透视距离（px）
  *   data-scale="1.03"      悬停放大              data-spring="0.5"       复位弹性 0（无回弹）–1（强回弹）
@@ -7361,7 +7361,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/text-fx/text-fx.css */
-/* Nova UI · Text FX 文字特效
+/* DomSprig-UI · Text FX 文字特效
  * .nv-text-gradient                 流动渐变文字（--nv-text-gradient 自定义渐变，需首尾同色才能无缝）
  * .nv-text-shine                    文字扫光（--nv-text-shine-base 底色 / --nv-text-shine-color 高光）
  * [data-nv-text="blur-in"]          逐词（data-split="char" 逐字）模糊淡入，进入视口触发
@@ -7495,7 +7495,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/marquee/marquee.css */
-/* Nova UI · Marquee 无限滚动
+/* DomSprig-UI · Marquee 无限滚动
  * <div class="nv-marquee">…任意子元素…</div>
  * JS 把内容包进 .nv-marquee-track > .nv-marquee-group，并按容器尺寸复制足够的副本（aria-hidden + inert）实现无缝循环。
  * data-reverse              反向            data-vertical          纵向（默认高 320px，--nv-marquee-height）
@@ -7572,7 +7572,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/confetti/confetti.css */
-/* Nova UI · Confetti 彩带
+/* DomSprig-UI · Confetti 彩带
  * 画布由 confetti.js 在喷发时创建，所有粒子落完后自动移除。
  * 支持 popover 的浏览器里画布进入顶层（top layer），模态对话框里触发也看得见；
  * 否则退回 fixed + 高 z-index。画布不拦截任何指针事件。
@@ -7594,7 +7594,7 @@ button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outlin
 }
 
 /* src/components/backdrop/backdrop.css */
-/* Nova UI · Backdrop 装饰背景
+/* DomSprig-UI · Backdrop 装饰背景
  * 背景层都是容器内的绝对定位层（inset: 0），不拦截指针，默认 z-index: -1 垫在内容下面。
  * 容器需要建立层叠上下文：加 .nv-bg-host（position: relative + isolation: isolate + 裁切），
  * 或自行写 position: relative; isolation: isolate。

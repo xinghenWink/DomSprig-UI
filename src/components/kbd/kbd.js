@@ -1,4 +1,4 @@
-/* Nova UI · Kbd
+/* DomSprig-UI · Kbd
  * <kbd class="nv-kbd" data-keys="mod+k"></kbd> → 按平台拆成多个按键：
  *   Mac：⌘ K    其他：Ctrl K（mod / ctrl / alt / shift / enter / esc / 方向键等有对应写法）
  * 结果是 <span class="nv-kbd-group"><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">K</kbd></span>，

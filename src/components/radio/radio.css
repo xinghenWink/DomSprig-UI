@@ -1,4 +1,4 @@
-/* Nova UI · Radio 单选框（纯 CSS，依赖 checkbox.css 中的 .nv-check / .nv-check-group / .nv-check-card 与颜色变量）
+/* DomSprig-UI · Radio 单选框（纯 CSS，依赖 checkbox.css 中的 .nv-check / .nv-check-group / .nv-check-card 与颜色变量）
  * <input type="radio" class="nv-radio" name="plan">     圆点弹性缩放动画
  * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
  */

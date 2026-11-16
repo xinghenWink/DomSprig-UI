@@ -1,4 +1,4 @@
-/* Nova UI · Tag Input 标签输入
+/* DomSprig-UI · Tag Input 标签输入
  * <div class="nv-tag-input" data-name="tags" data-value="设计,前端" data-placeholder="输入后回车"></div>
  * 需 tag-input.js 与 tag.css：增强成 .nv-control，回车 / 逗号把输入变成标签，退格删除最后一个。
  * data-name         隐藏 input 的 name，随表单提交（多个同名 input）

@@ -1,4 +1,4 @@
-/* Nova UI · Button
+/* DomSprig-UI · Button
  * 纯 CSS 即可使用；本文件只提供两项增强：
  * 1. data-ripple：按压水波纹（任意元素可用，事件委托，动态元素自动生效）
  * 2. Nova.button.loading(el, true|false)：切换加载态并同步 aria-busy

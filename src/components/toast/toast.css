@@ -1,4 +1,4 @@
-/* Nova UI · Toast
+/* DomSprig-UI · Toast
  * 由 toast.js 生成，不需要写 HTML：Nova.toast.success('已保存')
  * .nv-toast-region[data-position]   6 个位置的容器（top|bottom × left|center|right），带 data-nv-layer-ignore
  * .nv-toast[data-type]              success | error | warning | info | loading；[data-paused] 计时暂停

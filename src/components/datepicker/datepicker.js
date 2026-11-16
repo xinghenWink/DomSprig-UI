@@ -1,4 +1,4 @@
-/* Nova UI · DatePicker
+/* DomSprig-UI · DatePicker
  * <input type="date" data-nv-date>             日期        值 YYYY-MM-DD
  * <input type="datetime-local" data-nv-date>   日期时间    值 YYYY-MM-DDTHH:mm（本地时间）
  * <input data-nv-date-range name="period">     日期范围    值 YYYY-MM-DD/YYYY-MM-DD（ISO 8601 区间）

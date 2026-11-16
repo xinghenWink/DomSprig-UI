@@ -1,4 +1,4 @@
-/* Nova UI · Marquee 无限滚动
+/* DomSprig-UI · Marquee 无限滚动
  * <div class="nv-marquee">…任意子元素…</div>
  * JS 把内容包进 .nv-marquee-track > .nv-marquee-group，并按容器尺寸复制足够的副本（aria-hidden + inert）实现无缝循环。
  * data-reverse              反向            data-vertical          纵向（默认高 320px，--nv-marquee-height）

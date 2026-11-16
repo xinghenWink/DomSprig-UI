@@ -1,4 +1,4 @@
-/* Nova UI · Confetti 彩带
+/* DomSprig-UI · Confetti 彩带
  * Nova.confetti({ x, y, particleCount, spread, angle, velocity, gravity, drag, scalar, colors, shapes }) → Promise
  *   x / y 是视口比例（0–1），默认 0.5 / 0.6（屏幕中央偏下）；angle 90 表示朝上，spread 为扇形张角（度）。
  * Nova.confetti.burst(el, opts)   从元素中心喷出（颜色读取该元素所在处的 --nv-hue）

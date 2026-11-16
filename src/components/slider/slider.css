@@ -1,4 +1,4 @@
-/* Nova UI · Slider 滑块
+/* DomSprig-UI · Slider 滑块
  * 单值   <input type="range" class="nv-slider" min max step value>   无 JS 时也有完整外观（无填充色）
  *        slider.js 会包进 .nv-slider-box：写入填充比例、数值气泡（data-tooltip）、刻度（data-marks）
  * 范围   <div class="nv-slider-range" data-min="0" data-max="100" data-step="1" data-value="20,80" data-name="price">
