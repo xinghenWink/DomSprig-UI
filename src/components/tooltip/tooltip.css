@@ -1,0 +1,119 @@
+/* Nova UI · Tooltip
+ * 任意元素加 data-tip="说明文字" 即可（事件委托，动态插入的元素自动生效，无需初始化）
+ * data-tip-title      加粗标题                 data-tip-placement  top | bottom | left | right（可加 -start / -end）
+ * data-tip-delay      显示延迟 ms（默认 300）    data-tip-overflow   仅在文字被截断时显示，内容默认取元素文字
+ * 辅助类：.nv-tip-hint 虚线下划线文字 · .nv-tip-icon 圆形 i 图标 · .nv-tip-wrap 包裹禁用元素 · .nv-tip-truncate 单行截断
+ */
+.nv-tooltip {
+  --_bg: var(--nv-fg);
+  --_tx: 0px;
+  --_ty: 4px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: var(--nv-z-tooltip);
+  width: max-content;
+  max-width: min(var(--nv-tooltip-max-width, 280px), calc(100vw - 16px));
+  padding: 6px 10px;
+  border-radius: var(--nv-radius-md);
+  background: var(--_bg);
+  color: var(--nv-fg-inverse);
+  font: 400 var(--nv-text-xs) / 1.5 var(--nv-font);
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+  box-shadow: var(--nv-shadow-md);
+  pointer-events: none;
+  user-select: none;
+  transform-origin: var(--nv-origin, 50% 100%);
+}
+.nv-tooltip[data-titled] { padding: 8px 12px; }
+.nv-tooltip-title {
+  display: block;
+  margin-bottom: 2px;
+  font-size: var(--nv-text-sm);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.nv-tooltip[data-titled] .nv-tooltip-text {
+  display: block;
+  color: color-mix(in oklab, var(--nv-fg-inverse) 78%, var(--_bg));
+}
+
+/* 箭头：旋转方块，中心落在指向锚点的那条边上；z-index:-1 让它垫在文字下面 */
+.nv-tooltip::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: inherit;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.nv-tooltip[data-side="top"]::before { left: var(--nv-arrow-x, 50%); top: 100%; }
+.nv-tooltip[data-side="bottom"]::before { left: var(--nv-arrow-x, 50%); top: 0; }
+.nv-tooltip[data-side="left"]::before { left: 100%; top: var(--nv-arrow-y, 50%); }
+.nv-tooltip[data-side="right"]::before { left: 0; top: var(--nv-arrow-y, 50%); }
+
+/* 进出场：从锚点方向位移 4px + 轻微缩放弹出；工具栏中连续切换（跳过延迟）时只做淡入 */
+.nv-tooltip[data-side="bottom"] { --_ty: -4px; }
+.nv-tooltip[data-side="left"] { --_tx: 4px; --_ty: 0px; }
+.nv-tooltip[data-side="right"] { --_tx: -4px; --_ty: 0px; }
+.nv-tooltip[data-state="open"] { animation: nv-tip-in var(--nv-dur-3) var(--nv-ease-spring); }
+.nv-tooltip[data-state="open"][data-instant] { animation: nv-fade-in var(--nv-dur-1) var(--nv-ease-out); }
+.nv-tooltip[data-state="closed"] { animation: nv-fade-out var(--nv-dur-1) var(--nv-ease) forwards; }
+@keyframes nv-tip-in {
+  from { opacity: 0; transform: translate(var(--_tx), var(--_ty)) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ———————— 辅助类 ———————— */
+/* 文字标签旁「这里有说明」：虚线下划线 + 帮助光标 */
+.nv-tip-hint {
+  text-decoration: underline dashed var(--nv-fg-3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  cursor: help;
+  border-radius: 2px;
+  transition: text-decoration-color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-tip-hint:hover { text-decoration-color: var(--nv-fg-2); }
+.nv-tip-hint:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+
+/* 16px 圆形「i」图标；为空时 tooltip.js 自动填入 info 图标，也可放任意 <i data-nv-icon> */
+.nv-tip-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin: 0 0 0 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--nv-fg-3);
+  font: inherit;
+  line-height: 1;
+  vertical-align: -3px;
+  cursor: help;
+  transition: color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-tip-icon:hover { color: var(--nv-fg-2); }
+.nv-tip-icon:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-tip-icon > svg { width: 16px; height: 16px; }
+
+/* 禁用元素不触发鼠标事件：外面包一层可聚焦的 .nv-tip-wrap，把 data-tip 写在包裹层上 */
+.nv-tip-wrap { display: inline-flex; vertical-align: middle; border-radius: var(--nv-radius-md); cursor: not-allowed; }
+.nv-tip-wrap:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-tip-wrap > :is(:disabled, [aria-disabled="true"]) { pointer-events: none; }
+
+/* 单行截断，配合 data-tip-overflow：只有真的被截断时才显示完整原文 */
+.nv-tip-truncate {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nv-tip-truncate:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 2px; }

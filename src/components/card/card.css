@@ -1,0 +1,122 @@
+/* Nova UI · Card 卡片（纯 CSS）
+ * <article class="nv-card">
+ *   <div class="nv-card-media"><img …></div>                  可选：封面，贴边显示
+ *   <header class="nv-card-header">
+ *     <div><h3 class="nv-card-title">标题</h3><p class="nv-card-desc">说明</p></div>
+ *     <div class="nv-card-extra">右上角操作</div>
+ *   </header>
+ *   <div class="nv-card-body">内容</div>
+ *   <footer class="nv-card-footer">底部操作</footer>
+ * </article>
+ * data-variant  outline（默认）| elevated | filled | ghost
+ * data-size     sm | md（默认）| lg            内边距
+ * a.nv-card / [data-interactive]   悬停浮起
+ * label.nv-card 内放 radio / checkbox：选中时高亮（选择卡片），可加 data-indicator 显示右上角勾选标记
+ */
+.nv-card {
+  --_p: 20px;
+  --_gap: 14px;
+  --_r: var(--nv-radius-xl);
+  --_bg: var(--nv-surface);
+  --_bd: var(--nv-border);
+  --_shadow: var(--nv-shadow-xs);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--_bd);
+  border-radius: var(--_r);
+  background: var(--_bg);
+  color: var(--nv-fg);
+  box-shadow: var(--_shadow);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-3) var(--nv-ease), transform var(--nv-dur-3) var(--nv-ease-out), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-card[data-size="sm"] { --_p: 14px; --_gap: 10px; --_r: var(--nv-radius-lg); font-size: var(--nv-text-sm); }
+.nv-card[data-size="lg"] { --_p: 28px; --_gap: 18px; }
+
+.nv-card[data-variant="elevated"] { --_bd: color-mix(in oklab, var(--nv-border) 60%, transparent); --_shadow: var(--nv-shadow-md); background: var(--nv-surface-raised); }
+.nv-card[data-variant="filled"] { --_bg: var(--nv-surface-2); --_bd: transparent; --_shadow: none; }
+.nv-card[data-variant="ghost"] { --_bg: transparent; --_bd: transparent; --_shadow: none; }
+
+/* 结构：卡片自身留内边距，子元素之间用 gap；封面用负边距贴边 */
+.nv-card { gap: var(--_gap); padding: var(--_p); }
+.nv-card-header { display: flex; align-items: flex-start; gap: 12px; }
+.nv-card-header > :first-child { flex: 1; min-width: 0; }
+.nv-card-header > .nv-avatar:first-child { flex: none; }
+.nv-card-header > .nv-avatar:first-child + * { flex: 1; min-width: 0; }
+.nv-card-title { margin: 0; font-size: var(--nv-text-lg); font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; color: var(--nv-fg); }
+.nv-card[data-size="sm"] .nv-card-title { font-size: var(--nv-text-md); }
+.nv-card-desc { margin: 2px 0 0; font-size: var(--nv-text-sm); color: var(--nv-fg-2); line-height: 1.5; }
+.nv-card-extra { flex: none; display: inline-flex; align-items: center; gap: 4px; margin: -4px -6px 0 0; }
+.nv-card-body { color: var(--nv-fg-2); flex: 1 0 auto; }
+.nv-card-body > :first-child { margin-top: 0; }
+.nv-card-body > :last-child { margin-bottom: 0; }
+.nv-card-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.nv-card-footer[data-divider] { margin-inline: calc(var(--_p) * -1); padding: var(--_gap) var(--_p) 0; border-top: 1px solid var(--nv-border); }
+.nv-card-footer[data-align="end"] { justify-content: flex-end; }
+.nv-card-footer[data-align="between"] { justify-content: space-between; }
+
+/* 封面：贴边、继承圆角 */
+.nv-card-media { position: relative; overflow: hidden; margin-inline: calc(var(--_p) * -1); background: var(--nv-surface-2); }
+.nv-card > .nv-card-media:where(:first-child, input:first-child + *) { margin-top: calc(var(--_p) * -1); border-radius: calc(var(--_r) - 1px) calc(var(--_r) - 1px) 0 0; }
+.nv-card > .nv-card-media:where(:last-child) { margin-bottom: calc(var(--_p) * -1); border-radius: 0 0 calc(var(--_r) - 1px) calc(var(--_r) - 1px); }
+.nv-card-media > :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: var(--nv-card-ratio, 16 / 9); transition: transform var(--nv-dur-4) var(--nv-ease-out); }
+.nv-card > .nv-card-media[data-inset] { margin: 0; border-radius: calc(var(--_r) - 6px); }
+
+/* 横向布局 */
+.nv-card[data-orientation="horizontal"] { flex-direction: row; padding: 0; gap: 0; }
+.nv-card[data-orientation="horizontal"] > .nv-card-media { flex: none; width: var(--nv-card-media-width, 38%); margin: 0; border-radius: calc(var(--_r) - 1px) 0 0 calc(var(--_r) - 1px); }
+.nv-card[data-orientation="horizontal"] > .nv-card-media > :is(img, video) { aspect-ratio: auto; }
+.nv-card-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--_gap); }
+.nv-card[data-orientation="horizontal"] > .nv-card-content { padding: var(--_p); }
+
+/* 可交互 */
+:is(a, button).nv-card,
+.nv-card[data-interactive] { cursor: pointer; }
+:is(a, button).nv-card:hover,
+.nv-card[data-interactive]:hover { --_bd: var(--nv-border-strong); --_shadow: var(--nv-shadow-md); transform: translateY(-2px); }
+:is(a, button).nv-card:hover .nv-card-media > img,
+.nv-card[data-interactive]:hover .nv-card-media > img { transform: scale(1.03); }
+:is(a, button).nv-card:active,
+.nv-card[data-interactive]:active { transform: translateY(0); }
+:is(a, button).nv-card:focus-visible,
+.nv-card[data-interactive]:focus-within:has(:focus-visible) { outline: 0; --_bd: var(--nv-primary); box-shadow: 0 0 0 3px var(--nv-ring); }
+button.nv-card { width: 100%; text-align: inherit; font: inherit; }
+/* 整卡可点：卡片内的 a[data-card-link] 用伪元素铺满卡片，其他按钮仍可单独点击 */
+.nv-card [data-card-link]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.nv-card [data-card-link] { color: inherit; text-decoration: none; outline: 0; }
+.nv-card :is(button, a, input, select, textarea):not([data-card-link]) { position: relative; z-index: 1; }
+
+/* 选择卡片 */
+label.nv-card { cursor: pointer; }
+label.nv-card:hover { --_bd: var(--nv-border-strong); }
+label.nv-card > :is(input[type="radio"], input[type="checkbox"]):not(.nv-checkbox, .nv-radio) { position: absolute; opacity: 0; pointer-events: none; }
+label.nv-card:has(> input:checked) { --_bd: var(--nv-primary); --_bg: color-mix(in oklab, var(--nv-primary-soft) 45%, var(--nv-surface)); box-shadow: 0 0 0 1px var(--nv-primary); }
+label.nv-card:has(> input:focus-visible) { box-shadow: 0 0 0 1px var(--nv-primary), 0 0 0 4px var(--nv-ring); }
+label.nv-card:has(> input:disabled) { opacity: 0.55; cursor: not-allowed; }
+label.nv-card[data-indicator]::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--nv-border-input);
+  border-radius: 50%;
+  background: var(--nv-surface) center / 12px no-repeat;
+  transition: background-color var(--nv-dur-2), border-color var(--nv-dur-2);
+}
+label.nv-card[data-indicator]:has(> input:checked)::after {
+  border-color: var(--nv-primary);
+  background-color: var(--nv-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+.nv-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--nv-card-min, 240px), 1fr)); gap: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-card, .nv-card-media > :is(img, video) { transition: none; }
+  :is(a, button).nv-card:hover, .nv-card[data-interactive]:hover { transform: none; }
+}

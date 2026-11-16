@@ -1,0 +1,134 @@
+<!--
+@name stat
+@title Stat 统计数值
+@category data
+@order 15
+@deps number-ticker
+@desc 仪表盘里的指标卡：标签、数值、单位、同比环比趋势、迷你走势图和目标完成度。数值可以配合 Number Ticker 做滚动计数。
+-->
+
+<!-- @demo 指标卡 | `data-variant="card"` 卡片外观。趋势写 `data-trend="up|down|flat"`，上涨为绿色、下跌为红色；`data-invert` 反过来（如退款率下降是好事）。 | block -->
+<style>
+  .st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; width: 100%; }
+</style>
+<div class="st-grid">
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label">总收入<span class="nv-stat-icon"><i data-nv-icon="credit-card"></i></span></div>
+    <div class="nv-stat-value"><span data-nv-ticker data-value="128930" data-prefix="¥ ">¥ 128,930</span></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="up">12.5%</span>较上月</div>
+  </div>
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label">活跃用户<span class="nv-stat-icon" data-color="info"><i data-nv-icon="users"></i></span></div>
+    <div class="nv-stat-value"><span data-nv-ticker data-value="8642">8,642</span><small>人</small></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="down">3.1%</span>较上月</div>
+  </div>
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label">退款率<span class="nv-stat-icon" data-color="warning"><i data-nv-icon="refresh"></i></span></div>
+    <div class="nv-stat-value"><span data-nv-ticker data-value="1.8" data-decimals="1">1.8</span><small>%</small></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="down" data-invert>0.4%</span>较上月</div>
+  </div>
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label">平均响应</div>
+    <div class="nv-stat-value">320<small>ms</small></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="flat">0%</span>持平</div>
+  </div>
+</div>
+
+<!-- @demo 迷你走势图 | `svg.nv-stat-spark` 写 `data-values`，stat.js 画出平滑曲线。`data-type="line"` 只画线，`data-dot` 标出末端，`data-animate` 进入视口时描线。 | block -->
+<div class="st-grid">
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label"><i data-nv-icon="bar-chart"></i>页面浏览量</div>
+    <div class="nv-stat-value">48.2<small>万</small></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="up">8.2%</span>近 14 天</div>
+    <svg class="nv-stat-spark" data-values="12 18 15 22 19 26 24 30 28 33 31 38 36 42" data-animate data-dot></svg>
+  </div>
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label"><i data-nv-icon="users"></i>新增注册</div>
+    <div class="nv-stat-value">1,204</div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="down">5.4%</span>近 14 天</div>
+    <svg class="nv-stat-spark" data-color="danger" data-values="40 38 41 36 37 33 35 31 32 29 30 28 27 26" data-animate></svg>
+  </div>
+  <div class="nv-stat" data-variant="card">
+    <div class="nv-stat-label"><i data-nv-icon="zap"></i>接口调用</div>
+    <div class="nv-stat-value" id="st-live-value">2,860<small>次/分</small></div>
+    <div class="nv-stat-meta">每秒刷新</div>
+    <svg class="nv-stat-spark" data-type="line" data-color="success" id="st-live" data-values="20 24 22 28 26 30 27 32 29 31 28 33"></svg>
+  </div>
+</div>
+<script>
+  {
+    const svg = document.getElementById('st-live');
+    const out = document.getElementById('st-live-value');
+    let data = svg.dataset.values.split(' ').map(Number);
+    const timer = setInterval(() => {
+      if (!svg.isConnected) return clearInterval(timer);
+      const inst = Nova.get(svg, 'stat-spark');
+      if (!inst || svg.closest('[hidden]')) return;
+      const next = Math.max(10, Math.min(45, data[data.length - 1] + Math.round(Math.random() * 8 - 4)));
+      data = [...data.slice(1), next];
+      inst.set(data);
+      out.firstChild.textContent = (next * 100 - 140).toLocaleString('zh-CN');
+    }, 1000);
+  }
+</script>
+
+<!-- @demo 统计组 | `.nv-stat-group` 把多个指标放进同一个框里，等宽排列，自动换行，中间有分隔线。`.nv-stat-bar` 显示目标完成度。 | block -->
+<div class="nv-stat-group" style="width: 100%">
+  <div class="nv-stat">
+    <div class="nv-stat-label">本月销售额</div>
+    <div class="nv-stat-value">¥ 86.4<small>万</small></div>
+    <div class="nv-stat-meta">目标 ¥ 120 万 · 72%</div>
+    <div class="nv-stat-bar"><i style="--value: 72%"></i></div>
+  </div>
+  <div class="nv-stat">
+    <div class="nv-stat-label">订单数</div>
+    <div class="nv-stat-value">3,218</div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="up" data-variant="text">9.6%</span>较上月</div>
+  </div>
+  <div class="nv-stat">
+    <div class="nv-stat-label">客单价</div>
+    <div class="nv-stat-value">¥ 268</div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="down" data-variant="text">1.2%</span>较上月</div>
+  </div>
+  <div class="nv-stat">
+    <div class="nv-stat-label">复购率</div>
+    <div class="nv-stat-value">34<small>%</small></div>
+    <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="up" data-variant="text">2.0%</span>较上月</div>
+  </div>
+</div>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-stat` | 一个指标 |
+| `.nv-stat-label` | 标签，可以放图标；`.nv-stat-icon` 放在标签里会靠右 |
+| `.nv-stat-icon` | 带底色的图标块，`data-color` 取 `success` `warning` `danger` `info` |
+| `.nv-stat-value` | 数值，里面的 `<small>` 是单位 |
+| `.nv-stat-meta` | 底部说明，常放趋势 |
+| `.nv-stat-trend` | 趋势标记 |
+| `svg.nv-stat-spark` | 迷你走势图，需 stat.js |
+| `.nv-stat-bar > i` | 完成度条，宽度写在 `--value` |
+| `.nv-stat-group` | 指标组，最小列宽 `--nv-stat-min`（默认 160px） |
+
+### 属性
+| 位置 | 属性 | 说明 |
+|---|---|---|
+| `.nv-stat` | `data-variant` | `card` 卡片外观 |
+| `.nv-stat` | `data-size` | `sm` `md` `lg`（数值 22 / 28 / 36px） |
+| 趋势 | `data-trend` | `up` `down` `flat` |
+| 趋势 | `data-invert` | 下跌显示为绿色，上涨显示为红色 |
+| 趋势 | `data-variant` | `text` 去掉底色 |
+| 走势图 | `data-values` | 数据，空格或逗号分隔 |
+| 走势图 | `data-type` | `area`（默认）`line` |
+| 走势图 | `data-color` | `success` `danger` `warning` `info`，默认主色 |
+| 走势图 | `data-dot` / `data-animate` | 末端圆点 / 进入视口时描线 |
+| 走势图 | `data-min` / `data-max` | 固定纵轴范围 |
+
+### 方法
+`Nova.get(svg, 'stat-spark').set(values)` 更新走势图数据；`.values` 读取当前数据。
+
+### 说明
+- 走势图是装饰，带 `aria-hidden`；需要读屏获取的信息写在 `.nv-stat-meta` 里。
+- 减少动态时走势图直接显示，不做描线动画。
+-->

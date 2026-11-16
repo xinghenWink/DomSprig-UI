@@ -1,0 +1,74 @@
+<!--
+@name rating
+@title Rating 评分
+@category form
+@order 12
+@desc 星级评分。每颗星是一个原生 radio，表单提交、方向键和读屏都由浏览器完成；半星、悬停预览和再点清空是增强。
+-->
+
+<!-- @demo 基础 | 点击选分，方向键切换，再点当前值不会清空。容器上派发 `nv:change { value }`。 | col -->
+<div class="doc-stack">
+  <div class="nv-rating" id="rt-basic" data-name="score" aria-label="满意度"></div>
+  <div class="doc-log" id="rt-log">value = 0</div>
+</div>
+<script>
+  document.getElementById('rt-basic').addEventListener('nv:change', (e) => {
+    document.getElementById('rt-log').textContent = `value = ${e.detail.value}`;
+  });
+</script>
+
+<!-- @demo 半星与初始值 | `data-half` 允许半星，悬停时左半边是 x.5、右半边是整数；`data-value` 设初始分；`data-show-value` 在末尾显示分数。 | col -->
+<div class="doc-stack">
+  <div class="nv-rating" data-half data-value="3.5" data-show-value aria-label="半星评分"></div>
+  <div class="nv-rating" data-value="4" data-show-value aria-label="四星"></div>
+</div>
+
+<!-- @demo 尺寸与颜色 | `data-size` 取 sm / md / lg / xl；`data-color` 换成主色。 | col -->
+<div class="doc-stack">
+  <div class="nv-rating" data-size="sm" data-value="3" aria-label="小号"></div>
+  <div class="nv-rating" data-value="3" aria-label="默认"></div>
+  <div class="nv-rating" data-size="lg" data-color="primary" data-value="4" aria-label="大号主色"></div>
+  <div class="nv-rating" data-size="xl" data-value="5" aria-label="超大"></div>
+</div>
+
+<!-- @demo 可清空、只读与禁用 | `data-clearable` 再点当前值清空；`data-readonly` 只展示不能改；`data-max` 改星星数量。 | col -->
+<div class="doc-stack">
+  <div class="nv-rating" data-clearable data-value="2" data-show-value aria-label="可清空"></div>
+  <div class="nv-rating" data-readonly data-value="4.5" data-half data-show-value aria-label="只读"></div>
+  <div class="nv-rating" data-max="10" data-value="7" data-show-value aria-label="十分制"></div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-name` | radio 的 name，随表单提交 | 自动生成 |
+| `data-value` | 初始分数 | `0` |
+| `data-max` | 星星数量 | `5` |
+| `data-half` | 允许半星 | — |
+| `data-clearable` | 再点当前值清空 | — |
+| `data-show-value` | 末尾显示分数 | — |
+| `data-readonly` | 只读 | — |
+| `data-size` | `sm` `md` `lg` `xl` | `md` |
+| `data-color` | `primary` 用主色，其余为警告色 | — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `change` | 原生 radio 事件 |
+| `nv:change` | 在容器上派发，`detail: { value }`，清空时为 `0` |
+
+### 实例
+`Nova.get(el, 'rating')`：
+
+| 成员 | 说明 |
+|---|---|
+| `value` | 读写分数；写入不派发事件 |
+| `clear()` | 清空 |
+
+### 无障碍
+- 容器是 `role="radiogroup"`，要写 `aria-label`。
+- 每颗星是一个 radio，半星模式左右各一个，`aria-label` 为「3 星」「3.5 星」。
+- 方向键在星级间切换（浏览器原生 radio 行为），Tab 进出整组。
+- 没有 JS 时没有星星，所以这个组件依赖 JS。
+-->

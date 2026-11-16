@@ -1,0 +1,56 @@
+<div class="doc-hero">
+  <div class="nv-bg-grid doc-hero-bg" aria-hidden="true"></div>
+  <div class="nv-bg-aurora doc-hero-aurora" aria-hidden="true"></div>
+  <a class="doc-hero-pill" href="#/text-fx"><span class="nv-badge" data-variant="solid" data-size="sm">新</span>{{COUNT}} 个组件 · 零依赖 · 源码分发<i data-nv-icon="arrow-right" data-size="14"></i></a>
+  <h1 class="doc-hero-title">为<span data-nv-text="type" data-words="后台系统|营销页面|数据看板|AI 应用" class="nv-text-gradient">后台系统</span><br>打造的现代组件库</h1>
+  <p class="doc-hero-lead">原生 JS + CSS，复制即用。精致的默认视觉、完整的键盘与无障碍支持、开箱即用的动效，一个变量换主色，一行属性切暗色。</p>
+  <div class="doc-hero-actions">
+    <a class="nv-btn nv-shimmer" data-size="lg" href="#/button">浏览组件<i data-nv-icon="arrow-right"></i></a>
+    <a class="nv-btn" data-variant="outline" data-size="lg" href="#quickstart" data-doc-scroll>快速开始</a>
+  </div>
+  <div class="doc-hero-install"><code>node scripts/add.mjs select toast --out src/ui/nova</code></div>
+</div>
+
+<div class="doc-stats">
+  <div><b><span data-nv-ticker data-value="{{COUNT}}">{{COUNT}}</span></b><span>组件</span></div>
+  <div><b>0</b><span>运行时依赖</span></div>
+  <div><b>2</b><span>明暗主题</span></div>
+  <div><b><span data-nv-ticker data-value="360">360</span>°</b><span>主色可调</span></div>
+</div>
+
+<div class="nv-spotlight-group doc-features">
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="code" data-size="20"></i><b>源码分发</b><p>像 shadcn/ui 一样把源码复制进项目，按依赖自动带上所需文件，改起来没有包袱。</p></div>
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="zap" data-size="20"></i><b>零依赖、无构建</b><p>原生 JS + CSS，双击 HTML 就能跑；React、Vue 或纯后端模板里都能直接用。</p></div>
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="palette" data-size="20"></i><b>一个变量换主题</b><p>OKLCH 色彩体系：改 <code>--nv-hue</code> 整套配色随之变化，明暗主题自动适配。</p></div>
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="users" data-size="20"></i><b>无障碍优先</b><p>遵循 WAI-ARIA 模式：完整键盘操作、焦点管理、读屏语义，减少动态偏好自动降级。</p></div>
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="sparkles" data-size="20"></i><b>现代动效</b><p>流光、光束边框、聚光卡片、数字滚动、文字特效，给营销页和看板加点灵气。</p></div>
+  <div class="nv-spotlight doc-feature"><i data-nv-icon="grid" data-size="20"></i><b>业务组件齐全</b><p>表格、日期范围、上传、命令面板、确认框……覆盖后台系统的常见场景。</p></div>
+</div>
+
+<div class="doc-quick" id="quickstart">
+  <h2>快速开始</h2>
+  <div class="doc-quick-grid">
+    <div>
+      <h3><span>1</span>引入</h3>
+      <p>全量引入构建产物，或用 CLI 只复制需要的组件源码。</p>
+<pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">link</span> <span class="tk-a">rel</span>=<span class="tk-s">"stylesheet"</span> <span class="tk-a">href</span>=<span class="tk-s">"dist/nova.css"</span><span class="tk-p">&gt;</span>
+<span class="tk-p">&lt;</span><span class="tk-t">script</span> <span class="tk-a">src</span>=<span class="tk-s">"dist/nova.js"</span><span class="tk-p">&gt;&lt;/</span><span class="tk-t">script</span><span class="tk-p">&gt;</span></code></pre>
+    </div>
+    <div>
+      <h3><span>2</span>使用</h3>
+      <p>给原生元素加上类名或 <code>data-nv-*</code> 属性，动态插入的元素也会自动初始化。</p>
+<pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">select</span> <span class="tk-a">data-nv-select</span> <span class="tk-a">data-search</span><span class="tk-p">&gt;</span>…<span class="tk-p">&lt;/</span><span class="tk-t">select</span><span class="tk-p">&gt;</span>
+<span class="tk-f">Nova</span>.toast.<span class="tk-f">success</span>(<span class="tk-s">'已保存'</span>)</code></pre>
+    </div>
+    <div>
+      <h3><span>3</span>定制</h3>
+      <p>设计变量集中在 tokens.css；主题、主色与圆角可在运行时切换。</p>
+<pre class="doc-pre"><code><span class="tk-p">&lt;</span><span class="tk-t">html</span> <span class="tk-a">data-theme</span>=<span class="tk-s">"dark"</span><span class="tk-p">&gt;</span>
+:root { <span class="tk-a">--nv-hue</span>: 165; <span class="tk-a">--nv-radius</span>: 12px; }</code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="doc-overview">
+{{OVERVIEW}}
+</div>

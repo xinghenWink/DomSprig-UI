@@ -1,0 +1,186 @@
+/* Nova UI · Alert
+ * <div class="nv-alert" data-color="info">
+ *   <div class="nv-alert-title">标题</div>
+ *   <div class="nv-alert-desc">描述</div>
+ *   <div class="nv-alert-actions">…按钮</div>
+ * </div>
+ * data-color    info（默认） | primary | success | warning | danger | neutral
+ * data-variant  soft（默认） | outline | solid | banner（顶部通栏）
+ * data-icon     none 关闭默认图标 / 图标名 替换默认图标（需 alert.js）
+ * data-closable 显示关闭按钮（需 alert.js）
+ */
+.nv-alert {
+  /* 颜色通道 */
+  --_c: var(--nv-info);
+  --_text: var(--nv-info-text);
+  --_soft: var(--nv-info-soft);
+  --_on: #fff;
+  --_on-2: rgb(255 255 255 / 0.88);
+  /* 外观通道（变体切换） */
+  --_bg: var(--_soft);
+  --_bd: color-mix(in oklab, var(--_c) 22%, transparent);
+  --_title: var(--_text);
+  --_desc: var(--nv-fg-2);
+  --_icon: var(--_text);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  padding: var(--nv-alert-padding, 12px 14px);
+  border: 1px solid var(--nv-alert-border, var(--_bd));
+  border-radius: var(--nv-alert-radius, var(--nv-radius-lg));
+  /* 柔和底色叠在 surface 上，避免透出页面背景纹理 */
+  background: linear-gradient(var(--nv-alert-bg, var(--_bg)) 0 0), var(--nv-surface);
+  color: var(--_desc);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  text-align: left;
+}
+.nv-alert[hidden] { display: none; }
+
+/* 内容默认放在中间列；图标与关闭按钮跨行放在两侧，没有它们时两侧列宽度为 0 */
+.nv-alert > * { grid-column: 2; min-width: 0; }
+.nv-alert > .nv-alert-icon {
+  grid-column: 1;
+  grid-row: 1 / span 6;
+  width: 18px;
+  height: 18px;
+  margin: 2px 10px 0 0;
+  color: var(--nv-alert-color, var(--_icon));
+}
+.nv-alert > .nv-alert-close { grid-column: 3; grid-row: 1 / span 6; }
+
+.nv-alert-title {
+  color: var(--nv-alert-color, var(--_title));
+  font-weight: 600;
+  line-height: 22px;
+}
+.nv-alert-desc {
+  color: var(--_desc);
+  font-size: var(--nv-text-md);
+  line-height: 22px;
+}
+.nv-alert-title + .nv-alert-desc { margin-top: 2px; }
+.nv-alert-desc :is(ul, ol) { margin: 4px 0 0; padding-left: 1.25em; }
+.nv-alert-desc li + li { margin-top: 2px; }
+.nv-alert-desc a,
+.nv-alert-link {
+  color: var(--nv-alert-color, var(--_title));
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--nv-dur-1);
+}
+.nv-alert-desc a:hover,
+.nv-alert-link:hover { text-decoration-color: currentColor; }
+.nv-alert :is(a, .nv-alert-link):focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 3px; }
+.nv-alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* 关闭按钮 */
+.nv-alert-close {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin: -2px -6px -2px 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--_desc);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-alert-close:hover { background: color-mix(in oklab, currentColor 10%, transparent); color: var(--nv-alert-color, var(--_title)); }
+.nv-alert-close:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-alert-close > svg { width: 16px; height: 16px; }
+
+/* —— 颜色 —— */
+.nv-alert[data-color="primary"] { --_c: var(--nv-primary); --_text: var(--nv-primary-text); --_soft: var(--nv-primary-soft); }
+.nv-alert[data-color="success"] { --_c: var(--nv-success); --_text: var(--nv-success-text); --_soft: var(--nv-success-soft); }
+.nv-alert[data-color="warning"] {
+  --_c: var(--nv-warning);
+  --_text: var(--nv-warning-text);
+  --_soft: var(--nv-warning-soft);
+  --_on: oklch(0.25 0.06 60);
+  --_on-2: oklch(0.25 0.06 60 / 0.82);
+}
+.nv-alert[data-color="danger"] { --_c: var(--nv-danger); --_text: var(--nv-danger-text); --_soft: var(--nv-danger-soft); }
+.nv-alert[data-color="neutral"] {
+  --_c: var(--nv-fg-2);
+  --_text: var(--nv-fg);
+  --_soft: var(--nv-surface-2);
+  --_on: var(--nv-fg-inverse);
+  --_on-2: color-mix(in oklab, var(--nv-fg-inverse) 82%, transparent);
+  --_bd: var(--nv-border);
+  --_icon: var(--nv-fg-2);
+}
+.nv-alert[data-color="neutral"][data-variant="solid"] { --_c: var(--nv-fg); }
+
+/* —— 变体 —— */
+.nv-alert[data-variant="outline"] {
+  --_bg: var(--nv-surface);
+  --_bd: color-mix(in oklab, var(--_c) 45%, var(--nv-border));
+  box-shadow: var(--nv-shadow-xs);
+}
+.nv-alert[data-variant="outline"][data-color="neutral"] { --_bd: var(--nv-border-input); }
+.nv-alert[data-variant="outline"]::before {
+  /* 左侧细色条，让描边款在白底上也有足够的识别度 */
+  content: "";
+  position: absolute;
+  inset: 10px auto 10px -1px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--_c);
+}
+.nv-alert[data-variant="solid"] {
+  --_bg: var(--_c);
+  --_bd: transparent;
+  --_title: var(--_on);
+  --_desc: var(--_on-2);
+  --_icon: var(--_on);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0)), var(--nv-alert-bg, var(--_c));
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--_c) 30%, transparent), 0 6px 16px -8px color-mix(in oklab, var(--_c) 60%, transparent);
+}
+.nv-alert[data-variant="solid"] .nv-alert-close:hover { color: var(--_on); }
+.nv-alert[data-variant="solid"] :is(a, .nv-alert-link, .nv-alert-close):focus-visible { outline-color: currentColor; }
+
+/* 横幅：贴顶通栏，内容居中排成一行 */
+.nv-alert[data-variant="banner"] {
+  --_bg: color-mix(in oklab, var(--_c) 12%, var(--nv-surface));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 48px;
+  border-width: 0 0 1px;
+  border-color: var(--nv-alert-border, color-mix(in oklab, var(--_c) 28%, transparent));
+  border-radius: 0;
+  font-size: var(--nv-text-sm);
+  text-align: center;
+}
+.nv-alert[data-color="neutral"][data-variant="banner"] { --_bg: var(--nv-surface-2); }
+.nv-alert[data-variant="banner"] > .nv-alert-icon { margin: 0; width: 16px; height: 16px; }
+.nv-alert[data-variant="banner"] :is(.nv-alert-title, .nv-alert-desc) { margin: 0; font-size: var(--nv-text-sm); line-height: 20px; }
+.nv-alert[data-variant="banner"] .nv-alert-desc { color: var(--nv-fg); }
+.nv-alert[data-variant="banner"] .nv-alert-actions { margin: 0 0 0 4px; gap: 6px; }
+.nv-alert[data-variant="banner"] > .nv-alert-close { position: absolute; right: 12px; top: 50%; margin: -13px 0 0; }
+
+@media (max-width: 599px) {
+  /* 窄屏：回到图标 + 纵向内容的网格布局，左对齐 */
+  .nv-alert[data-variant="banner"] { display: grid; align-items: start; gap: 2px 0; padding: 10px 44px 10px 14px; text-align: left; }
+  .nv-alert[data-variant="banner"] > .nv-alert-icon { margin: 2px 10px 0 0; }
+  .nv-alert[data-variant="banner"] > :is(.nv-alert-link, .nv-alert-actions) { justify-self: start; }
+  .nv-alert[data-variant="banner"] .nv-alert-actions { margin: 6px 0 2px; }
+  .nv-alert[data-variant="banner"] > .nv-alert-close { top: 7px; right: 8px; margin: 0; }
+}

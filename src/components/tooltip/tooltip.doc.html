@@ -1,0 +1,138 @@
+<!--
+@name tooltip
+@title Tooltip 文字提示
+@category overlay
+@order 40
+@deps button
+@desc 为图标按钮、截断文本、置灰按钮和指标口径补充简短说明。只需 `data-tip`，事件委托、全页单例、自动翻转，键盘聚焦同样触发。
+-->
+
+<!-- @demo 基础用法 | 给任意元素加 `data-tip`，悬停 300ms 后显示。在工具栏里连续移动时，后一个提示立即出现（跳过延迟）。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="ghost" data-icon aria-label="编辑" data-tip="编辑"><i data-nv-icon="pencil"></i></button>
+  <button class="nv-btn" data-variant="ghost" data-icon aria-label="复制" data-tip="复制到剪贴板"><i data-nv-icon="copy"></i></button>
+  <button class="nv-btn" data-variant="ghost" data-icon aria-label="分享链接" data-tip="复制分享链接"><i data-nv-icon="link"></i></button>
+  <button class="nv-btn" data-variant="ghost" data-icon aria-label="下载" data-tip="下载原始文件"><i data-nv-icon="download"></i></button>
+  <button class="nv-btn" data-variant="ghost" data-icon aria-label="收藏" data-tip="加入收藏夹"><i data-nv-icon="star"></i></button>
+  <button class="nv-btn" data-variant="ghost" data-icon data-color="danger" aria-label="删除" data-tip="移到回收站，30 天后彻底删除"><i data-nv-icon="trash"></i></button>
+</div>
+
+<!-- @demo 位置 | `data-tip-placement` 指定首选方向；空间不足时自动翻转到对侧，贴边时夹紧在视口内，箭头始终指向元素中心。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-tip="显示在上方" data-tip-placement="top">上方</button>
+  <button class="nv-btn" data-variant="outline" data-tip="显示在下方" data-tip-placement="bottom">下方</button>
+  <button class="nv-btn" data-variant="outline" data-tip="显示在左侧" data-tip-placement="left">左侧</button>
+  <button class="nv-btn" data-variant="outline" data-tip="显示在右侧" data-tip-placement="right">右侧</button>
+  <button class="nv-btn" data-variant="outline" data-tip="与元素起始边对齐，箭头仍指向元素中心" data-tip-placement="bottom-start">下方 · 起始对齐</button>
+</div>
+
+<!-- @demo 标题与描述 | `data-tip-title` 加粗标题，`data-tip` 作为描述；超过最大宽度 280px 自动换行。适合说明指标口径：写清「是什么 / 怎么算」。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="soft" data-color="neutral" data-tip-title="任务成功率" data-tip="成功含部分完成；不计取消及进行中的任务。统计周期为近 7 天，每小时更新。">
+    <i data-nv-icon="bar-chart"></i>成功率 98.2%
+  </button>
+  <button class="nv-btn" data-variant="soft" data-color="neutral" data-tip-title="活跃用户" data-tip="当日至少完成 1 次登录且停留超过 30 秒的去重用户数。" data-tip-placement="bottom">
+    <i data-nv-icon="users"></i>日活 12,480
+  </button>
+</div>
+
+<!-- @demo 辅助样式 | `.nv-tip-hint` 给文字加虚线下划线，提示「这里有说明」；`.nv-tip-icon` 是 16px 的圆形 i 图标，留空时自动填充。两者都应可聚焦。 -->
+<div class="doc-stack doc-mid">
+  <p>当前套餐包含 <span class="nv-tip-hint" tabindex="0" data-tip="每月 1 日 00:00（UTC+8）重置，未用完的额度不累计。">10 万次 API 调用</span>，超出部分按量计费。</p>
+  <div class="doc-row">
+    <span>并发上限<button class="nv-tip-icon" aria-label="并发上限说明" data-tip="同一时刻处理中的请求数，超出的请求会排队等待。"></button></span>
+    <span>冷启动时间<button class="nv-tip-icon" aria-label="冷启动时间说明" data-tip-title="冷启动" data-tip="实例闲置 15 分钟后会被回收，下次请求需要重新加载，约 1–3 秒。"></button></span>
+  </div>
+</div>
+
+<!-- @demo 延迟 | `data-tip-delay` 覆盖显示延迟（毫秒）。频繁出现的提示可以设为 0，次要信息适当加长以免打扰。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-tip="立即显示" data-tip-delay="0">无延迟</button>
+  <button class="nv-btn" data-variant="outline" data-tip="默认延迟 300ms">默认</button>
+  <button class="nv-btn" data-variant="outline" data-tip="悬停 800ms 后才显示" data-tip-delay="800">800ms</button>
+</div>
+
+<!-- @demo 置灰按钮与截断文本 | 禁用元素不触发鼠标事件，外面包一层 `.nv-tip-wrap`（`tabindex="0"`），并说明**为什么不可用**。`data-tip-overflow` 只在文字真的被截断时显示完整原文。 | block -->
+<div class="doc-stack doc-narrow">
+  <div class="doc-row">
+    <span class="nv-tip-wrap" tabindex="0" data-tip="你没有发布权限，请联系项目管理员">
+      <button class="nv-btn" disabled><i data-nv-icon="upload"></i>发布版本</button>
+    </span>
+    <span class="nv-tip-wrap" tabindex="0" data-tip="至少选择 1 个文件后才能删除">
+      <button class="nv-btn" data-variant="outline" data-color="danger" disabled>删除所选</button>
+    </span>
+  </div>
+  <span class="nv-tip-truncate" tabindex="0" data-tip-overflow>2026 年第四季度产品路线图与资源规划（终版，已经过评审委员会确认）.pdf</span>
+  <span class="nv-tip-truncate" tabindex="0" data-tip-overflow>季度汇报.pdf（未截断，不显示提示）</span>
+</div>
+
+<!-- @demo 键盘与动态内容 | 用 Tab 聚焦同样会显示，按 Esc 只关闭提示（不会连带关闭下方的弹窗）。修改 `data-tip` 后调用 `Nova.tooltip.show(el)` 可即时反馈，例如复制成功。 -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="tooltip-slug">项目标识</label>
+    <input class="nv-control" id="tooltip-slug" placeholder="例如 nova-docs" data-tip="只能包含小写字母、数字和短横线，创建后不可修改" data-tip-placement="bottom">
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" id="tooltip-copy" data-tip="复制邀请链接"><i data-nv-icon="copy"></i>复制链接</button>
+  </div>
+</div>
+<script>
+  {
+    const btn = document.getElementById('tooltip-copy');
+    btn.addEventListener('click', () => {
+      btn.dataset.tip = '已复制';
+      Nova.tooltip.show(btn);
+    });
+    btn.addEventListener('pointerleave', () => { btn.dataset.tip = '复制邀请链接'; });
+    btn.addEventListener('blur', () => { btn.dataset.tip = '复制邀请链接'; });
+  }
+</script>
+
+<!-- @api
+### 属性
+写在触发元素上；属性随时可改，下次显示时生效。
+
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-tip` | 提示文字，按纯文本渲染 | 字符串 | — |
+| `data-tip-title` | 加粗标题，与 `data-tip` 组成「标题 + 描述」 | 字符串 | — |
+| `data-tip-placement` | 首选方向，空间不足时自动翻转到对侧 | `top` `bottom` `left` `right`，可加 `-start` / `-end` | `top` |
+| `data-tip-delay` | 显示延迟（毫秒），`0` 为立即 | 数字 | `300` |
+| `data-tip-overflow` | 只在元素文字被截断时显示；未写 `data-tip` 时内容取元素文字 | 布尔 | — |
+
+### 辅助类
+| 类名 | 说明 |
+|---|---|
+| `.nv-tip-hint` | 虚线下划线 + 帮助光标，标记「这段文字有说明」；记得加 `tabindex="0"` |
+| `.nv-tip-icon` | 16px 圆形 i 图标；元素为空时自动填入图标；用 `<button>` 并写 `aria-label` |
+| `.nv-tip-wrap` | 包裹禁用的按钮/输入框，让提示可以悬停与聚焦触发 |
+| `.nv-tip-truncate` | 单行省略号截断，常与 `data-tip-overflow` 搭配 |
+
+### 行为
+- 悬停或键盘聚焦后按延迟显示；鼠标点击引起的聚焦不显示。
+- 一个提示刚关闭后 500ms 内移到另一个目标，立即显示（跳过延迟，只做淡入）。
+- 移出、失焦、按 Esc、按下鼠标、滚动、窗口缩放时立即隐藏；目标被移除时自动隐藏。
+- 全页只有一个提示节点；`(hover: none)` 的触摸设备不显示，**关键信息不要只放在提示里**。
+- 提示节点 `pointer-events: none`，鼠标不能移入；需要可点击内容请用 Popover。
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.tooltip.show(el)` | 立即为 `el`（元素或选择器）显示提示，忽略延迟与触摸设备限制 |
+| `Nova.tooltip.hide()` | 立即隐藏当前提示，返回是否关掉了一个可见提示 |
+| `Nova.tooltip.config({ delay, skipDelay, offset })` | 全局默认：显示延迟（300）、免延迟窗口（500）、与目标的间距（9），返回当前配置 |
+| `Nova.tooltip.current` | 当前正在显示提示的目标元素，没有则为 `null` |
+
+### 无障碍
+- 提示节点 `role="tooltip"`、`id="nv-tooltip"`；目标获得悬停或焦点时追加 `aria-describedby="nv-tooltip"`，离开后移除（保留原有的描述 id）。
+- Esc 在窗口捕获阶段处理：提示可见时只关闭提示并阻止事件继续传播，下方的 Modal / Popover 不受影响；再按一次 Esc 才关闭它们。
+- 只有图标的按钮仍需 `aria-label`，提示是补充描述，不是可访问名称。
+- 提示节点带 `data-nv-layer-ignore`，不会触发浮层栈的「点击外部关闭」。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-tooltip-max-width` | 最大宽度，超出换行 | `280px` |
+| `--nv-fg` / `--nv-fg-inverse` | 背景色 / 文字色（反色气泡，随明暗主题自动切换） | — |
+| `--nv-z-tooltip` | 层级，高于 Toast 与所有浮层 | `1300` |
+-->

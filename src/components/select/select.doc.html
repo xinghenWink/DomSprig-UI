@@ -1,0 +1,269 @@
+<!--
+@name select
+@title Select 选择器
+@category form
+@order 20
+@deps button
+@desc 增强原生 select：统一外观、可搜索、分组、说明与图标、多选胶囊；原生值与 change 事件照常，键盘与读屏完整可用。
+-->
+
+<!-- @demo 基础用法 | 给 `<select>` 加 `data-nv-select` 即可。`value=""` 的选项作为占位，不出现在菜单里；值变化时原生 `change` 照常触发。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="select-basic">生成模型</label>
+  <select id="select-basic" name="model" data-nv-select>
+    <option value="" selected>选择模型</option>
+    <option value="nova-pro">Nova Pro</option>
+    <option value="nova-lite">Nova Lite</option>
+    <option value="nova-vision">Nova Vision</option>
+  </select>
+  <div class="doc-log" id="select-basic-log">change → （未选择）</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('select-basic');
+    const log = document.getElementById('select-basic-log');
+    el.addEventListener('change', () => { log.textContent = `change → ${el.value || '（未选择）'}`; });
+  }
+</script>
+
+<!-- @demo 说明、图标与禁用项 | 选项上写 `data-desc` 在右侧显示补充信息，`data-icon` 显示图标；`disabled` 的选项不可选，键盘导航会自动跳过。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="select-quality">出图质量</label>
+  <select id="select-quality" data-nv-select>
+    <option value="fast" data-icon="zap" data-desc="1 积分" selected>快速</option>
+    <option value="standard" data-icon="image" data-desc="2 积分">标准</option>
+    <option value="fine" data-icon="sparkles" data-desc="4 积分">精细</option>
+    <option value="ultra" data-icon="star" data-desc="即将上线" disabled>超清</option>
+  </select>
+</div>
+
+<!-- @demo 分组与搜索 | `optgroup` 生成分组标题；`data-search` 在菜单顶部加搜索框，按名称、说明与值过滤，无结果时显示 `data-empty-text`。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="select-tz">时区</label>
+  <select id="select-tz" data-nv-select data-search data-search-placeholder="搜索城市或偏移…">
+    <optgroup label="亚洲">
+      <option value="Asia/Tokyo" data-desc="UTC+09:00">东京</option>
+      <option value="Asia/Shanghai" data-desc="UTC+08:00" selected>上海</option>
+      <option value="Asia/Singapore" data-desc="UTC+08:00">新加坡</option>
+      <option value="Asia/Bangkok" data-desc="UTC+07:00">曼谷</option>
+      <option value="Asia/Kolkata" data-desc="UTC+05:30">孟买</option>
+    </optgroup>
+    <optgroup label="欧洲">
+      <option value="Europe/Paris" data-desc="UTC+01:00">巴黎</option>
+      <option value="Europe/London" data-desc="UTC+00:00">伦敦</option>
+    </optgroup>
+    <optgroup label="美洲">
+      <option value="America/New_York" data-desc="UTC-05:00">纽约</option>
+      <option value="America/Los_Angeles" data-desc="UTC-08:00">洛杉矶</option>
+      <option value="America/Sao_Paulo" data-desc="UTC-03:00">圣保罗</option>
+    </optgroup>
+    <option value="UTC" data-desc="UTC+00:00">协调世界时</option>
+  </select>
+</div>
+
+<!-- @demo 多选 | `multiple` 时触发器内显示可删除的胶囊，选择后菜单保持打开；`data-max-tags` 限制显示数量，其余折叠为 +N。触发器聚焦时按 Backspace 删除最后一项。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="select-tags">文章标签</label>
+    <select id="select-tags" name="tags" multiple data-nv-select data-placeholder="选择标签" data-clearable>
+      <option value="design" selected>设计</option>
+      <option value="frontend" selected>前端</option>
+      <option value="a11y">无障碍</option>
+      <option value="motion">动效</option>
+      <option value="perf">性能</option>
+      <option value="archived" disabled>已归档</option>
+    </select>
+  </div>
+  <div>
+    <label class="doc-label" for="select-members">通知成员</label>
+    <select id="select-members" multiple data-nv-select data-search data-max-tags="2" data-placeholder="选择成员">
+      <option value="lin" data-icon="user" selected>林一</option>
+      <option value="zhou" data-icon="user" selected>周舟</option>
+      <option value="chen" data-icon="user" selected>陈晨</option>
+      <option value="wu" data-icon="user">吴越</option>
+      <option value="he" data-icon="user">何夕</option>
+      <option value="ops" data-icon="users" data-desc="12 人">运维组</option>
+    </select>
+  </div>
+  <div class="doc-log" id="select-tags-log"></div>
+</div>
+<script>
+  {
+    const el = document.getElementById('select-tags');
+    const log = document.getElementById('select-tags-log');
+    const show = () => { log.textContent = `tags = [${[...el.selectedOptions].map((o) => o.value).join(', ')}]`; };
+    el.addEventListener('change', show);
+    show();
+  }
+</script>
+
+<!-- @demo 尺寸与状态 | `data-size="sm"` / `lg` 与按钮、输入框同高；`aria-invalid="true"` 显示错误态；`disabled` 禁用；`data-clearable` 有值时显示清除按钮（键盘 Delete）。 | col -->
+<div class="doc-stack doc-narrow">
+  <select data-nv-select data-size="sm" aria-label="画面比例（小）">
+    <option>1:1 · 小号</option><option>3:4</option><option>16:9</option>
+  </select>
+  <select data-nv-select aria-label="画面比例（中）">
+    <option>1:1</option><option selected>3:4 · 默认</option><option>16:9</option>
+  </select>
+  <select data-nv-select data-size="lg" aria-label="画面比例（大）">
+    <option>1:1</option><option>3:4</option><option selected>16:9 · 大号</option>
+  </select>
+  <div>
+    <select data-nv-select aria-invalid="true" aria-label="所属部门" aria-describedby="select-err-hint">
+      <option value="" selected>所属部门</option>
+      <option>设计部</option><option>研发部</option>
+    </select>
+    <div class="doc-hint" id="select-err-hint">请选择所属部门</div>
+  </div>
+  <select data-nv-select disabled aria-label="禁用的选择器">
+    <option>已锁定，不可修改</option>
+  </select>
+  <select data-nv-select data-clearable aria-label="优先级">
+    <option value="">优先级</option>
+    <option value="high" selected>高优先级</option><option value="low">低优先级</option>
+  </select>
+</div>
+
+<!-- @demo 底部输入栏：向上展开 | 下方空间不足且上方更大时自动向上展开；也可用 `data-placement="top-start"` 固定向上。菜单挂在 body 上，不会被 `overflow: hidden` 的卡片裁剪。 | col tall -->
+<div class="doc-stack doc-narrow">
+  <div class="doc-hint">聊天输入栏通常贴近屏幕底部，模型选择器向上弹出：</div>
+  <select data-nv-select data-size="sm" data-placement="top-start" data-placeholder="选择模型" aria-label="对话模型">
+    <option value="">选择模型</option>
+    <option value="nova-pro" data-desc="1 积分/次">Nova Pro</option>
+    <option value="nova-lite" data-desc="免费">Nova Lite</option>
+    <option value="nova-reason" data-desc="3 积分/次">Nova Reason</option>
+  </select>
+  <div class="doc-hint">完整回复 1 积分 · 失败或中断不扣费</div>
+</div>
+
+<!-- @demo 在弹窗中使用 | 位于原生 `<dialog>` 内时，菜单挂载到该 dialog（顶层渲染），不被遮挡；Esc 先关闭菜单，再按一次才关闭弹窗。 -->
+<button type="button" class="nv-btn" data-variant="outline" id="select-dialog-open">打开弹窗</button>
+<dialog class="doc-dialog" id="select-dialog" aria-labelledby="select-dialog-title">
+  <h3 id="select-dialog-title">邀请成员</h3>
+  <label class="doc-label" for="select-dialog-role">成员角色</label>
+  <select id="select-dialog-role" data-nv-select>
+    <option value="viewer" data-desc="只读" selected>访客</option>
+    <option value="editor" data-desc="可编辑">编辑者</option>
+    <option value="admin" data-desc="全部权限">管理员</option>
+  </select>
+  <div class="doc-dialog-actions">
+    <button type="button" class="nv-btn" data-variant="ghost" id="select-dialog-close">取消</button>
+    <button type="button" class="nv-btn" id="select-dialog-ok">发送邀请</button>
+  </div>
+</dialog>
+<script>
+  {
+    const dlg = document.getElementById('select-dialog');
+    document.getElementById('select-dialog-open').addEventListener('click', () => dlg.showModal());
+    document.getElementById('select-dialog-close').addEventListener('click', () => dlg.close());
+    document.getElementById('select-dialog-ok').addEventListener('click', () => dlg.close());
+  }
+</script>
+
+<!-- @demo 表单与程序化控制 | 原生 select 参与表单提交与重置。脚本修改 `value` 或增删 `option` 后调用 `Nova.select.refresh(el)`（增删选项会自动同步）。键盘：↑ ↓ Enter 空格展开，↑ ↓ Home End 移动，Enter/空格选中，Esc 关闭，直接输入首字母跳转。 | col -->
+<form class="doc-stack doc-narrow" id="select-form">
+  <div>
+    <label class="doc-label" for="select-city">配送城市</label>
+    <select id="select-city" name="city" data-nv-select required>
+      <option value="">选择城市</option>
+      <option value="bj">北京</option>
+      <option value="sh">上海</option>
+      <option value="gz">广州</option>
+      <option value="sz">深圳</option>
+    </select>
+  </div>
+  <div class="doc-row">
+    <button type="button" class="nv-btn" data-variant="soft" data-size="sm" id="select-random">随机选一个</button>
+    <button type="button" class="nv-btn" data-variant="soft" data-size="sm" id="select-add">添加「杭州」</button>
+    <button type="reset" class="nv-btn" data-variant="ghost" data-size="sm">重置</button>
+    <button type="submit" class="nv-btn" data-size="sm">提交</button>
+  </div>
+  <div class="doc-log" id="select-form-log"></div>
+</form>
+<script>
+  {
+    const form = document.getElementById('select-form');
+    const city = document.getElementById('select-city');
+    const log = document.getElementById('select-form-log');
+    document.getElementById('select-random').addEventListener('click', () => {
+      const opts = [...city.options].filter((o) => o.value);
+      city.value = opts[Math.floor(Math.random() * opts.length)].value;
+      Nova.select.refresh(city);
+    });
+    document.getElementById('select-add').addEventListener('click', (e) => {
+      if (!city.querySelector('[value="hz"]')) city.append(new Option('杭州', 'hz'));
+      e.currentTarget.disabled = true;
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      log.textContent = `submit → ${new URLSearchParams(new FormData(form))}`;
+    });
+  }
+</script>
+
+<!-- @api
+### 属性（写在 `<select>` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-nv-select` | 启用增强 | 布尔 | — |
+| `multiple` | 多选：触发器内显示胶囊，选择后菜单不关闭 | 布尔 | — |
+| `data-placeholder` | 未选择时的占位文字；不写时取 `value=""` 选项的文字 | 字符串 | `请选择` |
+| `data-search` | 菜单顶部显示搜索框 | 布尔 | — |
+| `data-search-placeholder` | 搜索框占位文字 | 字符串 | `搜索…` |
+| `data-empty-text` | 搜索无结果时的文字 | 字符串 | `无匹配项` |
+| `data-no-options-text` | 没有任何选项时的文字 | 字符串 | `暂无选项` |
+| `data-clearable` | 有值时显示清除按钮（键盘 Delete / Backspace） | 布尔 | — |
+| `data-clear-text` | 清除按钮的提示文字 | 字符串 | `清除` |
+| `data-remove-text` | 胶囊删除按钮的提示前缀 | 字符串 | `移除` |
+| `data-max-tags` | 多选时最多显示的胶囊数，其余显示 +N | 数字 | 不限 |
+| `data-size` | 尺寸 | `sm` `md` `lg` | `md` |
+| `data-placement` | 菜单方向（空间不足时仍会翻转） | `bottom-start` `bottom-end` `top-start` `top-end` | `bottom-start` |
+| `aria-invalid="true"` | 错误态 | 布尔 | — |
+| `disabled` / `required` | 原生禁用 / 必填，同步到触发器 | 布尔 | — |
+| `aria-label` | 没有可见 `<label>` 时必须提供 | 字符串 | — |
+
+### 选项属性（写在 `<option>` / `<optgroup>` 上）
+| 属性 | 说明 |
+|---|---|
+| `value=""` | 占位项：不出现在菜单中 |
+| `data-desc` | 右侧灰色说明文字，也参与搜索 |
+| `data-icon` | 选项图标，取 `Nova.icons` 中的名称；单选时同时显示在触发器内 |
+| `disabled` | 禁用该项（`optgroup[disabled]` 禁用整组） |
+| `optgroup[label]` | 分组标题 |
+
+### 事件（在原生 `<select>` 上）
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 与原生一致，值变化时依次触发 |
+| `nv:open` / `nv:close` | 菜单打开 / 关闭 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.select.refresh(el)` | 程序化修改 `value`、`selected` 后同步显示；增删 `option`、改 `disabled` 会自动同步 |
+| `Nova.select.open(el)` / `Nova.select.close(el)` | 打开 / 关闭菜单 |
+| `Nova.get(el, 'select')` | 实例：`open()` `close()` `toggle()` `clear()` `refresh()` `destroy()`，`value`（多选为数组）、`trigger`、`panel` |
+
+### 键盘
+| 按键 | 说明 |
+|---|---|
+| ↓ ↑ / Enter / 空格 | 触发器聚焦时展开菜单 |
+| ↓ ↑ / Home / End / PageUp / PageDown | 移动高亮（跳过禁用项） |
+| Enter / 空格 | 选中高亮项（多选为切换） |
+| 字母 / 数字 | 首字母跳转，600ms 内连续输入累计匹配；可搜索时直接输入到搜索框 |
+| Esc / Tab | 关闭菜单（Esc 焦点回到触发器） |
+| Backspace / Delete | 多选删除最后一项；单选 `data-clearable` 时清除 |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-select-width` | 触发器宽度 | `100%` |
+| `--nv-select-min-width` | 触发器最小宽度 | `160px` |
+| `--nv-select-max-height` | 选项列表最大高度 | `280px` |
+| `--nv-select-panel-max-width` | 菜单最大宽度（不小于触发器宽度） | `420px` |
+
+### 无障碍
+- 触发器 `role="combobox"` + `aria-haspopup="listbox"` + `aria-expanded` + `aria-controls`；菜单 `role="listbox"`（多选 `aria-multiselectable`），选项 `role="option"` + `aria-selected`，分组 `role="group"`。
+- 高亮项通过 `aria-activedescendant` 指示，焦点始终留在触发器（可搜索时在搜索框）。
+- 可访问名称由 `<label>`（或 `aria-label`）加当前值组成；原生 select 对读屏隐藏，点击 label 会把焦点转给触发器。
+-->

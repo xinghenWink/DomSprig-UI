@@ -1,0 +1,231 @@
+<!--
+@name drawer
+@title Drawer 抽屉
+@category overlay
+@order 20
+@deps modal
+@desc 从屏幕边缘滑入的模态面板，适合设置、详情与移动端导航。与 Modal 共用同一套内核：焦点陷阱、滚动锁定、Esc / 遮罩关闭、嵌套与还焦，动画方向随 data-side。
+-->
+
+<!-- @demo 四个方向 | `data-side="right|left|top|bottom"`，默认从右侧滑入；上下方向的抽屉高度随内容，并带圆角。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-demo-side="left"><i data-nv-icon="arrow-right"></i>左侧</button>
+  <button class="nv-btn" data-variant="outline" data-demo-side="top"><i data-nv-icon="arrow-down"></i>顶部</button>
+  <button class="nv-btn" data-variant="outline" data-demo-side="bottom"><i data-nv-icon="arrow-up"></i>底部</button>
+  <button class="nv-btn" data-variant="outline" data-demo-side="right"><i data-nv-icon="arrow-left"></i>右侧</button>
+</div>
+<div class="nv-drawer" id="drawer-side" hidden>
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">从<span id="drawer-side-name">右侧</span>滑入</h2>
+      <p class="nv-drawer-desc">按 Esc 或点击遮罩关闭，焦点会回到刚才的按钮。</p>
+      <button class="nv-drawer-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-drawer-body">
+      <p>抽屉不会打断页面上下文：用户能看到背后的页面，处理完后自然回到原来的位置。</p>
+    </div>
+    <div class="nv-drawer-footer">
+      <button class="nv-btn" data-nv-drawer-close>知道了</button>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const drawer = document.getElementById('drawer-side');
+    const names = { left: '左侧', right: '右侧', top: '顶部', bottom: '底部' };
+    for (const btn of document.querySelectorAll('[data-demo-side]')) {
+      btn.addEventListener('click', () => {
+        drawer.dataset.side = btn.dataset.demoSide;
+        document.getElementById('drawer-side-name').textContent = names[btn.dataset.demoSide];
+        Nova.drawer.open(drawer);
+      });
+    }
+  }
+</script>
+
+<!-- @demo 设置抽屉 | 真实场景：表单放在可滚动的正文里，底部操作栏固定；打开后焦点进入第一个输入框。 -->
+<button class="nv-btn" data-nv-drawer-open="#drawer-settings"><i data-nv-icon="settings"></i>项目设置</button>
+<div class="nv-drawer" id="drawer-settings" hidden>
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">项目设置</h2>
+      <p class="nv-drawer-desc">Nova 官网 · 生产环境</p>
+      <button class="nv-drawer-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-drawer-body">
+      <div class="doc-stack">
+        <div>
+          <label class="doc-label" for="drawer-settings-name">项目名称</label>
+          <input class="nv-control" id="drawer-settings-name" value="Nova 官网">
+        </div>
+        <div>
+          <label class="doc-label" for="drawer-settings-domain">自定义域名</label>
+          <input class="nv-control" id="drawer-settings-domain" value="www.nova.dev">
+          <div class="doc-hint">修改域名后需要重新验证 DNS 记录。</div>
+        </div>
+        <div>
+          <label class="doc-label" for="drawer-settings-branch">生产分支</label>
+          <input class="nv-control" id="drawer-settings-branch" value="main">
+        </div>
+        <div>
+          <span class="doc-label">部署通知</span>
+          <div class="doc-stack">
+            <label class="doc-row"><input type="checkbox" checked>部署成功时发邮件</label>
+            <label class="doc-row"><input type="checkbox" checked>部署失败时发邮件</label>
+            <label class="doc-row"><input type="checkbox">每周发送用量报告</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nv-drawer-footer">
+      <button class="nv-btn" data-variant="outline" data-nv-drawer-close>取消</button>
+      <button class="nv-btn" data-nv-drawer-close>保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 尺寸 | `data-size="sm|md|lg|xl|full"`：左右抽屉宽 320 / 400 / 560 / 720 px 与全屏；上下抽屉高 30 / 45 / 65 / 85 / 100 dvh。窄屏下左右抽屉最多占满视口宽度减 48px。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-demo-drawer-size="sm">sm</button>
+  <button class="nv-btn" data-variant="outline" data-demo-drawer-size="md">md</button>
+  <button class="nv-btn" data-variant="outline" data-demo-drawer-size="lg">lg</button>
+  <button class="nv-btn" data-variant="outline" data-demo-drawer-size="xl">xl</button>
+  <button class="nv-btn" data-variant="outline" data-demo-drawer-size="full">full</button>
+</div>
+<div class="nv-drawer" id="drawer-size" hidden>
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">尺寸 <span id="drawer-size-name">md</span></h2>
+      <button class="nv-drawer-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-drawer-body">
+      <p>详情类内容用 md，含表格或代码对比时用 lg / xl。</p>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const drawer = document.getElementById('drawer-size');
+    for (const btn of document.querySelectorAll('[data-demo-drawer-size]')) {
+      btn.addEventListener('click', () => {
+        drawer.dataset.size = btn.dataset.demoDrawerSize;
+        document.getElementById('drawer-size-name').textContent = btn.dataset.demoDrawerSize;
+        Nova.drawer.open(drawer);
+      });
+    }
+  }
+</script>
+
+<!-- @demo 底部操作面板 | 移动端常见的分享 / 更多操作：底部抽屉 + `.nv-item` 列表，选择后关闭。 -->
+<button class="nv-btn" data-variant="soft" data-nv-drawer-open="#drawer-share"><i data-nv-icon="external"></i>分享文档</button>
+<div class="nv-drawer" id="drawer-share" data-side="bottom" hidden>
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">分享「2026 产品规划」</h2>
+      <p class="nv-drawer-desc">获得链接的人可以查看，不能编辑。</p>
+    </div>
+    <div class="nv-drawer-body">
+      <button class="nv-item" data-nv-drawer-close><i data-nv-icon="link"></i><span class="nv-item-label">复制链接</span></button>
+      <button class="nv-item" data-nv-drawer-close><i data-nv-icon="mail"></i><span class="nv-item-label">通过邮件发送</span></button>
+      <button class="nv-item" data-nv-drawer-close><i data-nv-icon="download"></i><span class="nv-item-label">导出为 PDF</span></button>
+      <button class="nv-item" data-nv-drawer-close><i data-nv-icon="users"></i><span class="nv-item-label">邀请协作者</span></button>
+    </div>
+    <div class="nv-drawer-footer">
+      <button class="nv-btn" data-variant="outline" data-block data-nv-drawer-close>取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 移动端导航 | 左侧抽屉放导航链接；`data-size="sm"` 宽 320px。 -->
+<button class="nv-btn" data-icon data-variant="outline" aria-label="打开导航" data-nv-drawer-open="#drawer-nav"><i data-nv-icon="menu"></i></button>
+<div class="nv-drawer" id="drawer-nav" data-side="left" data-size="sm" hidden aria-label="主导航">
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">Nova 控制台</h2>
+      <button class="nv-drawer-close" aria-label="关闭导航"><i data-nv-icon="x"></i></button>
+    </div>
+    <nav class="nv-drawer-body">
+      <a class="nv-item" href="#/drawer"><i data-nv-icon="home"></i><span class="nv-item-label">概览</span></a>
+      <a class="nv-item" href="#/drawer"><i data-nv-icon="folder"></i><span class="nv-item-label">项目</span></a>
+      <a class="nv-item" href="#/drawer"><i data-nv-icon="bar-chart"></i><span class="nv-item-label">用量分析</span></a>
+      <a class="nv-item" href="#/drawer"><i data-nv-icon="users"></i><span class="nv-item-label">团队</span></a>
+      <a class="nv-item" href="#/drawer"><i data-nv-icon="credit-card"></i><span class="nv-item-label">账单</span></a>
+    </nav>
+  </div>
+</div>
+
+<!-- @demo 命令式与事件 | `Nova.drawer.open(el)` / `Nova.drawer.close(el)`；`data-static` 让遮罩点击无效。事件与 Modal 相同：`nv:open`、`nv:close`（`detail.reason`）。 -->
+<button class="nv-btn" data-variant="outline" id="drawer-api-btn">打开（3 秒后自动关闭）</button>
+<div class="doc-log" id="drawer-api-log">等待操作…</div>
+<div class="nv-drawer" id="drawer-api" data-static hidden>
+  <div class="nv-drawer-panel">
+    <div class="nv-drawer-header">
+      <h2 class="nv-drawer-title">正在同步</h2>
+      <p class="nv-drawer-desc">静态遮罩：点击遮罩不会关闭。</p>
+    </div>
+    <div class="nv-drawer-body">
+      <p>3 秒后通过 <code>Nova.drawer.close()</code> 自动关闭，也可以按 Esc。</p>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const drawer = document.getElementById('drawer-api');
+    const log = document.getElementById('drawer-api-log');
+    let timer = 0;
+    document.getElementById('drawer-api-btn').addEventListener('click', () => {
+      Nova.drawer.open(drawer);
+      clearTimeout(timer);
+      timer = setTimeout(() => Nova.drawer.close(drawer), 3000);
+    });
+    drawer.addEventListener('nv:open', () => { log.textContent = 'nv:open'; });
+    drawer.addEventListener('nv:close', (e) => { log.textContent = `nv:close · reason = ${e.detail.reason}`; clearTimeout(timer); });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-drawer` | 根节点 = 遮罩。必须带 `hidden` 与唯一 `id`；打开时移到 `<body>` 末尾 |
+| `.nv-drawer-panel` | 滑入的面板 |
+| `.nv-drawer-header` | 头部：`.nv-drawer-title`、`.nv-drawer-desc`、`.nv-drawer-close` |
+| `.nv-drawer-body` | 正文，内部滚动，滚动时出现分隔线 |
+| `.nv-drawer-footer` | 底部操作区；`.nv-drawer-extra` 放在左侧的附加内容 |
+
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-side` | 滑入方向 | `right` `left` `top` `bottom` | `right` |
+| `data-size` | 左右：宽度；上下：高度 | `sm` `md` `lg` `xl` `full` | 左右 `md`，上下随内容 |
+| `data-static` | 点击遮罩不关闭 | 布尔 | — |
+| `data-open` | 初始化后立即打开 | 布尔 | — |
+| `data-nv-drawer-open="#id"` | 点击打开对应抽屉 | 选择器 | — |
+| `data-nv-drawer-close` | 点击关闭所在抽屉（或指定选择器） | 布尔 / 选择器 | — |
+| `data-autofocus` / `autofocus` | 打开时优先聚焦该元素 | 布尔 | — |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.drawer.open(el)` | 打开，`el` 可以是元素或选择器 |
+| `Nova.drawer.close(el, reason?)` | 关闭 |
+| `Nova.drawer.toggle(el)` / `Nova.drawer.isOpen(el)` | 切换 / 是否打开 |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:open` | 打开后在 `.nv-drawer` 上触发 | — |
+| `nv:close` | 开始关闭时触发 | `{ reason }`：`escape` `outside` `close-button` `api` |
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Tab` / `Shift + Tab` | 焦点在抽屉内循环 |
+| `Esc` | 关闭最上层抽屉 / 对话框 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-drawer-width` | 左右抽屉默认宽度，默认 `400px` |
+| `--nv-overlay` / `--nv-z-modal` | 遮罩颜色 / 层级（tokens，与 Modal 相同） |
+-->

@@ -1,0 +1,216 @@
+<!--
+@name badge
+@title Badge 徽标
+@category general
+@order 40
+@deps button
+@desc 小号的状态、分类与计数标记。.nv-badge 用于行内文字徽标（soft / solid / outline / surface 四种外观、六种语义色、状态圆点）；.nv-indicator 给图标、按钮、头像加数字或圆点角标，支持 99+、呼吸动效和四个方位。纯 CSS。
+-->
+
+<!-- @demo 外观与颜色 | `data-variant` 切换 soft（默认）、solid、outline、surface 四种外观，`data-color` 取 neutral、primary、success、warning、danger、info。不写颜色时 soft 为中性灰，solid 为主色。 | col left -->
+<div class="doc-stack" style="gap:12px">
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge">默认</span>
+    <span class="nv-badge" data-color="primary">主色</span>
+    <span class="nv-badge" data-color="success">成功</span>
+    <span class="nv-badge" data-color="warning">警告</span>
+    <span class="nv-badge" data-color="danger">危险</span>
+    <span class="nv-badge" data-color="info">信息</span>
+  </div>
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-variant="solid" data-color="neutral">默认</span>
+    <span class="nv-badge" data-variant="solid">主色</span>
+    <span class="nv-badge" data-variant="solid" data-color="success">成功</span>
+    <span class="nv-badge" data-variant="solid" data-color="warning">警告</span>
+    <span class="nv-badge" data-variant="solid" data-color="danger">危险</span>
+    <span class="nv-badge" data-variant="solid" data-color="info">信息</span>
+  </div>
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-variant="outline">默认</span>
+    <span class="nv-badge" data-variant="outline" data-color="primary">主色</span>
+    <span class="nv-badge" data-variant="outline" data-color="success">成功</span>
+    <span class="nv-badge" data-variant="outline" data-color="warning">警告</span>
+    <span class="nv-badge" data-variant="outline" data-color="danger">危险</span>
+    <span class="nv-badge" data-variant="outline" data-color="info">信息</span>
+  </div>
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-variant="surface">默认</span>
+    <span class="nv-badge" data-variant="surface" data-color="primary">主色</span>
+    <span class="nv-badge" data-variant="surface" data-color="success">成功</span>
+    <span class="nv-badge" data-variant="surface" data-color="warning">警告</span>
+    <span class="nv-badge" data-variant="surface" data-color="danger">危险</span>
+    <span class="nv-badge" data-variant="surface" data-color="info">信息</span>
+  </div>
+</div>
+
+<!-- @demo 状态圆点、图标与尺寸 | `data-dot` 在文字前加一个同色圆点，适合表格里的状态列；内容只有圆点（空元素）时变成 8px 纯圆点。`data-size` 有 sm / md / lg，`data-shape="square"` 改成小圆角。 | col left -->
+<div class="doc-stack" style="gap:14px">
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-dot data-color="success">运行中</span>
+    <span class="nv-badge" data-dot data-color="warning">部署中</span>
+    <span class="nv-badge" data-dot data-color="danger">失败</span>
+    <span class="nv-badge" data-dot>已暂停</span>
+    <span class="nv-badge" data-dot data-variant="outline" data-color="info">排队中</span>
+  </div>
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-color="success"><i data-nv-icon="circle-check"></i>已通过</span>
+    <span class="nv-badge" data-color="danger"><i data-nv-icon="circle-x"></i>已驳回</span>
+    <span class="nv-badge" data-color="primary"><i data-nv-icon="sparkles"></i>AI 生成</span>
+    <span class="nv-badge" data-variant="outline"><i data-nv-icon="lock"></i>私有</span>
+  </div>
+  <div class="doc-row" style="gap:8px">
+    <span class="nv-badge" data-size="sm" data-color="primary">小号 sm</span>
+    <span class="nv-badge" data-color="primary">默认 md</span>
+    <span class="nv-badge" data-size="lg" data-color="primary">大号 lg</span>
+    <span class="nv-badge" data-shape="square" data-variant="solid" data-color="neutral">v2.4.0</span>
+    <span class="nv-badge" data-shape="square" data-variant="outline" data-size="sm">MIT</span>
+  </div>
+  <div class="doc-row" style="gap:14px; color:var(--nv-fg-2); font-size:13px">
+    <span style="display:inline-flex;align-items:center;gap:8px"><span class="nv-badge" data-dot data-color="success" aria-label="在线"></span>在线</span>
+    <span style="display:inline-flex;align-items:center;gap:8px"><span class="nv-badge" data-dot data-color="warning" aria-label="离开"></span>离开</span>
+    <span style="display:inline-flex;align-items:center;gap:8px"><span class="nv-badge" data-dot aria-label="离线"></span>离线</span>
+  </div>
+</div>
+
+<!-- @demo 数字与圆点角标 | `.nv-indicator` 包住任意元素，`data-count` 显示数字（超过上限自己写成 `99+`），`data-dot` 只显示圆点，`data-pulse` 加呼吸扩散。角标是 CSS 生成的内容，读屏软件读不到，请在被包住的按钮上写完整的 `aria-label`。 | left -->
+<div class="doc-row" style="gap:20px">
+  <span class="nv-indicator" data-count="3">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="通知，3 条未读"><i data-nv-icon="bell"></i></button>
+  </span>
+  <span class="nv-indicator" data-count="28" data-color="primary">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="私信，28 条未读"><i data-nv-icon="mail"></i></button>
+  </span>
+  <span class="nv-indicator" data-count="99+">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="评论，超过 99 条未读"><i data-nv-icon="users"></i></button>
+  </span>
+  <span class="nv-indicator" data-dot>
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="设置，有新的配置项"><i data-nv-icon="settings"></i></button>
+  </span>
+  <span class="nv-indicator" data-dot data-pulse data-color="success">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="同步中"><i data-nv-icon="refresh"></i></button>
+  </span>
+  <span class="nv-indicator" data-count="NEW" data-color="primary">
+    <button type="button" class="nv-btn" data-variant="soft" data-color="neutral">更新日志</button>
+  </span>
+</div>
+
+<!-- @demo 位置与贴合圆形 | `data-placement` 取 top-end（默认）、top-start、bottom-end、bottom-start。包住头像这类圆形元素时加 `data-overlap="circle"`，角标会落在圆周上，不会悬在外接正方形的角外。 | left -->
+<div class="doc-row" style="gap:28px">
+  <span class="nv-indicator" data-dot data-color="success" data-overlap="circle" data-placement="bottom-end">
+    <span class="badge-demo-face" style="--h:200">林</span>
+  </span>
+  <span class="nv-indicator" data-count="5" data-overlap="circle">
+    <span class="badge-demo-face" style="--h:30">周</span>
+  </span>
+  <span class="nv-indicator" data-dot data-pulse data-overlap="circle" data-placement="top-start">
+    <span class="badge-demo-face" style="--h:300">陈</span>
+  </span>
+  <span class="nv-indicator" data-count="12" data-placement="bottom-start" data-color="primary" data-overlap="circle">
+    <span class="badge-demo-face" style="--h:150">王</span>
+  </span>
+  <span class="nv-indicator" data-count="2" data-overlap="inset">
+    <span class="badge-demo-tile"><i data-nv-icon="folder" data-size="22"></i></span>
+  </span>
+</div>
+<style>
+  .badge-demo-face { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-weight: 600; color: light-dark(oklch(0.34 0.09 var(--h)), oklch(0.92 0.06 var(--h))); background: light-dark(oklch(0.9 0.06 var(--h)), oklch(0.4 0.08 var(--h))); }
+  .badge-demo-tile { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--nv-radius-lg); background: var(--nv-surface-2); border: 1px solid var(--nv-border); color: var(--nv-fg-2); }
+</style>
+
+<!-- @demo 在导航与标题里 | 侧边导航的未读数、标题旁的版本与「新」标记、套餐卡片的推荐角标都是 `.nv-badge` 的典型位置。数字徽标默认用等宽数字，计数变化时宽度不跳。 | left -->
+<div class="doc-row" style="gap:24px; align-items:flex-start">
+  <nav class="badge-demo-nav" aria-label="邮箱">
+    <a href="#" aria-current="page"><i data-nv-icon="inbox"></i>收件箱<span class="nv-badge" data-variant="solid" data-size="sm">12</span></a>
+    <a href="#"><i data-nv-icon="star"></i>星标<span class="nv-badge" data-size="sm">3</span></a>
+    <a href="#"><i data-nv-icon="file"></i>草稿<span class="nv-badge" data-size="sm">1</span></a>
+    <a href="#"><i data-nv-icon="trash"></i>垃圾箱</a>
+  </nav>
+  <div class="doc-stack" style="gap:10px; min-width:240px">
+    <h4 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px">智能摘要 <span class="nv-badge" data-variant="solid" data-size="sm">新</span></h4>
+    <h4 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px">Nova UI <span class="nv-badge" data-variant="outline" data-shape="square" data-size="sm">v2.4.0</span></h4>
+    <div class="badge-demo-plan">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+        <strong>专业版</strong><span class="nv-badge" data-color="primary" data-variant="surface"><i data-nv-icon="zap"></i>最受欢迎</span>
+      </div>
+      <div style="color:var(--nv-fg-2); font-size:13px; margin-top:4px">¥49 / 人 / 月 · 无限项目</div>
+    </div>
+  </div>
+</div>
+<style>
+  .badge-demo-nav { display: grid; gap: 2px; width: 200px; padding: 6px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-lg); background: var(--nv-surface); }
+  .badge-demo-nav a { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: var(--nv-radius-md); color: var(--nv-fg-2); font-size: 14px; text-decoration: none; }
+  .badge-demo-nav a:hover { background: var(--nv-surface-2); color: var(--nv-fg); }
+  .badge-demo-nav a[aria-current="page"] { background: var(--nv-primary-soft); color: var(--nv-primary-text); font-weight: 500; }
+  .badge-demo-nav a:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+  .badge-demo-nav .nv-badge { margin-inline-start: auto; }
+  .badge-demo-plan { padding: 14px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-lg); background: var(--nv-surface); }
+</style>
+
+<!-- @demo 动态更新计数 | 角标内容来自属性，改 `data-count` 即可更新；`"0"` 时角标缩小隐藏（带过渡），加 `data-show-zero` 则保留 0。同时更新按钮的 `aria-label`，读屏用户才能听到新数量。 | left -->
+<div class="doc-row" style="gap:16px">
+  <span class="nv-indicator" data-count="4" id="badge-cart">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-icon aria-label="购物车，4 件商品" id="badge-cart-btn"><i data-nv-icon="credit-card"></i></button>
+  </span>
+  <div class="nv-btn-group">
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-size="sm" id="badge-cart-minus" aria-label="减少一件"><i data-nv-icon="minus"></i></button>
+    <button type="button" class="nv-btn" data-variant="outline" data-color="neutral" data-size="sm" id="badge-cart-plus" aria-label="增加一件"><i data-nv-icon="plus"></i></button>
+  </div>
+  <button type="button" class="nv-btn" data-variant="ghost" data-color="neutral" data-size="sm" id="badge-cart-many">设为 120</button>
+  <span class="doc-log" id="badge-cart-log" style="margin:0" aria-live="polite">4 件商品</span>
+</div>
+<script>
+  {
+    const ind = document.getElementById('badge-cart');
+    const btn = document.getElementById('badge-cart-btn');
+    const log = document.getElementById('badge-cart-log');
+    let n = 4;
+    const render = () => {
+      ind.dataset.count = n > 99 ? '99+' : String(n);
+      btn.setAttribute('aria-label', `购物车，${n} 件商品`);
+      log.textContent = n ? `${n} 件商品` : '购物车是空的';
+    };
+    document.getElementById('badge-cart-plus').addEventListener('click', () => { n += 1; render(); });
+    document.getElementById('badge-cart-minus').addEventListener('click', () => { n = Math.max(0, n - 1); render(); });
+    document.getElementById('badge-cart-many').addEventListener('click', () => { n = 120; render(); });
+  }
+</script>
+
+<!-- @api
+### .nv-badge 行内徽标
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-badge"` | 基础类，可用在 `span` `a` 等行内元素上 | — | — |
+| `data-variant` | 外观 | `soft` `solid` `outline` `surface` | `soft` |
+| `data-color` | 语义色；不写时 soft/outline/surface 为中性灰，solid 为主色 | `neutral` `primary` `success` `warning` `danger` `info` | — |
+| `data-size` | 尺寸，高度 18 / 22 / 26px | `sm` `md` `lg` | `md` |
+| `data-dot` | 文字前加同色圆点；元素为空时变成 8px 纯圆点 | 布尔 | — |
+| `data-shape` | `square` 改为小圆角（版本号、许可证） | `square` | 胶囊 |
+| 子元素 `svg` / `<i data-nv-icon>` | 前置图标，自动按字号缩放 | — | — |
+
+### .nv-indicator 角标
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-indicator"` | 包住按钮、图标、头像等元素 | — | — |
+| `data-count` | 角标文字；`"0"` 或空字符串时隐藏 | 字符串，如 `"8"` `"99+"` `"NEW"` | — |
+| `data-show-zero` | 数字为 0 时仍然显示 | 布尔 | — |
+| `data-dot` | 只显示 10px 圆点（与 `data-count` 二选一） | 布尔 | — |
+| `data-pulse` | 呼吸扩散动画；系统开启「减少动态效果」时关闭 | 布尔 | — |
+| `data-color` | 角标颜色 | `danger` `primary` `success` `warning` `info` `neutral` | `danger` |
+| `data-size` | `sm` 缩小为 16px 数字 / 8px 圆点 | `sm` | — |
+| `data-placement` | 方位 | `top-end` `top-start` `bottom-end` `bottom-start` | `top-end` |
+| `data-overlap` | `circle` 贴合圆形元素（落在圆周上）；`inset` 向内收 6px，适合大圆角方块 | `circle` `inset` | — |
+
+### 无障碍
+- 徽标文字是正常文本，读屏会按顺序读出；纯圆点徽标（空元素）请加 `aria-label` 或在旁边写出状态文字。
+- 角标由 CSS `::after` 生成，读屏软件不会读出。请在被包住的可交互元素上写完整的 `aria-label`（如「通知，3 条未读」），数量变化时一起更新。
+- 颜色不是唯一的信息来源：状态徽标总是带文字，或配合图标。
+
+### CSS 变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-badge-bg` / `--nv-badge-fg` | 覆盖徽标背景色 / 文字色 |
+| `--nv-badge-height` | 覆盖徽标高度（同时作为最小宽度） |
+| `--nv-badge-radius` | 覆盖圆角 |
+| `--nv-indicator-bg` | 覆盖角标背景色 |
+| `--nv-indicator-ring` | 角标外圈描边颜色，默认 `--nv-surface`；放在彩色背景上时改成背景色 |
+-->

@@ -1,0 +1,262 @@
+<!--
+@name tabs
+@title Tabs 标签页
+@category navigation
+@order 10
+@deps button
+@desc 在同一区域内切换多组内容。三种变体、横纵两向、滑动指示器、WAI-ARIA 键盘（含手动激活）、图标与计数徽标、溢出滚动与渐隐边缘；只写简洁标记，ARIA 由脚本补齐。
+-->
+
+<!-- @demo 基础用法 | 标签用 `data-value` 与面板一一对应；不写 `data-value` 时按顺序对应。脚本会补齐 `role`、`id`、`aria-controls`、`aria-labelledby`。 | block -->
+<div class="nv-tabs">
+  <div class="nv-tabs-list" aria-label="项目">
+    <button class="nv-tab" data-value="overview">概览</button>
+    <button class="nv-tab" data-value="activity">动态</button>
+    <button class="nv-tab" data-value="members">成员</button>
+    <button class="nv-tab" data-value="settings">设置</button>
+  </div>
+  <div class="nv-tab-panel" data-value="overview">
+    <p class="nv-muted">本周共合并 18 个拉取请求，构建成功率 98.6%，平均评审耗时 3.2 小时。</p>
+  </div>
+  <div class="nv-tab-panel" data-value="activity">
+    <p class="nv-muted">林小雨 将「支付页改版」移动到了「待验收」，2 分钟前。</p>
+  </div>
+  <div class="nv-tab-panel" data-value="members">
+    <p class="nv-muted">项目共有 12 名成员，其中 3 名管理员。</p>
+  </div>
+  <div class="nv-tab-panel" data-value="settings">
+    <p class="nv-muted">在这里修改项目名称、可见范围与默认分支。</p>
+  </div>
+</div>
+
+<!-- @demo 变体 | `data-variant`：`line` 下划线（默认）、`pill` 分段胶囊、`enclosed` 卡片页签（与面板连成一体）。指示器在标签间平滑滑动。 | block -->
+<div class="doc-stack">
+  <div class="nv-tabs" data-variant="line">
+    <div class="nv-tabs-list" aria-label="下划线">
+      <button class="nv-tab">日</button>
+      <button class="nv-tab">周</button>
+      <button class="nv-tab">月</button>
+      <button class="nv-tab">年</button>
+    </div>
+    <div class="nv-tab-panel"><p class="nv-muted">今日新增用户 1,204。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">本周新增用户 8,931。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">本月新增用户 36,402。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">今年新增用户 41 万。</p></div>
+  </div>
+  <div class="nv-tabs" data-variant="pill">
+    <div class="nv-tabs-list" aria-label="胶囊">
+      <button class="nv-tab">日</button>
+      <button class="nv-tab">周</button>
+      <button class="nv-tab">月</button>
+      <button class="nv-tab">年</button>
+    </div>
+    <div class="nv-tab-panel"><p class="nv-muted">今日订单 326 笔。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">本周订单 2,180 笔。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">本月订单 9,457 笔。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">今年订单 10.8 万笔。</p></div>
+  </div>
+  <div class="nv-tabs" data-variant="enclosed">
+    <div class="nv-tabs-list" aria-label="卡片">
+      <button class="nv-tab">index.html</button>
+      <button class="nv-tab">style.css</button>
+      <button class="nv-tab">main.js</button>
+    </div>
+    <div class="nv-tab-panel"><code>&lt;div id="app"&gt;&lt;/div&gt;</code></div>
+    <div class="nv-tab-panel"><code>#app { display: grid; }</code></div>
+    <div class="nv-tab-panel"><code>createApp().mount('#app')</code></div>
+  </div>
+</div>
+
+<!-- @demo 尺寸与撑满 | `data-size="sm|md|lg"` 与按钮、输入框高度对齐；`data-block` 让标签平分整行，适合移动端或表单切换。 | block -->
+<div class="doc-stack">
+  <div class="nv-tabs" data-variant="pill" data-size="sm">
+    <div class="nv-tabs-list" aria-label="视图">
+      <button class="nv-tab"><i data-nv-icon="grid"></i>网格</button>
+      <button class="nv-tab"><i data-nv-icon="list"></i>列表</button>
+    </div>
+    <div class="nv-tab-panel"><p class="nv-muted">以网格展示 24 张图片。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">以列表展示 24 张图片。</p></div>
+  </div>
+  <div class="nv-tabs" data-variant="pill" data-block>
+    <div class="nv-tabs-list" aria-label="登录方式">
+      <button class="nv-tab">密码登录</button>
+      <button class="nv-tab">验证码登录</button>
+      <button class="nv-tab">扫码登录</button>
+    </div>
+    <div class="nv-tab-panel"><input class="nv-control" placeholder="手机号或邮箱" aria-label="账号"></div>
+    <div class="nv-tab-panel"><input class="nv-control" placeholder="手机号" aria-label="手机号"></div>
+    <div class="nv-tab-panel"><p class="nv-muted">打开 App 扫一扫，二维码 60 秒后刷新。</p></div>
+  </div>
+  <div class="nv-tabs" data-size="lg">
+    <div class="nv-tabs-list" aria-label="文档">
+      <button class="nv-tab">指南</button>
+      <button class="nv-tab">组件</button>
+      <button class="nv-tab">更新日志</button>
+    </div>
+    <div class="nv-tab-panel"><p class="nv-muted">从安装到上线的完整指南。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">所有组件的示例与 API。</p></div>
+    <div class="nv-tab-panel"><p class="nv-muted">v1.0.0 已发布。</p></div>
+  </div>
+</div>
+
+<!-- @demo 图标、徽标与禁用 | 标签内可放 `data-nv-icon` 图标与 `.nv-tab-badge` 计数；`disabled` 或 `aria-disabled="true"` 禁用，键盘导航会跳过它。 | block -->
+<div class="nv-tabs" data-value="inbox">
+  <div class="nv-tabs-list" aria-label="邮箱">
+    <button class="nv-tab" data-value="inbox"><i data-nv-icon="inbox"></i>收件箱<span class="nv-tab-badge" data-color="danger">12</span></button>
+    <button class="nv-tab" data-value="sent"><i data-nv-icon="send"></i>已发送</button>
+    <button class="nv-tab" data-value="drafts"><i data-nv-icon="file"></i>草稿<span class="nv-tab-badge">3</span></button>
+    <button class="nv-tab" data-value="trash" disabled><i data-nv-icon="trash"></i>回收站</button>
+  </div>
+  <div class="nv-tab-panel" data-value="inbox"><p class="nv-muted">你有 12 封未读邮件，最新一封来自「财务部」。</p></div>
+  <div class="nv-tab-panel" data-value="sent"><p class="nv-muted">最近 30 天共发送 46 封邮件。</p></div>
+  <div class="nv-tab-panel" data-value="drafts"><p class="nv-muted">3 封草稿将在 7 天后自动删除。</p></div>
+  <div class="nv-tab-panel" data-value="trash"><p class="nv-muted">回收站为空。</p></div>
+</div>
+
+<!-- @demo 纵向：设置页 | `data-orientation="vertical"` 把标签栏放在左侧，上下方向键切换；面板内放表单等任意内容。 | block -->
+<div class="nv-tabs" data-orientation="vertical" id="tabs-settings">
+  <div class="nv-tabs-list" aria-label="账户设置">
+    <button class="nv-tab" data-value="profile"><i data-nv-icon="user"></i>个人资料</button>
+    <button class="nv-tab" data-value="security"><i data-nv-icon="lock"></i>账号安全</button>
+    <button class="nv-tab" data-value="notify"><i data-nv-icon="bell"></i>通知<span class="nv-tab-badge">2</span></button>
+    <button class="nv-tab" data-value="billing"><i data-nv-icon="credit-card"></i>账单</button>
+  </div>
+  <div class="nv-tab-panel" data-value="profile">
+    <div class="doc-stack">
+      <div>
+        <label class="doc-label" for="tabs-settings-name">昵称</label>
+        <input class="nv-control" id="tabs-settings-name" value="林小雨">
+      </div>
+      <div>
+        <label class="doc-label" for="tabs-settings-email">邮箱</label>
+        <input class="nv-control" id="tabs-settings-email" type="email" value="xiaoyu@example.com">
+      </div>
+      <div class="doc-row"><button class="nv-btn">保存修改</button></div>
+    </div>
+  </div>
+  <div class="nv-tab-panel" data-value="security">
+    <div class="doc-stack">
+      <p class="nv-muted">上次修改密码：2026 年 9 月 2 日。建议每 90 天更换一次。</p>
+      <div class="doc-row"><button class="nv-btn" data-variant="outline">修改密码</button><button class="nv-btn" data-variant="ghost">开启两步验证</button></div>
+    </div>
+  </div>
+  <div class="nv-tab-panel" data-value="notify">
+    <p class="nv-muted">有 2 条新的安全提醒，请及时查看。</p>
+  </div>
+  <div class="nv-tab-panel" data-value="billing">
+    <p class="nv-muted">当前方案：团队版 · 按年付费，下次扣款 2027 年 1 月 1 日。</p>
+  </div>
+</div>
+
+<!-- @demo 标签过多：横向滚动 | 放不下时标签栏可横向滚动（触控滑动、滚轮、键盘均可），两端按剩余内容自动渐隐；切换时会把选中项滚到可见处。 | block -->
+<div class="nv-tabs doc-mid" data-value="tech">
+  <div class="nv-tabs-list" aria-label="频道">
+    <button class="nv-tab" data-value="all">全部</button>
+    <button class="nv-tab" data-value="hot">热榜</button>
+    <button class="nv-tab" data-value="tech">科技</button>
+    <button class="nv-tab" data-value="finance">财经</button>
+    <button class="nv-tab" data-value="sports">体育</button>
+    <button class="nv-tab" data-value="auto">汽车</button>
+    <button class="nv-tab" data-value="game">游戏</button>
+    <button class="nv-tab" data-value="travel">旅行</button>
+    <button class="nv-tab" data-value="food">美食</button>
+    <button class="nv-tab" data-value="edu">教育</button>
+    <button class="nv-tab" data-value="health">健康</button>
+  </div>
+  <div class="nv-tab-panel" data-value="all"><p class="nv-muted">为你推荐的全部内容。</p></div>
+  <div class="nv-tab-panel" data-value="hot"><p class="nv-muted">过去 24 小时最受关注的 50 条。</p></div>
+  <div class="nv-tab-panel" data-value="tech"><p class="nv-muted">新一代芯片发布，能效提升 40%。</p></div>
+  <div class="nv-tab-panel" data-value="finance"><p class="nv-muted">三大指数今日集体收涨。</p></div>
+  <div class="nv-tab-panel" data-value="sports"><p class="nv-muted">联赛第 12 轮战报。</p></div>
+  <div class="nv-tab-panel" data-value="auto"><p class="nv-muted">新能源车 10 月销量榜。</p></div>
+  <div class="nv-tab-panel" data-value="game"><p class="nv-muted">本周值得一玩的独立游戏。</p></div>
+  <div class="nv-tab-panel" data-value="travel"><p class="nv-muted">初冬赏雪的 8 个目的地。</p></div>
+  <div class="nv-tab-panel" data-value="food"><p class="nv-muted">一碗好汤的 5 个秘诀。</p></div>
+  <div class="nv-tab-panel" data-value="edu"><p class="nv-muted">高效记笔记的方法。</p></div>
+  <div class="nv-tab-panel" data-value="health"><p class="nv-muted">久坐人群的拉伸指南。</p></div>
+</div>
+
+<!-- @demo 手动激活、事件与方法 | `data-activation="manual"`：方向键只移动焦点，按 Enter 或空格才切换（面板内容昂贵时使用）。切换后派发 `nv:change`；`Nova.tabs.select(el, value)` 从外部切换。 | block -->
+<div class="doc-stack">
+  <div class="nv-tabs" data-variant="pill" data-activation="manual" id="tabs-manual">
+    <div class="nv-tabs-list" aria-label="报表">
+      <button class="nv-tab" data-value="sales">销售报表</button>
+      <button class="nv-tab" data-value="traffic">流量报表</button>
+      <button class="nv-tab" data-value="retention">留存报表</button>
+    </div>
+    <div class="nv-tab-panel" data-value="sales"><p class="nv-muted">销售额 ¥ 128,400，环比 +12%。</p></div>
+    <div class="nv-tab-panel" data-value="traffic"><p class="nv-muted">访问量 4.2 万，跳出率 31%。</p></div>
+    <div class="nv-tab-panel" data-value="retention"><p class="nv-muted">次日留存 46%，7 日留存 21%。</p></div>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-size="sm" id="tabs-manual-go">切换到留存报表</button>
+  </div>
+  <div class="doc-log" id="tabs-manual-log">先 Tab 聚焦标签栏，再用 ← → 移动，按 Enter 切换</div>
+</div>
+<script>
+  {
+    const tabs = document.getElementById('tabs-manual');
+    const log = document.getElementById('tabs-manual-log');
+    tabs.addEventListener('nv:change', (e) => {
+      log.textContent = `nv:change → ${e.detail.value}（之前：${e.detail.previous}）`;
+    });
+    document.getElementById('tabs-manual-go').addEventListener('click', () => Nova.tabs.select(tabs, 'retention'));
+  }
+</script>
+
+<!-- @api
+### 结构
+| 元素 | 说明 |
+|---|---|
+| `.nv-tabs` | 根元素 |
+| `.nv-tabs-list` | 标签栏（自动加 `role="tablist"`）；用 `aria-label` 说明这组标签的用途 |
+| `.nv-tab` | 标签，建议用 `<button>`；可含图标与 `.nv-tab-badge` |
+| `.nv-tab-panel` | 面板，`.nv-tabs` 的直接子元素（自动加 `role="tabpanel"`、`tabindex="0"`） |
+| `.nv-tab-badge` | 计数徽标；`data-color="danger"` 为红底白字 |
+
+### 属性
+| 属性 | 位置 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `data-value` | `.nv-tab` / `.nv-tab-panel` | 标签与面板的对应值 | 字符串 | 序号 `0` `1` … |
+| `data-value` | `.nv-tabs` | 初始选中的标签；切换后同步为当前值 | 字符串 | 第一个可用标签 |
+| `aria-selected="true"` | `.nv-tab` | 另一种声明初始选中的方式 | — | — |
+| `data-variant` | `.nv-tabs` | 视觉变体 | `line` `pill` `enclosed` | `line` |
+| `data-orientation` | `.nv-tabs` | 方向；纵向时用 ↑ ↓ 切换 | `horizontal` `vertical` | `horizontal` |
+| `data-activation` | `.nv-tabs` | 激活方式：`auto` 聚焦即切换；`manual` 需 Enter/空格 | `auto` `manual` | `auto` |
+| `data-size` | `.nv-tabs` | 尺寸（高 32 / 38 / 44） | `sm` `md` `lg` | `md` |
+| `data-block` | `.nv-tabs` | 标签平分整行 | 布尔 | — |
+| `disabled` / `aria-disabled="true"` | `.nv-tab` | 禁用；不可点击，键盘导航跳过 | 布尔 | — |
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Tab` | 进入标签栏时聚焦选中的标签；再按进入面板 |
+| `←` `→`（纵向为 `↑` `↓`） | 移到上一个/下一个可用标签，首尾循环；自动激活模式下同时切换 |
+| `Home` / `End` | 移到第一个/最后一个可用标签 |
+| `Enter` / `空格` | 手动激活模式下切换到聚焦的标签 |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:change` | 选中标签变化后在 `.nv-tabs` 上派发（初始化时不派发） | `{ value, previous, tab, panel }` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.tabs.select(el, value, { focus })` | 切换到指定标签，返回是否成功（禁用或不存在时为 `false`）；`focus: true` 同时聚焦标签 |
+| `Nova.tabs.value(el)` | 当前值 |
+| `Nova.get(el, 'tabs').refresh()` | 重新扫描标签与面板（增删子元素时会自动调用） |
+| `Nova.get(el, 'tabs').destroy()` | 移除指示器与事件监听 |
+
+### 可定制变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-tabs-gap` | 标签栏与面板的间距 | `16px`（纵向 `24px`） |
+| `--nv-tabs-fade` | 溢出渐隐宽度 | `40px` |
+| `--nv-primary` | 指示器颜色 | 主色 |
+
+### 说明
+- 组件可放在隐藏容器（另一组标签页、折叠面板、对话框）里初始化：指示器在可见后由 `ResizeObserver` 自动落位。
+- 指示器就绪前（或未加载脚本时），选中项用静态下划线/底色标出，不会出现“无选中态”。
+- 面板切换带 260ms 淡入；系统开启“减少动态效果”时直接切换。
+-->

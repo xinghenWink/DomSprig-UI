@@ -1,0 +1,75 @@
+<!--
+@name marquee
+@title Marquee 无限滚动
+@category effects
+@order 7
+@desc 无缝循环滚动的内容带，适合客户 Logo、用户评价与公告。自动按容器宽度复制副本，悬停暂停、离开视口暂停，减少动态时改为可手动滚动。
+-->
+
+<!-- @demo Logo 墙 | 把任意子元素放进 `.nv-marquee`；两端默认渐隐 48px。悬停或键盘聚焦其中元素时暂停。 | block -->
+<style>
+  .mq-logo { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-full); background: var(--nv-surface); color: var(--nv-fg-2); font-weight: 600; white-space: nowrap; }
+  .mq-logo > svg { color: var(--nv-primary-text); }
+</style>
+<div class="nv-marquee" data-speed="40">
+  <span class="mq-logo"><i data-nv-icon="zap"></i>Voltline</span>
+  <span class="mq-logo"><i data-nv-icon="globe"></i>Orbitly</span>
+  <span class="mq-logo"><i data-nv-icon="sparkles"></i>Lumen AI</span>
+  <span class="mq-logo"><i data-nv-icon="bar-chart"></i>Metrica</span>
+  <span class="mq-logo"><i data-nv-icon="lock"></i>Vaultkey</span>
+  <span class="mq-logo"><i data-nv-icon="code"></i>Stackforge</span>
+  <span class="mq-logo"><i data-nv-icon="palette"></i>Hue Studio</span>
+</div>
+
+<!-- @demo 双行反向 | 第二行加 `data-reverse`；两行都用 `data-speed`（像素/秒）设定速度，内容长短不同也能同速。 | block -->
+<style>
+  .mq-quote { width: 280px; padding: 14px 16px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-lg); background: var(--nv-surface); font-size: var(--nv-text-sm); color: var(--nv-fg-2); line-height: 1.6; }
+  .mq-quote b { display: block; margin-top: 8px; color: var(--nv-fg); font-weight: 600; }
+</style>
+<div class="doc-stack" style="width: 100%">
+  <div class="nv-marquee" data-speed="30">
+    <div class="mq-quote">接入只用了一个下午，表单和弹窗全部换掉了。<b>林夏 · 前端负责人</b></div>
+    <div class="mq-quote">暗色模式终于不用单独维护一套样式。<b>周屿 · 设计师</b></div>
+    <div class="mq-quote">命令面板让后台的操作效率提升了一截。<b>陈默 · 产品经理</b></div>
+  </div>
+  <div class="nv-marquee" data-speed="30" data-reverse>
+    <div class="mq-quote">源码在自己仓库里，改起来没有心理负担。<b>许诺 · 全栈工程师</b></div>
+    <div class="mq-quote">键盘操作和读屏都考虑到了，过审很顺利。<b>宋一 · 无障碍顾问</b></div>
+    <div class="mq-quote">动效克制但很精致，营销页直接用。<b>何川 · 增长</b></div>
+  </div>
+</div>
+
+<!-- @demo 纵向 | `data-vertical` 纵向滚动，容器高度用 `--nv-marquee-height`（默认 320px）。 -->
+<div class="nv-marquee" data-vertical data-speed="24" style="--nv-marquee-height: 240px; width: 300px">
+  <div class="mq-quote">v1.0 发布：27 个组件。<b>11 月 15 日</b></div>
+  <div class="mq-quote">新增日期范围选择与快捷预设。<b>11 月 10 日</b></div>
+  <div class="mq-quote">命令面板支持分组与快捷键提示。<b>11 月 2 日</b></div>
+  <div class="mq-quote">表格支持固定列与吸顶表头。<b>10 月 28 日</b></div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `.nv-marquee` | 容器；子元素自动包进 `.nv-marquee-track > .nv-marquee-group`（也可以自己写好） | — |
+| `data-speed` | 速度（像素/秒），覆盖时长 | — |
+| `data-reverse` | 反向 | — |
+| `data-vertical` | 纵向 | — |
+| `data-pause-on-hover` | `false` 时悬停不暂停 | 暂停 |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-marquee-duration` | 滚动一组内容的时长（未设 `data-speed` 时） | `40s` |
+| `--nv-marquee-gap` | 项目间距 | `16px` |
+| `--nv-marquee-fade` | 两端渐隐长度，`0` 关闭 | `48px` |
+| `--nv-marquee-height` | 纵向时的容器高度 | `320px` |
+
+### 实例
+`Nova.get(el, 'marquee').refresh()`：内容变化后重建副本。
+
+### 无障碍与降级
+- 副本加 `aria-hidden` 与 `inert`，并去掉 `id`，读屏与 Tab 只经过原始内容一次。
+- 只动画 `transform`；离开视口时暂停。
+- 减少动态：停止滚动、隐藏副本，容器改为可手动横向（纵向）滚动。
+-->

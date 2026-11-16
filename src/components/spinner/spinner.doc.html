@@ -1,0 +1,166 @@
+<!--
+@name spinner
+@title Spinner 加载中
+@category feedback
+@order 30
+@deps button
+@desc 表示正在加载。基础旋转圈 `nv-spinner` 纯 CSS、跟随文字大小与颜色；`nv-loader` 提供跳动圆点、音频条、渐变圆环、脉冲四种动画；`nv-loading-overlay` 给任意区域盖上模糊加载遮罩。
+-->
+
+<!-- @demo 基础旋转圈 | `nv-spinner` 定义在 base.css，无需额外文件：尺寸跟随 `font-size`，颜色跟随 `currentColor`，可放在按钮、文字或标题中。`data-track` 显示浅色轨道。 -->
+<div class="doc-row">
+  <span class="nv-spinner" role="status" aria-label="加载中"></span>
+  <span class="nv-spinner" data-size="md" data-color="primary" role="status" aria-label="加载中"></span>
+  <span class="nv-spinner" data-size="lg" data-color="primary" data-track role="status" aria-label="加载中"></span>
+  <span class="nv-loader-text"><span class="nv-spinner" aria-hidden="true"></span>正在获取最新数据…</span>
+  <button class="nv-btn" data-variant="outline" aria-busy="true"><span class="nv-spinner" aria-hidden="true"></span>连接中</button>
+</div>
+
+<!-- @demo 四种加载动画 | `nv-loader` 的 `data-variant`：`dots` 三点跳动（默认）、`bars` 音频条、`ring` 渐变圆环（`data-gradient` 使用品牌渐变）、`pulse` 脉冲扩散。子元素由脚本自动补齐。 -->
+<div class="doc-row">
+  <span class="nv-loader" data-variant="dots" data-size="lg"></span>
+  <span class="nv-loader" data-variant="bars" data-size="lg"></span>
+  <span class="nv-loader" data-variant="ring" data-size="lg"></span>
+  <span class="nv-loader" data-variant="ring" data-size="lg" data-gradient></span>
+  <span class="nv-loader" data-variant="pulse" data-size="lg"></span>
+</div>
+
+<!-- @demo 尺寸与颜色 | `data-size="sm|md|lg"` 对应 16 / 24 / 40px；`data-color` 取语义色，`current` 继承文字颜色。也可直接设置 `--nv-loader-size` 与 `--nv-loader-color`。 | block -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <span class="nv-loader" data-size="sm"></span>
+    <span class="nv-loader"></span>
+    <span class="nv-loader" data-size="lg"></span>
+    <span class="nv-loader" data-variant="bars" data-size="sm" data-color="success"></span>
+    <span class="nv-loader" data-variant="bars" data-color="success"></span>
+    <span class="nv-loader" data-variant="bars" data-size="lg" data-color="success"></span>
+  </div>
+  <div class="doc-row">
+    <span class="nv-loader" data-variant="ring" data-size="sm" data-color="info"></span>
+    <span class="nv-loader" data-variant="ring" data-color="warning"></span>
+    <span class="nv-loader" data-variant="ring" data-size="lg" data-color="danger"></span>
+    <span class="nv-loader" data-variant="pulse" data-size="sm" data-color="neutral"></span>
+    <span class="nv-loader" data-variant="pulse" data-color="info"></span>
+    <span class="nv-loader" data-variant="pulse" data-size="lg"></span>
+  </div>
+</div>
+
+<!-- @demo 在按钮与文字中 | `data-color="current"` 让加载动画跟随所在元素的文字颜色，适合放进实心按钮或状态提示。 -->
+<div class="doc-row">
+  <button class="nv-btn" aria-busy="true"><span class="nv-loader" data-size="sm" data-color="current" aria-hidden="true"></span>发送中</button>
+  <button class="nv-btn" data-variant="soft" aria-busy="true"><span class="nv-loader" data-variant="bars" data-size="sm" data-color="current" aria-hidden="true"></span>正在录音</button>
+  <span class="nv-loader-text"><span class="nv-loader" data-variant="pulse" data-size="sm" data-color="success" aria-hidden="true"></span>实时同步中</span>
+  <span class="nv-loader-text"><span class="nv-loader" data-size="sm" data-color="neutral" aria-hidden="true"></span>对方正在输入</span>
+</div>
+
+<!-- @demo 区域加载遮罩 | `nv-loading-overlay` 盖在 `position: relative` 的容器上，带半透明模糊背景、加载动画与文字。也可以调用 `Nova.loading(容器, { text })` 动态添加，返回的对象可 `update()` 文字或 `hide()`。 | block -->
+<style>
+  /* 示例卡片：遮罩的定位祖先需要 position: relative */
+  .spinner-card { position: relative; padding: 18px 20px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-lg); background: var(--nv-surface); }
+  .spinner-card-head { display: flex; justify-content: space-between; gap: 12px; font-size: var(--nv-text-sm); }
+  .spinner-card-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+  .spinner-card-stats div { display: grid; gap: 4px; font-size: var(--nv-text-xs); }
+  .spinner-card-stats b { font-size: var(--nv-text-xl); color: var(--nv-fg); }
+</style>
+<div class="doc-stack doc-mid">
+  <div class="spinner-card" id="spinner-card">
+    <div class="spinner-card-head">
+      <b>本周销售概览</b>
+      <span class="nv-muted">更新于 3 分钟前</span>
+    </div>
+    <div class="spinner-card-stats">
+      <div><span class="nv-muted">订单数</span><b>1,284</b></div>
+      <div><span class="nv-muted">销售额</span><b>¥ 96,420</b></div>
+      <div><span class="nv-muted">转化率</span><b>3.8%</b></div>
+    </div>
+    <div class="nv-loading-overlay" id="spinner-static">
+      <span class="nv-loader" data-variant="ring" data-size="lg"></span>
+      <div class="nv-loading-overlay-text">正在统计数据…</div>
+    </div>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-size="sm" id="spinner-toggle">隐藏遮罩</button>
+    <button class="nv-btn" data-size="sm" id="spinner-refresh"><i data-nv-icon="refresh"></i>刷新（Nova.loading）</button>
+  </div>
+</div>
+<script>
+  {
+    const card = document.getElementById('spinner-card');
+    const staticOverlay = document.getElementById('spinner-static');
+    const toggle = document.getElementById('spinner-toggle');
+    toggle.addEventListener('click', () => {
+      staticOverlay.hidden = !staticOverlay.hidden;
+      toggle.textContent = staticOverlay.hidden ? '显示遮罩' : '隐藏遮罩';
+    });
+    document.getElementById('spinner-refresh').addEventListener('click', () => {
+      staticOverlay.hidden = true;
+      toggle.textContent = '显示遮罩';
+      const ctl = Nova.loading(card, { text: '正在刷新…', desc: '首次加载可能需要几秒钟', variant: 'dots' });
+      setTimeout(() => ctl.update('即将完成…', null), 1000);
+      setTimeout(() => ctl.hide(), 1800);
+    });
+  }
+</script>
+
+<!-- @demo 全屏加载 | `Nova.loading(null, { text })` 或给遮罩加 `data-fullscreen` 盖住整个视口，并锁定页面滚动。适合登录跳转、支付确认等必须等待的操作。 -->
+<button class="nv-btn" id="spinner-fullscreen"><i data-nv-icon="credit-card"></i>确认支付</button>
+<script>
+  {
+    document.getElementById('spinner-fullscreen').addEventListener('click', () => {
+      const ctl = Nova.loading(null, { text: '正在确认支付结果…', desc: '请勿关闭或刷新页面' });
+      setTimeout(() => ctl.update('支付成功，正在跳转', ''), 1400);
+      setTimeout(() => ctl.hide(), 2200);
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `nv-spinner` | 基础旋转圈（base.css），尺寸 = `font-size`，颜色 = `currentColor` |
+| `nv-loader` | 加载动画；`dots` 需 3 个、`bars` 需 4 个 `<i>` 子元素，引入 spinner.js 时自动补齐 |
+| `nv-loader-text` | 加载动画 + 文字的行内组合 |
+| `nv-loading-overlay` | 加载遮罩，盖在最近的定位祖先上 |
+| `nv-loading-overlay-text` / `nv-loading-overlay-desc` | 遮罩内主文字 / 辅助说明 |
+
+### 属性
+| 属性 | 适用 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `data-variant` | loader | 动画类型 | `dots` `bars` `ring` `pulse` | `dots` |
+| `data-size` | spinner、loader | 尺寸 | `sm` `md` `lg` | 跟随字号 / `md` |
+| `data-color` | spinner、loader | 颜色 | `primary` `neutral` `success` `warning` `danger` `info`；loader 另有 `current` | 文字色 / `primary` |
+| `data-track` | spinner | 显示浅色整圈轨道 | 布尔 | — |
+| `data-gradient` | loader ring | 使用品牌渐变 | 布尔 | — |
+| `data-label` | loader | 自动补的 `aria-label` | 字符串 | `加载中` |
+| `data-fullscreen` | overlay | 固定定位盖住整个视口 | 布尔 | — |
+| `hidden` | overlay | 隐藏遮罩，宿主的 `aria-busy` 自动同步 | 布尔 | — |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.loading(container, opts)` | 给容器添加加载遮罩，返回 `{ el, update(text, desc), hide() }`；同一容器重复调用会复用已有遮罩 |
+| `opts.text` / `opts.desc` | 主文字（默认 `加载中…`）/ 辅助说明 |
+| `opts.variant` / `opts.size` | 遮罩内动画类型（默认 `ring`）/ 尺寸（默认 `lg`） |
+| `opts.fullscreen` | 全屏遮罩并锁定滚动；`container` 传 `null` 时同样为全屏 |
+| `Nova.loading.hide(container)` | 关闭容器上的遮罩（全屏传 `null`） |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `nv:loaded` | `Nova.loading()` 创建的遮罩退场完成后，在宿主容器（全屏为 `body`）上触发 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-loader-size` | loader 尺寸 |
+| `--nv-loader-color` | loader 颜色 |
+| `--nv-loader-duration` | 动画周期（dots/bars `1s`，ring `0.9s`，pulse `1.6s`） |
+| `--nv-loading-overlay-bg` | 遮罩背景 |
+| `--nv-loading-overlay-blur` | 背景模糊半径，默认 `3px` |
+
+### 无障碍
+- 独立的加载动画需要 `role="status"` 与 `aria-label`；`nv-loader` 会自动补齐，`nv-spinner` 需自己写。放在按钮或带文字的组合里时加 `aria-hidden="true"`，由文字表达状态。
+- 遮罩带 `role="status"` 与 `aria-live="polite"`，`update()` 修改的文字会被读屏播报；宿主容器同时被标记为 `aria-busy="true"`。
+- 减少动态时，圆点与音频条改为原地明暗交替，圆环放慢旋转，仍能看出“正在加载”。
+-->

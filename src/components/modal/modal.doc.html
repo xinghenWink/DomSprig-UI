@@ -1,0 +1,280 @@
+<!--
+@name modal
+@title Modal 对话框
+@category overlay
+@order 10
+@deps button
+@desc 打断当前流程、要求用户处理的模态窗口。焦点陷阱、滚动锁定、关闭还焦、可嵌套；遮罩淡入 + 面板弹性入场，窄屏自动变为底部弹出；附带 Nova.confirm / Nova.alert 命令式确认框。
+-->
+
+<!-- @demo 基础用法 | `[data-nv-modal-open="#id"]` 打开；`[data-nv-modal-close]`、右上角关闭按钮、Esc、点击遮罩关闭。打开后焦点进入第一个输入框，关闭后回到触发按钮。 -->
+<button class="nv-btn" data-nv-modal-open="#modal-basic"><i data-nv-icon="pencil"></i>编辑资料</button>
+<div class="nv-modal" id="modal-basic" hidden aria-labelledby="modal-basic-title">
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title" id="modal-basic-title">编辑个人资料</h2>
+      <p class="nv-modal-desc">修改会同步到你所在的所有团队空间。</p>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-body">
+      <div class="doc-stack">
+        <div>
+          <label class="doc-label" for="modal-basic-name">昵称</label>
+          <input class="nv-control" id="modal-basic-name" value="林小满">
+        </div>
+        <div>
+          <label class="doc-label" for="modal-basic-email">邮箱</label>
+          <input class="nv-control" id="modal-basic-email" type="email" value="xiaoman@nova.dev">
+        </div>
+      </div>
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-variant="outline" data-nv-modal-close>取消</button>
+      <button class="nv-btn" data-nv-modal-close>保存修改</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 删除确认 | `Nova.confirm()` 返回 `Promise<boolean>`。`onConfirm` 返回 Promise 时确认按钮进入加载态，完成后才关闭；危险操作默认聚焦「取消」。 -->
+<button class="nv-btn" data-color="danger" id="modal-delete-btn"><i data-nv-icon="trash"></i>删除项目</button>
+<div class="doc-log" id="modal-delete-log"></div>
+<script>
+  {
+    const log = document.getElementById('modal-delete-log');
+    document.getElementById('modal-delete-btn').addEventListener('click', async () => {
+      const ok = await Nova.confirm({
+        title: '删除项目「Nova 官网」？',
+        content: '所有部署记录、域名与环境变量将被永久移除，此操作无法撤销。',
+        confirmText: '删除项目',
+        danger: true,
+        onConfirm: () => new Promise((resolve) => setTimeout(resolve, 1200)), // 模拟请求
+      });
+      log.textContent = ok ? '✓ 项目已删除' : '已取消删除';
+    });
+  }
+</script>
+
+<!-- @demo 命令式提示 | `Nova.alert()` 只有一个按钮，返回 `Promise<void>`；`icon` 与 `color` 可换成任意图标与语义色，`icon: false` 隐藏图标。 -->
+<button class="nv-btn" data-variant="outline" id="modal-alert-btn"><i data-nv-icon="circle-check"></i>发布成功提示</button>
+<button class="nv-btn" data-variant="outline" id="modal-confirm-btn"><i data-nv-icon="circle-help"></i>离开前确认</button>
+<script>
+  {
+    document.getElementById('modal-alert-btn').addEventListener('click', () => {
+      Nova.alert({
+        title: '版本 2.4.0 已发布',
+        content: '新版本将在 5 分钟内推送到所有节点，期间旧版本仍可正常访问。',
+        icon: 'circle-check',
+        color: 'success',
+      });
+    });
+    document.getElementById('modal-confirm-btn').addEventListener('click', async () => {
+      if (await Nova.confirm({ title: '有未保存的修改', content: '离开后修改将丢失，确定要离开吗？', confirmText: '离开', cancelText: '继续编辑' })) {
+        Nova.alert({ title: '已离开编辑页', icon: false });
+      }
+    });
+  }
+</script>
+
+<!-- @demo 尺寸 | `data-size="sm|md|lg|xl|full"`，宽度分别为 400 / 520 / 720 / 960 px 与铺满视口；也可用 `--nv-modal-width` 自定义。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-demo-size="sm">sm</button>
+  <button class="nv-btn" data-variant="outline" data-demo-size="md">md</button>
+  <button class="nv-btn" data-variant="outline" data-demo-size="lg">lg</button>
+  <button class="nv-btn" data-variant="outline" data-demo-size="xl">xl</button>
+  <button class="nv-btn" data-variant="outline" data-demo-size="full">full</button>
+</div>
+<div class="nv-modal" id="modal-size" hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">尺寸 <span id="modal-size-name">md</span></h2>
+      <p class="nv-modal-desc">表单类对话框用 sm / md，数据表格与对比视图用 lg / xl，沉浸式编辑用 full。</p>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-nv-modal-close>好的</button>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const modal = document.getElementById('modal-size');
+    for (const btn of document.querySelectorAll('[data-demo-size]')) {
+      btn.addEventListener('click', () => {
+        modal.dataset.size = btn.dataset.demoSize;
+        document.getElementById('modal-size-name').textContent = btn.dataset.demoSize;
+        Nova.modal.open(modal);
+      });
+    }
+  }
+</script>
+
+<!-- @demo 顶部对齐与长内容 | `data-placement="top"` 贴近顶部；内容超出视口时只有正文滚动，头部与底部保持可见，滚动时出现分隔线。 -->
+<button class="nv-btn" data-variant="outline" data-nv-modal-open="#modal-terms"><i data-nv-icon="file"></i>查看服务协议</button>
+<div class="nv-modal" id="modal-terms" data-placement="top" hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">Nova 云服务协议</h2>
+      <p class="nv-modal-desc">更新于 2026 年 10 月 1 日</p>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-body">
+      <p><b>1. 服务内容。</b>Nova 为你提供应用托管、自动构建、边缘缓存与日志分析等服务，具体功能以控制台实际提供为准。</p>
+      <p><b>2. 账号安全。</b>你应妥善保管账号与访问令牌。因令牌泄露导致的损失，由账号持有人自行承担。</p>
+      <p><b>3. 计费方式。</b>按量计费资源每小时结算一次，包月资源在购买时一次性扣费，到期前 7 天会通过邮件提醒续费。</p>
+      <p><b>4. 数据保护。</b>我们仅在提供服务所必需的范围内处理你的数据，不会将其用于广告或出售给第三方。</p>
+      <p><b>5. 服务可用性。</b>核心服务的月度可用性目标为 99.95%，未达标时将按服务等级协议补偿代金券。</p>
+      <p><b>6. 内容规范。</b>不得托管违法、侵权或恶意软件内容；发现违规时我们有权暂停相关部署并通知你。</p>
+      <p><b>7. 协议变更。</b>协议如有重大变更，将提前 30 天在控制台公告，继续使用即视为接受新协议。</p>
+      <p><b>8. 终止服务。</b>你可以随时注销账号；注销后数据保留 30 天，期满后将被永久删除。</p>
+      <p><b>9. 争议解决。</b>因本协议产生的争议，双方应友好协商；协商不成的，提交服务提供方所在地法院管辖。</p>
+    </div>
+    <div class="nv-modal-footer">
+      <span class="nv-modal-extra">共 9 条</span>
+      <button class="nv-btn" data-variant="outline" data-nv-modal-close>不同意</button>
+      <button class="nv-btn" data-nv-modal-close>同意并继续</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 静态遮罩 | `data-static` 时点击遮罩不会关闭，面板轻微缩放提示用户在对话框内完成操作；Esc 与按钮仍可关闭。 -->
+<button class="nv-btn" data-variant="outline" data-nv-modal-open="#modal-static"><i data-nv-icon="lock"></i>两步验证</button>
+<div class="nv-modal" id="modal-static" data-size="sm" data-static hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">输入验证码</h2>
+      <p class="nv-modal-desc">验证码已发送至 138****6625，10 分钟内有效。</p>
+    </div>
+    <div class="nv-modal-body">
+      <label class="doc-label" for="modal-static-code">6 位验证码</label>
+      <input class="nv-control" id="modal-static-code" inputmode="numeric" maxlength="6" placeholder="请输入验证码">
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-variant="ghost" data-nv-modal-close>稍后再说</button>
+      <button class="nv-btn" data-nv-modal-close>验证</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 嵌套对话框 | 对话框内可以再打开对话框：Esc 与遮罩点击只关闭最上层，下层对话框后退一层，关闭后焦点回到下层的触发按钮。 -->
+<button class="nv-btn" data-variant="outline" data-nv-modal-open="#modal-team"><i data-nv-icon="users"></i>管理团队</button>
+<div class="nv-modal" id="modal-team" hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">团队成员</h2>
+      <p class="nv-modal-desc">设计组 · 4 位成员</p>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-body">
+      <p>林小满（管理员）、周以安、陈墨、许知夏。邀请新成员后，对方会收到一封加入邮件。</p>
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-nv-modal-open="#modal-invite"><i data-nv-icon="plus"></i>邀请成员</button>
+    </div>
+  </div>
+</div>
+<div class="nv-modal" id="modal-invite" data-size="sm" hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">邀请成员</h2>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-body">
+      <label class="doc-label" for="modal-invite-email">邮箱地址</label>
+      <input class="nv-control" id="modal-invite-email" type="email" placeholder="name@company.com">
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-variant="outline" data-nv-modal-close>取消</button>
+      <button class="nv-btn" data-nv-modal-close>发送邀请</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 事件与无障碍 | 监听 `nv:open` / `nv:close`（`detail.reason` 说明关闭来源）。根节点自动获得 `role="dialog"` `aria-modal="true"`，标题与描述自动关联；Tab 在面板内循环。 -->
+<button class="nv-btn" data-variant="soft" data-nv-modal-open="#modal-events">打开并观察事件</button>
+<div class="doc-log" id="modal-events-log">等待操作…</div>
+<div class="nv-modal" id="modal-events" data-size="sm" hidden>
+  <div class="nv-modal-panel">
+    <div class="nv-modal-header">
+      <h2 class="nv-modal-title">试试不同的关闭方式</h2>
+      <p class="nv-modal-desc">按 Esc、点击遮罩、点关闭按钮或底部按钮，下方会显示关闭来源。</p>
+      <button class="nv-modal-close" aria-label="关闭"><i data-nv-icon="x"></i></button>
+    </div>
+    <div class="nv-modal-footer">
+      <button class="nv-btn" data-nv-modal-close>完成</button>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const modal = document.getElementById('modal-events');
+    const log = document.getElementById('modal-events-log');
+    modal.addEventListener('nv:open', () => { log.textContent = 'nv:open'; });
+    modal.addEventListener('nv:close', (e) => { log.textContent = `nv:close · reason = ${e.detail.reason}`; });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-modal` | 根节点 = 遮罩。必须带 `hidden` 与唯一 `id`；打开时移到 `<body>` 末尾 |
+| `.nv-modal-panel` | 面板 |
+| `.nv-modal-header` | 头部：`.nv-modal-icon`（可选）、`.nv-modal-title`、`.nv-modal-desc`、`.nv-modal-close` |
+| `.nv-modal-body` | 正文，内容过长时内部滚动 |
+| `.nv-modal-footer` | 底部操作区，按钮右对齐；`.nv-modal-extra` 放在左侧的附加内容 |
+
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-size` | 面板宽度 | `sm` `md` `lg` `xl` `full` | `md` |
+| `data-placement` | 垂直位置 | `center` `top` | `center` |
+| `data-static` | 点击遮罩不关闭（给出缩放反馈） | 布尔 | — |
+| `data-open` | 初始化后立即打开 | 布尔 | — |
+| `data-close-label` | 关闭按钮的默认 `aria-label` | 字符串 | `关闭` |
+| `data-nv-modal-open="#id"` | 放在任意按钮上，点击打开对应对话框（自动补 `aria-haspopup="dialog"` `aria-controls`） | 选择器 | — |
+| `data-nv-modal-close` | 放在对话框内的元素上，点击关闭所在对话框；也可写选择器关闭指定对话框 | 布尔 / 选择器 | — |
+| `data-autofocus` / `autofocus` | 打开时优先聚焦该元素（否则聚焦第一个可聚焦元素，关闭按钮除外） | 布尔 | — |
+| `.nv-modal-icon[data-color]` | 头部状态图标颜色 | `primary` `success` `warning` `danger` `info` | `primary` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.modal.open(el)` | 打开；`el` 可以是元素或选择器。返回实例 |
+| `Nova.modal.close(el, reason?)` | 关闭（触发退场动画，焦点回到打开前的元素） |
+| `Nova.modal.toggle(el)` / `Nova.modal.isOpen(el)` | 切换 / 是否打开 |
+| `Nova.confirm(options)` | 确认框，返回 `Promise<boolean>`：确认为 `true`，取消 / Esc 为 `false` |
+| `Nova.alert(options)` | 提示框，只有一个按钮，返回 `Promise<void>` |
+
+### Nova.confirm / Nova.alert 选项
+| 选项 | 说明 | 类型 | 默认 |
+|---|---|---|---|
+| `title` | 标题 | `string` | `确认操作` / `提示` |
+| `content` | 说明文字或 DOM 节点（文字一律按纯文本渲染） | `string \| Node` | — |
+| `confirmText` | 确认按钮文字 | `string` | `确定` / `知道了` |
+| `cancelText` | 取消按钮文字（仅 confirm） | `string` | `取消` |
+| `danger` | 危险操作：红色按钮与图标，默认聚焦「取消」 | `boolean` | `false` |
+| `icon` | 图标名（`Nova.icon` 中的名称），`false` 隐藏 | `string \| false` | `circle-help` / `triangle-alert` / `info` |
+| `color` | 图标颜色 | `primary` `success` `warning` `danger` `info` | 随类型 |
+| `onConfirm` | 点击确认时调用。返回 Promise 时按钮进入加载态直到完成；返回 `false` 或 Promise 失败时保持打开 | `() => any` | — |
+| `size` | 对话框尺寸 | 同 `data-size` | `sm` |
+| `maskClosable` | 允许点击遮罩关闭（默认为静态遮罩） | `boolean` | `false` |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:open` | 打开后在 `.nv-modal` 上触发 | — |
+| `nv:close` | 开始关闭时触发 | `{ reason }`：`escape` `outside` `close-button` `confirm` `cancel` `api` |
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Tab` / `Shift + Tab` | 焦点在面板内循环 |
+| `Esc` | 关闭最上层对话框 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-modal-width` | 默认（md）面板宽度，默认 `520px` |
+| `--nv-overlay` | 遮罩颜色（tokens） |
+| `--nv-z-modal` | 层级，默认 `1000`；菜单 / 弹出层 / Toast / Tooltip 都在其上 |
+-->

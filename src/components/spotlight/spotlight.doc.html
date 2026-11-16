@@ -1,0 +1,58 @@
+<!--
+@name spotlight
+@title Spotlight 聚光卡片
+@category effects
+@order 3
+@desc 光标经过时卡片内出现柔和光斑、附近边框被照亮；放进 `.nv-spotlight-group` 后多张卡片共享同一光源。只写 CSS 变量，不触发布局。
+-->
+
+<!-- @demo 单张卡片 | 给卡片加 `.nv-spotlight`，移动光标试试。键盘聚焦卡片内的元素时同样点亮。 -->
+<style>
+  .spot-demo h4 { margin: 0 0 6px; font-size: var(--nv-text-md); }
+  .spot-demo p { margin: 0; font-size: var(--nv-text-sm); color: var(--nv-fg-2); line-height: 1.6; }
+  .spot-demo > svg { color: var(--nv-primary-text); margin-bottom: 12px; }
+</style>
+<div class="nv-spotlight spot-demo" style="width: min(100%, 340px)">
+  <i data-nv-icon="sparkles" data-size="20"></i>
+  <h4>AI 摘要</h4>
+  <p>自动提炼长文要点，生成三句话摘要与关键词。</p>
+</div>
+
+<!-- @demo 共享光源 | `.nv-spotlight-group` 内的卡片共用一个光源：光标在一张卡片上时，相邻卡片靠近光标的边框也会亮起。 | block -->
+<div class="nv-spotlight-group spot-grid">
+  <div class="nv-spotlight spot-demo"><i data-nv-icon="zap" data-size="20"></i><h4>毫秒级响应</h4><p>边缘节点缓存，首屏 120ms 内可交互。</p></div>
+  <div class="nv-spotlight spot-demo"><i data-nv-icon="lock" data-size="20"></i><h4>端到端加密</h4><p>密钥只保存在你的设备上。</p></div>
+  <div class="nv-spotlight spot-demo"><i data-nv-icon="globe" data-size="20"></i><h4>全球部署</h4><p>18 个区域，自动就近接入。</p></div>
+</div>
+<style>.spot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }</style>
+
+<!-- @demo 自定义光色与尺寸 | `--nv-spotlight-color` 改光色，`--nv-spotlight-size` 改光斑直径，`--nv-spotlight-bg` 改卡片底色。 -->
+<div class="nv-spotlight spot-demo" style="width: min(100%, 300px); --nv-spotlight-color: var(--nv-success); --nv-spotlight-size: 240px">
+  <h4>成功色 · 240px</h4>
+  <p>光斑更小、更集中。</p>
+</div>
+<div class="nv-spotlight spot-demo" style="width: min(100%, 300px); --nv-spotlight-color: var(--nv-warning)">
+  <h4>警告色</h4>
+  <p>适合提醒类入口。</p>
+</div>
+
+<!-- @api
+### 类名
+| 名称 | 说明 |
+|---|---|
+| `.nv-spotlight` | 聚光卡片；默认内边距 24px、圆角 `--nv-radius-xl`，内容自由排版 |
+| `.nv-spotlight-group` | 容器：内部所有 `.nv-spotlight` 共享光源。容器本身不带布局，自行写 grid / flex |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-spotlight-color` | 光斑与边框光颜色 | `var(--nv-primary)` |
+| `--nv-spotlight-size` | 光斑直径 | `380px` |
+| `--nv-spotlight-bg` | 卡片底色 | `var(--nv-surface)` |
+
+### 实现与降级
+- JS 只写 `--_x` / `--_y`，指针移动与滚动合并为每帧一次；组模式在一帧内先批量读位置再批量写入，避免布局抖动。
+- 亮度用 `@property` 注册的变量过渡，光标离开时柔和熄灭。
+- 触屏没有悬停：显示顶部的静态环境光，按下时光源移到触点。
+- 减少动态：关闭点亮与熄灭的渐变过渡，光斑直接出现或消失。
+-->

@@ -1,0 +1,190 @@
+<!--
+@name input
+@title Input 输入框
+@category form
+@order 2
+@deps button
+@desc 单行文本输入。独立写法或带前后缀图标的包装写法，附加块组合、清除按钮、密码显示切换、字数统计、填充变体与完整状态；外观与所有表单控件统一。
+-->
+
+<!-- @demo 基础用法 | 独立的 `<input class="nv-input">` 即可使用；需要图标时用 `.nv-control` 包装，图标放进 `.nv-control-affix`。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="input-basic">昵称</label>
+    <input class="nv-input" id="input-basic" placeholder="请输入昵称">
+  </div>
+  <div>
+    <label class="doc-label" for="input-email">工作邮箱</label>
+    <div class="nv-control">
+      <span class="nv-control-affix"><i data-nv-icon="mail"></i></span>
+      <input id="input-email" type="email" placeholder="name@company.com" autocomplete="email">
+    </div>
+  </div>
+  <div>
+    <label class="doc-label" for="input-site">个人主页</label>
+    <div class="nv-control">
+      <span class="nv-control-affix"><i data-nv-icon="globe"></i></span>
+      <input id="input-site" type="url" placeholder="https://">
+      <span class="nv-control-affix"><i data-nv-icon="external"></i></span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 尺寸与变体 | `data-size="sm|md|lg"` 对应 32 / 38 / 44px，与按钮、选择器等同高；`data-variant="filled"` 为无边框填充风格。 | col -->
+<div class="doc-stack doc-mid">
+  <input class="nv-input" data-size="sm" placeholder="小号 32px" aria-label="小号输入框">
+  <input class="nv-input" placeholder="默认 38px" aria-label="默认输入框">
+  <input class="nv-input" data-size="lg" placeholder="大号 44px" aria-label="大号输入框">
+  <div class="nv-input-group" data-size="sm">
+    <input class="nv-input" placeholder="与同尺寸按钮等高" aria-label="搜索关键词">
+    <button class="nv-btn" data-size="sm" type="button">搜索</button>
+  </div>
+  <div class="nv-control" data-variant="filled">
+    <span class="nv-control-affix"><i data-nv-icon="search"></i></span>
+    <input placeholder="填充变体：搜索文档、组件…" aria-label="搜索">
+    <kbd>Ctrl K</kbd>
+  </div>
+</div>
+
+<!-- @demo 前后置附加块 | `.nv-input-group` 内放 `.nv-input-addon`、输入框或按钮，相邻元素自动合并圆角；尺寸写在组上。 | col -->
+<div class="doc-stack doc-mid">
+  <div class="nv-input-group">
+    <span class="nv-input-addon">https://</span>
+    <input class="nv-input" placeholder="your-site" aria-label="站点域名">
+    <span class="nv-input-addon">.com</span>
+  </div>
+  <div class="nv-input-group">
+    <span class="nv-input-addon">¥</span>
+    <input class="nv-input" inputmode="decimal" placeholder="0.00" aria-label="金额">
+    <span class="nv-input-addon">元</span>
+  </div>
+  <div class="nv-input-group" data-size="sm">
+    <input class="nv-input" id="input-invite" value="https://nova.dev/invite/7f3a9c" readonly aria-label="邀请链接">
+    <button class="nv-btn" data-variant="outline" type="button" id="input-copy"><i data-nv-icon="copy"></i>复制</button>
+  </div>
+</div>
+<script>
+  {
+    const btn = document.getElementById('input-copy');
+    btn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(document.getElementById('input-invite').value); } catch (_) { /* 无剪贴板权限 */ }
+      btn.lastChild.textContent = '已复制';
+      setTimeout(() => { btn.lastChild.textContent = '复制'; }, 1400);
+    });
+  }
+</script>
+
+<!-- @demo 清除、密码与字数统计 | `data-clearable` 有内容时出现清除按钮；`type="password" data-toggle` 切换明文；`maxlength` + `data-count` 显示字数，接近上限时屏幕阅读器会朗读剩余字数。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="input-clear">收件人</label>
+    <input class="nv-input" id="input-clear" data-clearable value="林晓 <lin@nova.dev>">
+  </div>
+  <div>
+    <label class="doc-label" for="input-pwd">密码</label>
+    <div class="nv-control">
+      <span class="nv-control-affix"><i data-nv-icon="lock"></i></span>
+      <input id="input-pwd" type="password" data-toggle value="nova-2026" autocomplete="new-password">
+    </div>
+  </div>
+  <div>
+    <label class="doc-label" for="input-title">文章标题</label>
+    <input class="nv-input" id="input-title" maxlength="30" data-count data-clearable value="原生 JS 也能写出精致的组件">
+  </div>
+  <div class="doc-log" id="input-log">清除事件：—</div>
+</div>
+<script>
+  {
+    const log = document.getElementById('input-log');
+    document.getElementById('input-clear').addEventListener('nv:clear', () => {
+      log.textContent = `清除事件：nv:clear @ ${new Date().toLocaleTimeString()}`;
+    });
+  }
+</script>
+
+<!-- @demo 状态 | `aria-invalid="true"` 错误（建议配合 Field 的错误文字）、`disabled` 禁用、`readonly` 只读（可聚焦与复制）。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="input-err">手机号</label>
+    <input class="nv-input" id="input-err" value="1380013" aria-invalid="true" aria-describedby="input-err-msg">
+    <div class="doc-hint" id="input-err-msg">请输入 11 位手机号</div>
+  </div>
+  <div class="nv-control">
+    <span class="nv-control-affix"><i data-nv-icon="user"></i></span>
+    <input value="system-admin" disabled aria-label="用户名（禁用）">
+  </div>
+  <input class="nv-input" value="NV-2026-000318" readonly aria-label="订单号（只读）">
+  <div class="nv-control" data-variant="filled">
+    <input value="填充变体 · 禁用" disabled aria-label="填充禁用">
+  </div>
+</div>
+
+<!-- @demo 实战：搜索栏 | 包装写法组合图标、清除按钮与快捷键提示；按 `/` 聚焦，`Esc` 清空。 | col -->
+<div class="doc-stack doc-mid">
+  <div class="nv-control" data-size="lg">
+    <span class="nv-control-affix"><i data-nv-icon="search"></i></span>
+    <input id="input-search" type="search" data-clearable placeholder="搜索订单号、客户或商品" aria-label="搜索订单" enterkeyhint="search">
+    <kbd>/</kbd>
+  </div>
+  <div class="doc-log" id="input-search-log">输入后按 Enter 搜索</div>
+</div>
+<script>
+  {
+    const input = document.getElementById('input-search');
+    const log = document.getElementById('input-search-log');
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') log.textContent = input.value ? `搜索「${input.value}」` : '请输入关键词';
+      if (e.key === 'Escape') Nova.input.clear(input);
+    });
+    document.addEventListener('keydown', (e) => {
+      const typing = e.target.closest('input, textarea, select, [contenteditable]');
+      if (e.key === '/' && !typing && input.getClientRects().length) { e.preventDefault(); input.focus(); }
+    });
+  }
+</script>
+
+<!-- @api
+### 属性（写在 `<input>` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-input"` | 独立写法，外观同 `.nv-control` | — | — |
+| `data-size` | 尺寸，32 / 38 / 44px（包装写法写在 `.nv-control` 上） | `sm` `md` `lg` | `md` |
+| `data-variant` | 填充变体（包装写法写在 `.nv-control` 上） | `filled` | — |
+| `data-clearable` | 有内容时显示清除按钮（需 input.js） | 布尔 | — |
+| `data-toggle` | 配合 `type="password"`，显示/隐藏密码 | 布尔 | — |
+| `data-count` | 显示字数；有 `maxlength` 时显示「当前/上限」 | 布尔 | — |
+| `data-clear-label` | 清除按钮的无障碍文案 | 字符串 | `清除` |
+| `data-show-label` / `data-hide-label` | 密码切换按钮文案 | 字符串 | `显示密码` / `隐藏密码` |
+| `aria-invalid="true"` | 错误态 | — | — |
+| `disabled` / `readonly` | 禁用 / 只读 | 布尔 | — |
+
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-control` | 包装容器，内含 `<input>` 与前后缀 |
+| `.nv-control-affix` | 前后缀图标或文字 |
+| `.nv-control-btn` | 包装内的小图标按钮 |
+| `.nv-input-group` | 附加块组合，`data-size` 写在组上 |
+| `.nv-input-addon` | 灰底附加块（如 `https://`、`.com`） |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 原生事件；点击清除按钮时也会依次派发 |
+| `nv:clear` | 点击清除按钮后在 `<input>` 上派发 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.input.clear(el)` | 清空并派发 `input`、`change` |
+| `Nova.input.refresh(el)` | 脚本修改 `value` 后刷新清除按钮与字数 |
+| `Nova.get(el, 'input')` | 实例：`clear()` `refresh()` `destroy()` |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-h-sm` `--nv-h-md` `--nv-h-lg` | 控件高度 |
+| `--nv-border-input` | 边框颜色 |
+| `--nv-ring` / `--nv-danger-ring` | 聚焦环 / 错误聚焦环 |
+| `--nv-radius` | 圆角基准 |
+-->

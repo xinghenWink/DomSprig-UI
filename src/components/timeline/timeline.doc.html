@@ -1,0 +1,125 @@
+<!--
+@name timeline
+@title Timeline 时间轴
+@category data
+@order 70
+@deps avatar
+@desc 按时间顺序展示事件：操作记录、订单物流、版本发布。支持语义色、图标或头像节点、进行中状态、时间单独一栏和左右交替布局。纯 CSS。
+-->
+
+<!-- @demo 基础 | 每项写 `data-color`；不写 `.nv-timeline-dot` 时显示小圆点。最后一项加 `data-state="pending"` 表示进行中：圆点呼吸，连接线变虚线。 | left -->
+<ol class="nv-timeline" style="max-width: 420px">
+  <li class="nv-timeline-item" data-color="success">
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">订单已提交 <time class="nv-timeline-time">11-14 09:12</time></div>
+    </div>
+  </li>
+  <li class="nv-timeline-item" data-color="success">
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">支付成功 <time class="nv-timeline-time">11-14 09:13</time></div>
+      <p class="nv-timeline-desc">微信支付 ¥ 1,280.00</p>
+    </div>
+  </li>
+  <li class="nv-timeline-item" data-color="primary">
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">仓库已发货 <time class="nv-timeline-time">11-14 16:40</time></div>
+      <p class="nv-timeline-desc">顺丰速运 SF1234567890</p>
+    </div>
+  </li>
+  <li class="nv-timeline-item" data-color="primary" data-state="pending">
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">运输中</div>
+      <p class="nv-timeline-desc">预计 11 月 16 日送达</p>
+    </div>
+  </li>
+</ol>
+
+<!-- @demo 图标与头像节点 | `.nv-timeline-dot` 里放图标或 `.nv-avatar` 就变成图标圆；空的 `.nv-timeline-dot` 加 `data-variant="outline"` 是空心圆点。内容里可以放 `.nv-timeline-box` 或任意卡片。 | left -->
+<ol class="nv-timeline" style="max-width: 480px">
+  <li class="nv-timeline-item" data-color="primary">
+    <span class="nv-timeline-dot"><i data-nv-icon="code"></i></span>
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">合并了 PR #482 <time class="nv-timeline-time">2 小时前</time></div>
+      <p class="nv-timeline-desc">feat(select): 支持远程搜索</p>
+    </div>
+  </li>
+  <li class="nv-timeline-item">
+    <span class="nv-timeline-dot"><span class="nv-avatar" data-name="周屿"></span></span>
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">周屿 发表了评论 <time class="nv-timeline-time">昨天</time></div>
+      <div class="nv-timeline-box">空状态的插画在暗色模式下对比度不够，建议改成描边风格。</div>
+    </div>
+  </li>
+  <li class="nv-timeline-item" data-color="warning">
+    <span class="nv-timeline-dot"><i data-nv-icon="triangle-alert"></i></span>
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">构建出现警告 <time class="nv-timeline-time">11 月 12 日</time></div>
+    </div>
+  </li>
+  <li class="nv-timeline-item" data-color="neutral">
+    <span class="nv-timeline-dot" data-variant="outline"></span>
+    <div class="nv-timeline-content">
+      <div class="nv-timeline-title">创建仓库 <time class="nv-timeline-time">10 月 1 日</time></div>
+    </div>
+  </li>
+</ol>
+
+<!-- @demo 时间单独一栏 | 列表加 `data-time="left"`，把 `.nv-timeline-time` 作为 li 的直接子元素，时间右对齐成一列。栏宽用 `--nv-timeline-time-width`。 | left -->
+<ol class="nv-timeline" data-time="left" style="max-width: 480px">
+  <li class="nv-timeline-item" data-color="primary">
+    <time class="nv-timeline-time">v1.0.0</time>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">正式发布</div><p class="nv-timeline-desc">新增 Avatar、Tag、Card 等 14 个组件</p></div>
+  </li>
+  <li class="nv-timeline-item">
+    <time class="nv-timeline-time">v0.9.0</time>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">日期选择器</div><p class="nv-timeline-desc">支持范围选择与快捷预设</p></div>
+  </li>
+  <li class="nv-timeline-item">
+    <time class="nv-timeline-time">v0.8.0</time>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">命令面板</div><p class="nv-timeline-desc">分组、快捷键提示与模糊搜索</p></div>
+  </li>
+</ol>
+
+<!-- @demo 左右交替 | `data-align="alternate"`，宽度不足 640px 时自动回到单侧。 | block -->
+<ol class="nv-timeline" data-align="alternate" style="width: 100%">
+  <li class="nv-timeline-item" data-color="primary">
+    <span class="nv-timeline-dot"><i data-nv-icon="sparkles"></i></span>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">立项 <time class="nv-timeline-time">2026 Q1</time></div><p class="nv-timeline-desc">确定零依赖、源码分发的方向</p></div>
+  </li>
+  <li class="nv-timeline-item" data-color="info">
+    <span class="nv-timeline-dot"><i data-nv-icon="palette"></i></span>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">设计令牌 <time class="nv-timeline-time">2026 Q2</time></div><p class="nv-timeline-desc">OKLCH 色板与明暗主题</p></div>
+  </li>
+  <li class="nv-timeline-item" data-color="success">
+    <span class="nv-timeline-dot"><i data-nv-icon="check"></i></span>
+    <div class="nv-timeline-content"><div class="nv-timeline-title">1.0 发布 <time class="nv-timeline-time">2026 Q4</time></div><p class="nv-timeline-desc">40+ 组件，覆盖表单、浮层与动效</p></div>
+  </li>
+</ol>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-timeline` | 列表，建议用 `<ol>` |
+| `.nv-timeline-item` | 一个事件，`<li>` |
+| `.nv-timeline-dot` | 节点（可选）。空的是圆点，里面放图标或头像则是图标圆 |
+| `.nv-timeline-content` | 内容 |
+| `.nv-timeline-title` / `.nv-timeline-time` / `.nv-timeline-desc` | 标题 / 时间 / 说明 |
+| `.nv-timeline-box` | 内容里的浅色引用框 |
+
+### 属性
+| 位置 | 属性 | 说明 |
+|---|---|---|
+| 项目 | `data-color` | `primary` `success` `warning` `danger` `info` `neutral` |
+| 项目 | `data-state` | `pending` 进行中 |
+| 节点 | `data-variant` | `outline` 空心圆点 |
+| 列表 | `data-time` | `left` 时间单独一栏 |
+| 列表 | `data-align` | `alternate` 左右交替 |
+| 列表 | `data-size` | `sm` 紧凑 |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-timeline-ring` | 节点外圈颜色，放在非默认背景上时改成背景色 | `--nv-surface` |
+| `--nv-timeline-time-width` | `data-time="left"` 时的时间栏宽度 | `88px` |
+-->

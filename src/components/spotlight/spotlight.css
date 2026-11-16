@@ -1,0 +1,46 @@
+/* Nova UI · Spotlight 聚光卡片
+ * .nv-spotlight            卡片：指针处出现柔和光斑，同时附近的边框被照亮
+ * .nv-spotlight-group      容器：内部所有 .nv-spotlight 共享同一个光源（光标附近的卡片边框都会亮起）
+ * 可定制：--nv-spotlight-color（光色）--nv-spotlight-size（光斑直径）--nv-spotlight-bg（卡片底色）
+ * 实现：背景四层（内光斑 / 底色 裁剪到 padding-box，边框光 / 边框色 裁剪到 border-box），
+ *      JS 只写 --_x/--_y（rAF 节流），亮度用 @property 注册的 --_spot 过渡，不触发布局。
+ * 触屏：没有 hover 时显示顶部的静态环境光；按下时光源移到触点。键盘聚焦卡片内元素时同样点亮。
+ */
+@property --_spot { syntax: '<number>'; inherits: true; initial-value: 0; }
+
+.nv-spotlight {
+  --_size: var(--nv-spotlight-size, 380px);
+  --_c: var(--nv-spotlight-color, var(--nv-primary));
+  --_bg: var(--nv-spotlight-bg, var(--nv-surface));
+  --_x: 50%;
+  --_y: 0%;
+  position: relative;
+  padding: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--nv-radius-xl);
+  color: var(--nv-fg);
+  background:
+    radial-gradient(var(--_size) circle at var(--_x) var(--_y),
+      color-mix(in oklab, var(--_c) calc(var(--_spot) * 10%), transparent), transparent 70%) padding-box,
+    linear-gradient(var(--_bg), var(--_bg)) padding-box,
+    radial-gradient(calc(var(--_size) * 0.6) circle at var(--_x) var(--_y),
+      color-mix(in oklab, var(--_c) calc(var(--_spot) * 95%), transparent), transparent 72%) border-box,
+    linear-gradient(var(--nv-border), var(--nv-border)) border-box;
+  box-shadow: var(--nv-shadow-xs);
+  transition: --_spot var(--nv-dur-4) var(--nv-ease);
+}
+.nv-spotlight:is([data-active], :focus-within) { --_spot: 1; }
+.nv-spotlight:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+:is(a, button).nv-spotlight { display: block; text-align: inherit; text-decoration: none; font: inherit; cursor: pointer; }
+
+/* 网格中共享光源时，光斑略大，让相邻卡片的边框也能被照到 */
+.nv-spotlight-group { --nv-spotlight-size: 440px; }
+
+/* 触屏：静态的顶部环境光 */
+@media (hover: none) {
+  .nv-spotlight:not([data-active]) { --_spot: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-spotlight { transition: none; }
+}

@@ -1,0 +1,57 @@
+/* Nova UI · Number Input 数字输入框
+ * <input type="number" class="nv-number" min max step>   需 number-input.js：包进 .nv-control.nv-number-box 并追加按钮
+ * 外框沿用 .nv-control（data-size / data-variant / aria-invalid / disabled 都照常生效）
+ * data-controls stacked（默认）| sides | none
+ */
+.nv-number-box { overflow: hidden; }
+.nv-number-box > input {
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.nv-number-box > input::-webkit-inner-spin-button,
+.nv-number-box > input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.nv-number-btn {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-number-btn:hover:not(:disabled) { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-number-btn:active:not(:disabled) { background: color-mix(in oklab, var(--nv-fg) 12%, transparent); }
+.nv-number-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* 右侧上下箭头 */
+.nv-number-steppers {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: 26px;
+  margin-right: calc(var(--_px) * -1);
+  border-left: 1px solid var(--nv-border);
+}
+.nv-number-steppers > .nv-number-btn { flex: 1; width: 100%; min-height: 0; }
+.nv-number-steppers > .nv-number-btn + .nv-number-btn { border-top: 1px solid var(--nv-border); }
+.nv-number-box[data-size="sm"] .nv-number-steppers { width: 22px; }
+.nv-number-box:is(:disabled, .is-disabled, :has(> :disabled)) .nv-number-steppers { opacity: 0.6; }
+
+/* 左减右加 */
+.nv-number-box[data-controls="sides"] > input { text-align: center; }
+.nv-number-box[data-controls="sides"] > .nv-number-btn {
+  width: calc(var(--_h) - 10px);
+  height: calc(var(--_h) - 10px);
+  border-radius: calc(var(--nv-radius-md) - 3px);
+  color: var(--nv-fg-2);
+}
+.nv-number-box[data-controls="sides"] > .nv-number-btn:first-child { margin-left: calc(var(--_px) * -1 + 4px); }
+.nv-number-box[data-controls="sides"] > .nv-number-btn:last-child { margin-right: calc(var(--_px) * -1 + 4px); }
+.nv-number-box[data-controls="sides"] > .nv-number-btn > svg { width: 15px; height: 15px; }

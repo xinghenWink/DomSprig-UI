@@ -1,0 +1,248 @@
+<!--
+@name datepicker
+@title DatePicker 日期选择
+@category form
+@order 30
+@deps button
+@desc 增强原生日期输入：日历面板、月份/年份快速切换、日期时间、日期范围（双月并排 + 悬停预览 + 快捷预设），支持手动输入多种格式；原生值与 input/change 事件照常。
+-->
+
+<!-- @demo 基础用法 | 给 `<input type="date">` 加 `data-nv-date`。点击输入框或按 ↓ 打开日历；也可以直接输入 `2026-10-24`、`2026/10/24`、`2026.10.24`、`2026年10月24日` 或 `20261024`，回车或失焦后生效，无法识别时还原并提示。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="date-basic">出发日期</label>
+  <input type="date" id="date-basic" name="depart" data-nv-date data-clearable>
+  <div class="doc-log" id="date-basic-log">change → （未选择）</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('date-basic');
+    const log = document.getElementById('date-basic-log');
+    el.addEventListener('change', () => { log.textContent = `change → ${el.value || '（已清空）'}`; });
+    el.addEventListener('nv:invalid', (e) => { log.textContent = `nv:invalid → 「${e.detail.text}」无法识别`; });
+  }
+</script>
+
+<!-- @demo 日期时间 | `type="datetime-local"` 在日历右侧显示时、分两列，值为本地时间 `YYYY-MM-DDTHH:mm`。`data-minute-step="5"` 设置分钟步长；底栏「此刻」取当前时间，「确定」关闭面板。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="date-time">会议开始时间</label>
+  <input type="datetime-local" id="date-time" data-nv-date data-minute-step="5" value="2026-11-20T14:30">
+  <div class="doc-log" id="date-time-log">value = 2026-11-20T14:30</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('date-time');
+    const log = document.getElementById('date-time-log');
+    el.addEventListener('change', () => { log.textContent = `value = ${el.value || '（空）'}`; });
+  }
+</script>
+
+<!-- @demo 可选范围 | 原生 `min` / `max` 限制可选日期，范围外的日期置灰且不可选，月份与年份面板同样生效。脚本传入 `disabledDate` 可以额外禁用某些日期（下例禁用周末）。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="date-minmax">预约日期（今起 30 天内）</label>
+    <input type="date" id="date-minmax" data-nv-date>
+  </div>
+  <div>
+    <label class="doc-label" for="date-workday">交付日期（仅工作日）</label>
+    <input type="date" id="date-workday" data-nv-date data-placeholder="选择工作日">
+  </div>
+</div>
+<script>
+  {
+    const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const t = new Date();
+    const el = document.getElementById('date-minmax');
+    el.min = iso(t);
+    el.max = iso(new Date(t.getFullYear(), t.getMonth(), t.getDate() + 29));
+    Nova.datepicker(document.getElementById('date-workday'), {
+      disabledDate: (d) => d.getDay() === 0 || d.getDay() === 6,
+    });
+  }
+</script>
+
+<!-- @demo 日期范围与快捷预设 | `<input data-nv-date-range>` 选择一段日期，值为 `开始/结束`（如 `2026-10-01/2026-10-07`）。宽屏并排显示两个月，窄屏显示一个月；点起点后悬停可预览区间，再点终点完成，先点后点哪一端都可以。左侧预设默认是今天、最近 7 天、最近 30 天、本月、上月。 | col -->
+<div class="doc-narrow">
+  <label class="doc-label" for="date-range">统计周期</label>
+  <input id="date-range" name="period" data-nv-date-range data-clearable>
+  <div class="doc-log" id="date-range-log">period = （未选择）</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('date-range');
+    const log = document.getElementById('date-range-log');
+    el.addEventListener('change', () => { log.textContent = `period = ${el.value || '（已清空）'}`; });
+  }
+</script>
+
+<!-- @demo 自定义预设 | `data-presets="today 7d month"` 从内置预设（`today` `7d` `30d` `month` `lastMonth`）中挑选；`data-presets="false"` 关闭预设栏。脚本传入 `presets` 数组可加入自定义项，`value(today)` 返回 `[开始, 结束]`。 | col -->
+<div class="doc-stack doc-narrow">
+  <div>
+    <label class="doc-label" for="date-presets-js">账单周期（自定义预设）</label>
+    <input id="date-presets-js" data-nv-date-range>
+  </div>
+  <div>
+    <label class="doc-label" for="date-presets-pick">发布时间（只保留三项）</label>
+    <input id="date-presets-pick" data-nv-date-range data-presets="today 7d month">
+  </div>
+  <div>
+    <label class="doc-label" for="date-presets-off">请假日期（无预设、单月）</label>
+    <input id="date-presets-off" data-nv-date-range data-presets="false" data-months="1" value="2026-11-09/2026-11-13">
+  </div>
+</div>
+<script>
+  {
+    const back = (t, n) => new Date(t.getFullYear(), t.getMonth(), t.getDate() - n);
+    Nova.datepicker(document.getElementById('date-presets-js'), {
+      presets: [
+        'today',
+        { label: '最近 3 天', value: (t) => [back(t, 2), t] },
+        { label: '最近 90 天', value: (t) => [back(t, 89), t] },
+        { label: '本季度', value: (t) => { const q = Math.floor(t.getMonth() / 3) * 3; return [new Date(t.getFullYear(), q, 1), new Date(t.getFullYear(), q + 3, 0)]; } },
+        { label: '今年至今', value: (t) => [new Date(t.getFullYear(), 0, 1), t] },
+      ],
+    });
+  }
+</script>
+
+<!-- @demo 尺寸与状态 | `data-size="sm"` / `lg` 与其它表单控件同高；`aria-invalid="true"` 显示错误态；`disabled` 禁用，`readonly` 只读（不弹出面板）。 | col -->
+<div class="doc-stack doc-narrow">
+  <input type="date" data-nv-date data-size="sm" aria-label="小号日期" value="2026-11-15">
+  <input type="date" data-nv-date aria-label="默认日期" value="2026-11-15">
+  <input type="date" data-nv-date data-size="lg" aria-label="大号日期" value="2026-11-15">
+  <div>
+    <input type="date" data-nv-date aria-invalid="true" aria-label="截止日期" aria-describedby="date-err-hint">
+    <div class="doc-hint" id="date-err-hint">请选择截止日期</div>
+  </div>
+  <input type="date" data-nv-date disabled aria-label="禁用的日期" value="2026-01-01">
+  <input data-nv-date-range readonly aria-label="只读的范围" value="2026-10-01/2026-10-07">
+</div>
+
+<!-- @demo 底部空间不足：向上展开 | 下方放不下面板而上方更宽裕时自动向上展开；`data-placement="top-start"` 可固定向上。面板挂在 body 上，不会被 `overflow: hidden` 的容器裁剪。 | col tall -->
+<div class="doc-stack doc-narrow">
+  <div class="doc-hint">筛选栏贴近页面底部时：</div>
+  <input data-nv-date-range data-size="sm" data-placement="top-start" aria-label="筛选日期">
+</div>
+
+<!-- @demo 在弹窗中与表单使用 | 位于原生 `<dialog>` 内时面板挂载到该 dialog，Esc 先关闭面板（并还原未确认的文字），再按一次才关闭弹窗。原生 input 参与表单提交与重置；脚本修改 `value` 后调用 `Nova.datepicker.refresh(el)`。 -->
+<div class="doc-row">
+  <button type="button" class="nv-btn" data-variant="outline" id="date-dialog-open">新建请假单</button>
+</div>
+<dialog class="doc-dialog" id="date-dialog" aria-labelledby="date-dialog-title">
+  <form id="date-form" class="doc-stack">
+    <h3 id="date-dialog-title">新建请假单</h3>
+    <div>
+      <label class="doc-label" for="date-leave">请假日期</label>
+      <input id="date-leave" name="leave" data-nv-date-range data-presets="false" required>
+    </div>
+    <div>
+      <label class="doc-label" for="date-back">返岗时间</label>
+      <input type="datetime-local" id="date-back" name="back" data-nv-date data-minute-step="30">
+    </div>
+    <div class="doc-row">
+      <button type="button" class="nv-btn" data-variant="soft" data-size="sm" id="date-next-week">填入下周一至周五</button>
+      <button type="reset" class="nv-btn" data-variant="ghost" data-size="sm">重置</button>
+    </div>
+    <div class="doc-log" id="date-form-log"></div>
+    <div class="doc-dialog-actions">
+      <button type="button" class="nv-btn" data-variant="ghost" id="date-dialog-close">取消</button>
+      <button type="submit" class="nv-btn">提交</button>
+    </div>
+  </form>
+</dialog>
+<script>
+  {
+    const dlg = document.getElementById('date-dialog');
+    const form = document.getElementById('date-form');
+    const log = document.getElementById('date-form-log');
+    const leave = document.getElementById('date-leave');
+    const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    document.getElementById('date-dialog-open').addEventListener('click', () => dlg.showModal());
+    document.getElementById('date-dialog-close').addEventListener('click', () => dlg.close());
+    document.getElementById('date-next-week').addEventListener('click', () => {
+      const t = new Date();
+      const mon = new Date(t.getFullYear(), t.getMonth(), t.getDate() + ((8 - t.getDay()) % 7 || 7));
+      const fri = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 4);
+      leave.value = `${iso(mon)}/${iso(fri)}`;
+      Nova.datepicker.refresh(leave);
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      log.textContent = `submit → ${new URLSearchParams(new FormData(form))}`;
+    });
+  }
+</script>
+
+<!-- @api
+### 属性（写在原生 `<input>` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-nv-date` | 单个日期；`type="date"` 值为 `YYYY-MM-DD`，`type="datetime-local"` 值为 `YYYY-MM-DDTHH:mm` | 布尔 | — |
+| `data-nv-date-range` | 日期范围，值为 `YYYY-MM-DD/YYYY-MM-DD` | 布尔 | — |
+| `min` / `max` | 可选的最早 / 最晚日期（按天） | `YYYY-MM-DD` | — |
+| `data-minute-step` | 分钟列步长（日期时间） | `1`–`30` | `1` |
+| `data-week-start` | 每周第一天 | `0`（周日）`1`（周一） | `1` |
+| `data-months` | 范围模式并排显示的月数；不写时宽屏 ≥ 700px 为 2，否则为 1 | `1`–`3` | 自动 |
+| `data-presets` | 范围预设：内置键名，空格或逗号分隔；`false` 关闭 | `today` `7d` `30d` `month` `lastMonth` | 全部 |
+| `data-clearable` | 有值时显示清除按钮 | 布尔 | — |
+| `data-placeholder` | 占位文字 | 字符串 | `年/月/日` 等 |
+| `data-separator` | 范围显示时的分隔符 | 字符串 | ` – ` |
+| `data-size` | 尺寸 | `sm` `md` `lg` | `md` |
+| `data-placement` | 面板方向（空间不足时仍会翻转） | `bottom-start` `bottom-end` `top-start` `top-end` | `bottom-start` |
+| `aria-invalid="true"` / `disabled` / `readonly` / `required` | 错误态 / 禁用 / 只读 / 必填，同步到可见输入框 | 布尔 | — |
+
+### 文案（`data-*` 或脚本选项覆盖，全部可改）
+| 属性 | 默认 |
+|---|---|
+| `data-label` | `选择日期`（面板的可访问名称） |
+| `data-clear-text` / `data-today-text` / `data-now-text` / `data-ok-text` | `清除` / `今天` / `此刻` / `确定` |
+| `data-open-text` | `打开日历` |
+| `data-hour-text` / `data-minute-text` | `时` / `分` |
+| `data-invalid-text` | `日期无效，已还原` |
+| `data-range-hint` / `data-days-text` | `请选择结束日期` / `共 {n} 天` |
+| `data-prev-month-text` `data-next-month-text` `data-prev-year-text` `data-next-year-text` `data-prev-decade-text` `data-next-decade-text` | 翻页按钮的提示文字 |
+
+### 脚本选项 `Nova.datepicker(el, options)`
+| 选项 | 说明 |
+|---|---|
+| `presets` | 预设数组：内置键名或 `{ label, value: (today) => [start, end] }`（`value` 也可以直接是数组，元素为 Date 或 ISO 字符串）；`false` 关闭 |
+| `disabledDate` | `(date) => boolean`，返回 true 的日期不可选 |
+| 上表所有属性 | 用 camelCase 名称传入，例如 `{ minuteStep: 15, okText: 'OK' }`，优先于 `data-*` |
+
+### 事件（在原生 `<input>` 上）
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 值变化时依次触发，与原生一致 |
+| `nv:open` / `nv:close` | 面板打开 / 关闭 |
+| `nv:invalid` | 手动输入无法识别（或超出可选范围）后已还原，`detail.text` 为输入的文字 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.datepicker(el, options)` | 初始化或更新选项，返回实例 |
+| `Nova.datepicker.refresh(el)` | 脚本修改 `value` / `min` / `max` 后同步显示（属性变化会自动同步） |
+| `Nova.datepicker.open(el)` / `.close(el)` | 打开 / 关闭面板 |
+| `Nova.datepicker.presets` | 内置预设表，可增改，例如 `Nova.datepicker.presets.week = { label: '本周', value }` |
+| `Nova.get(el, 'datepicker')` | 实例：`open()` `close()` `clear()` `refresh()` `setValue(v)` `destroy()`，`value`、`input`、`panel` |
+
+### 键盘（焦点始终在输入框）
+| 按键 | 说明 |
+|---|---|
+| ↓ / Alt + ↓ | 打开面板 |
+| ↑ ↓ ← → | 按天 / 按周移动游标（打开后先按 ↑ ↓ 进入游标模式，之前 ← → 用于编辑文字） |
+| PageUp / PageDown | 上 / 下一个月，加 Shift 为一年 |
+| Home / End | 本周第一天 / 最后一天 |
+| Enter | 选中游标日期；无游标时应用输入的文字 |
+| Esc / Alt + ↑ / Tab | 关闭面板（Esc 还原未应用的文字） |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-date-width` | 控件宽度 | `100%` |
+| `--nv-date-cell` | 日期格边长 | `36px`（窄屏 `34px`） |
+| `--nv-date-time-col` | 时间列宽度 | `56px` |
+
+### 无障碍
+- 可见输入框 `role="combobox"` + `aria-haspopup="dialog"` + `aria-expanded` + `aria-controls`；面板 `role="dialog"`，日历为 `role="grid"`，日期格 `role="gridcell"` + `aria-selected`，每格的 `aria-label` 带完整日期与星期。
+- 键盘游标通过 `aria-activedescendant` 指示；范围模式的状态（「请选择结束日期」「共 n 天」）与输入错误通过 `aria-live` 播报。
+- 原生 input 对读屏隐藏、移出 Tab 序列，点击 `<label>` 会把焦点转给可见输入框。
+-->

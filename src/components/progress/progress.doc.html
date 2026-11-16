@@ -1,0 +1,261 @@
+<!--
+@name progress
+@title Progress 进度条
+@category feedback
+@order 20
+@deps button
+@desc 展示任务进度。线性、环形与分段三种形态，支持尺寸、语义色、品牌渐变、动态条纹、不确定态与标签数值；`Nova.progress.set()` 平滑过渡，纯 CSS 也能用。
+-->
+
+<!-- @demo 基础用法 | 只写 `data-value` 即可。放进 `nv-progress-field` 并配上 `nv-progress-label` 与空的 `nv-progress-value`，标签会自动关联、数值自动显示。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-progress" data-value="62" aria-label="个人资料完成度"></div>
+  <div class="nv-progress-field">
+    <div class="nv-progress-header">
+      <span class="nv-progress-label">本月流量</span>
+      <span class="nv-progress-value"></span>
+    </div>
+    <div class="nv-progress" data-value="38"></div>
+    <div class="nv-progress-hint">已用 38 GB，共 100 GB · 每月 1 日重置</div>
+  </div>
+  <div class="nv-progress-field" data-inline>
+    <div class="nv-progress" data-value="7" data-max="12" aria-label="已完成课程"></div>
+    <span class="nv-progress-value">7 / 12</span>
+  </div>
+  <!-- 纯 CSS：不加载 progress.js 时也能显示 -->
+  <div class="nv-progress" style="--value: 84" aria-label="服务可用性"></div>
+</div>
+
+<!-- @demo 尺寸与颜色 | `data-size="sm|md|lg"` 对应 4 / 8 / 12px；`data-color` 表达语义，也可写在 `nv-progress-field` 上统一控制。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-progress" data-size="sm" data-value="30" aria-label="小号"></div>
+  <div class="nv-progress" data-value="50" aria-label="默认"></div>
+  <div class="nv-progress" data-size="lg" data-value="70" aria-label="大号"></div>
+  <div class="nv-progress" data-color="success" data-value="92" aria-label="成功"></div>
+  <div class="nv-progress" data-color="warning" data-value="76" aria-label="警告"></div>
+  <div class="nv-progress" data-color="danger" data-value="98" aria-label="危险"></div>
+  <div class="nv-progress" data-color="info" data-value="44" aria-label="信息"></div>
+  <div class="nv-progress" data-color="neutral" data-value="58" aria-label="中性"></div>
+</div>
+
+<!-- @demo 渐变与条纹 | `data-variant="gradient"` 使用品牌渐变，渐变铺满整条轨道、随进度逐步揭开；`data-striped` 静态条纹，`data-animated` 流动条纹。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-progress" data-variant="gradient" data-size="lg" data-value="45" aria-label="渐变"></div>
+  <div class="nv-progress" data-striped data-size="lg" data-value="60" aria-label="条纹"></div>
+  <div class="nv-progress" data-animated data-color="success" data-size="lg" data-value="72" aria-label="流动条纹"></div>
+  <div class="nv-progress" data-animated data-variant="gradient" data-size="lg" data-value="88" aria-label="渐变流动条纹"></div>
+  <div class="doc-row">
+    <button class="nv-btn" data-size="sm" data-variant="outline" id="progress-random"><i data-nv-icon="refresh"></i>随机进度</button>
+  </div>
+</div>
+<script>
+  {
+    const btn = document.getElementById('progress-random');
+    btn.addEventListener('click', () => {
+      btn.closest('.doc-stack').querySelectorAll('.nv-progress').forEach((el) => {
+        Nova.progress.set(el, Math.round(10 + Math.random() * 90));
+      });
+    });
+  }
+</script>
+
+<!-- @demo 不确定态 | 无法预估时长时用 `data-indeterminate`，或 `Nova.progress.set(el, null)`。此时不写 `aria-valuenow`，读屏会播报为“忙碌”。减少动态时改为原地呼吸。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-progress-field">
+    <div class="nv-progress-header">
+      <span class="nv-progress-label">正在连接数据库…</span>
+    </div>
+    <div class="nv-progress" data-indeterminate data-size="sm"></div>
+  </div>
+  <div class="nv-progress" data-indeterminate data-variant="gradient" aria-label="正在同步"></div>
+  <div class="doc-row">
+    <span class="nv-progress-circle" data-size="sm" data-indeterminate aria-label="加载中"></span>
+    <span class="nv-progress-circle" data-indeterminate data-variant="gradient" aria-label="处理中"></span>
+  </div>
+</div>
+
+<!-- @demo 环形进度 | `nv-progress-circle` 由脚本生成 SVG。尺寸 `xs|sm|md|lg`，粗细 `data-thickness`（px），支持颜色与渐变；子元素会放在圆心，替代默认数值。 -->
+<div class="doc-row">
+  <span class="nv-progress-circle" data-size="xs" data-value="65" aria-label="上传"></span>
+  <span class="nv-progress-circle" data-size="sm" data-value="25" aria-label="下载"></span>
+  <span class="nv-progress-circle" data-value="68" data-color="success" aria-label="测试通过率"></span>
+  <span class="nv-progress-circle" data-size="lg" data-value="82" data-variant="gradient" aria-label="磁盘使用率">
+    <span class="nv-progress-circle-value"></span>
+    <span class="nv-progress-circle-label">磁盘已用</span>
+  </span>
+  <span class="nv-progress-circle" data-size="lg" data-value="3" data-max="5" data-thickness="4" data-color="warning" aria-label="今日目标">
+    <span class="nv-progress-circle-value">3/5</span>
+    <span class="nv-progress-circle-label">今日目标</span>
+  </span>
+  <span class="nv-progress-circle" data-value="100" data-color="success" aria-label="已完成"><i data-nv-icon="check"></i></span>
+</div>
+
+<!-- @demo 分段进度 | `data-segments="N"` 把进度条分成 N 段，当前段按比例部分填充，增长时依次点亮。适合密码强度、引导步骤等离散进度。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-progress-field">
+    <div class="nv-progress-header">
+      <span class="nv-progress-label">新手引导</span>
+      <span class="nv-progress-value">第 3 步，共 5 步</span>
+    </div>
+    <div class="nv-progress" data-segments="5" data-value="60"></div>
+  </div>
+  <div class="nv-progress-field" id="progress-pwd" data-color="danger">
+    <label class="doc-label" for="progress-pwd-input">设置密码</label>
+    <input class="nv-control" id="progress-pwd-input" type="password" autocomplete="new-password" placeholder="至少 8 位，包含大小写字母与数字" aria-describedby="progress-pwd-hint">
+    <div class="nv-progress" data-segments="4" data-size="sm" data-value="0" aria-label="密码强度"></div>
+    <div class="nv-progress-hint" id="progress-pwd-hint" aria-live="polite">请输入密码</div>
+  </div>
+</div>
+<script>
+  {
+    const box = document.getElementById('progress-pwd');
+    const input = document.getElementById('progress-pwd-input');
+    const bar = box.querySelector('.nv-progress');
+    const hint = document.getElementById('progress-pwd-hint');
+    const LEVELS = [
+      ['danger', '请输入密码'], ['danger', '强度：弱'], ['warning', '强度：一般'], ['info', '强度：良好'], ['success', '强度：很强'],
+    ];
+    input.addEventListener('input', () => {
+      const v = input.value;
+      const score = !v ? 0 : [v.length >= 8, /[a-z]/.test(v) && /[A-Z]/.test(v), /\d/.test(v), /[^\w]/.test(v) || v.length >= 14]
+        .filter(Boolean).length || 1;
+      const [color, label] = LEVELS[score];
+      box.dataset.color = color;
+      hint.textContent = label;
+      Nova.progress.set(bar, score * 25, { text: label });
+    });
+  }
+</script>
+
+<!-- @demo 上传进度 | 真实场景：多文件上传。用 `Nova.progress.set(el, value)` 更新，宽度与数值平滑过渡；完成后切换为成功色，失败切换为危险色。 | block -->
+<div class="doc-stack doc-mid" id="progress-upload">
+  <div class="nv-progress-field" data-total="4.2">
+    <div class="nv-progress-header">
+      <span class="nv-progress-label"><i data-nv-icon="file"></i><span class="nv-progress-label-text">2026 年度财务报告.pdf</span></span>
+      <span class="nv-progress-value"></span>
+    </div>
+    <div class="nv-progress" data-size="sm" data-value="0"></div>
+    <div class="nv-progress-hint">4.2 MB · 等待上传</div>
+  </div>
+  <div class="nv-progress-field" data-total="18.6">
+    <div class="nv-progress-header">
+      <span class="nv-progress-label"><i data-nv-icon="image"></i><span class="nv-progress-label-text">产品发布会主视觉-最终版-高清.png</span></span>
+      <span class="nv-progress-value"></span>
+    </div>
+    <div class="nv-progress" data-size="sm" data-value="0"></div>
+    <div class="nv-progress-hint">18.6 MB · 等待上传</div>
+  </div>
+  <div class="nv-progress-field" data-total="9.1" data-fail>
+    <div class="nv-progress-header">
+      <span class="nv-progress-label"><i data-nv-icon="folder"></i><span class="nv-progress-label-text">设计资源.zip</span></span>
+      <span class="nv-progress-value"></span>
+    </div>
+    <div class="nv-progress" data-size="sm" data-value="0"></div>
+    <div class="nv-progress-hint">9.1 MB · 等待上传</div>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" id="progress-upload-start"><i data-nv-icon="cloud-upload"></i>开始上传</button>
+  </div>
+</div>
+<script>
+  {
+    const root = document.getElementById('progress-upload');
+    const btn = document.getElementById('progress-upload-start');
+    const ICON = (name) => Nova.icon(name, { size: 16 });
+    btn.addEventListener('click', () => {
+      Nova.button && Nova.button.loading(btn, true);
+      const fields = [...root.querySelectorAll('.nv-progress-field')];
+      let pending = fields.length;
+      fields.forEach((field, i) => {
+        const bar = field.querySelector('.nv-progress');
+        const hint = field.querySelector('.nv-progress-hint');
+        const total = Number(field.dataset.total);
+        const icon = field.querySelector('.nv-progress-label > svg');
+        delete field.dataset.color;
+        Nova.progress.set(bar, 0, { animate: false });
+        let done = 0;
+        const timer = setInterval(() => {
+          done = Math.min(total, done + total * (0.04 + Math.random() * 0.12) / (1 + i * 0.3));
+          const pct = (done / total) * 100;
+          if (field.hasAttribute('data-fail') && pct > 64) {
+            clearInterval(timer);
+            field.dataset.color = 'danger';
+            icon.outerHTML = ICON('circle-x');
+            hint.textContent = '网络中断，上传失败 · 点击「开始上传」重试';
+            if (--pending === 0) Nova.button && Nova.button.loading(btn, false);
+            return;
+          }
+          Nova.progress.set(bar, pct);
+          hint.textContent = `${done.toFixed(1)} MB / ${total} MB`;
+          if (done >= total) {
+            clearInterval(timer);
+            field.dataset.color = 'success';
+            icon.outerHTML = ICON('circle-check');
+            hint.textContent = `${total} MB · 上传完成`;
+            if (--pending === 0) Nova.button && Nova.button.loading(btn, false);
+          }
+        }, 260);
+      });
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `nv-progress` | 线性进度条（轨道本身） |
+| `nv-progress-circle` | 环形进度，SVG 由脚本生成；子元素放在圆心 |
+| `nv-progress-field` | 可选外层：组合标签、数值、提示文字；`data-inline` 时进度条与数值同行 |
+| `nv-progress-header` | 标签与数值所在行 |
+| `nv-progress-label` | 标签，自动成为进度条的 `aria-labelledby`；内部可放图标，长文字包 `nv-progress-label-text` 省略 |
+| `nv-progress-value` | 数值。留空时由组件自动显示百分比（数字滚动），写了文字则保持不变 |
+| `nv-progress-hint` | 辅助说明（小号弱色） |
+| `nv-progress-circle-value` / `nv-progress-circle-label` | 环形圆心的数值 / 说明 |
+
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-value` | 当前值（也可直接写 `style="--value:40"`，0–100） | 数字 | `0` |
+| `data-max` | 最大值，百分比按 `value / max` 计算 | 数字 | `100` |
+| `data-size` | 线性：高度 4 / 8 / 12px；环形：20 / 48 / 72 / 120px | 线性 `sm` `md` `lg`；环形 `xs` `sm` `md` `lg` | `md` |
+| `data-color` | 语义颜色；写在 `nv-progress-field` 上可统一控制 | `primary` `success` `warning` `danger` `info` `neutral` | `primary` |
+| `data-variant` | 品牌渐变 | `gradient` | — |
+| `data-striped` | 静态条纹（线性） | 布尔 | — |
+| `data-animated` | 流动条纹（线性，自带条纹） | 布尔 | — |
+| `data-indeterminate` | 不确定态 | 布尔 | — |
+| `data-segments` | 分段数（线性，需 JS） | 2–50 | — |
+| `data-thickness` | 环形粗细（px） | 数字 | 按尺寸 3 / 4 / 6 / 9 |
+| `data-linecap` | 环形端点样式 | `round` `butt` | `round` |
+| `data-show-value` | 环形是否自动显示数值 | 布尔 | `true` |
+| `data-label` | 没有可见标签时使用的 `aria-label` | 字符串 | `进度` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.progress.set(el, value, opts)` | 更新进度，宽度 / 弧长 / 数值平滑过渡；`value` 为 `null` 进入不确定态 |
+| `opts.text` | 自定义数值文字，同时写入 `aria-valuetext`（如 `'3.2 / 8 MB'`） |
+| `opts.max` | 同时修改最大值 |
+| `opts.animate` | `false` 时数值文字不滚动（如重置为 0） |
+| `Nova.progress.get(el)` | 读取当前值，不确定态返回 `null` |
+| `Nova.get(el, 'progress')` | 实例：`set(value, opts)` `value` `max` `destroy()` |
+
+直接修改 `data-value` / `data-max` / `data-indeterminate` 属性同样会更新（适合框架绑定）。
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--value` | 当前百分比 0–100（纯 CSS 用法） |
+| `--nv-progress-color` | 填充颜色 |
+| `--nv-progress-track` | 轨道颜色 |
+| `--nv-progress-height` | 线性高度 |
+| `--nv-progress-radius` | 线性圆角，默认全圆角 |
+| `--nv-progress-gap` | 分段间距，默认 `4px` |
+| `--nv-progress-size` | 环形直径 |
+| `--nv-progress-thickness` | 环形粗细（无单位 px 数） |
+
+### 无障碍
+- 自动写入 `role="progressbar"`、`aria-valuemin`、`aria-valuemax`、`aria-valuenow`；不确定态移除 `aria-valuenow`。
+- 每个进度条都需要名称：可见标签（`nv-progress-label`）、`aria-label` 或 `data-label` 三选一。
+- 进度条不会主动播报变化；任务完成或失败时请配合 `aria-live` 区域或 Alert / Toast 提示。
+-->

@@ -1,0 +1,294 @@
+<!--
+@name skeleton
+@title Skeleton 骨架屏
+@category feedback
+@order 40
+@deps button
+@desc 在内容加载前展示页面结构的占位图形。文本行、圆形、矩形、按钮等形状，波浪/脉冲动画，组合出卡片、列表、表格与个人资料骨架，并提供加载完成后的淡入替换。
+-->
+
+<!-- @demo 基础用法 | 空的 `.nv-skeleton` 是一行文本；`data-lines` 生成多行段落，末行自动变短。 -->
+<div class="nv-skeleton-group doc-mid" data-direction="row" data-align="start" data-gap="lg">
+  <span class="nv-skeleton" data-shape="circle" data-size="lg"></span>
+  <div class="nv-skeleton-group">
+    <span class="nv-skeleton" data-size="lg" data-width="45%"></span>
+    <div class="nv-skeleton" data-lines="3"></div>
+  </div>
+</div>
+
+<!-- @demo 形状与尺寸 | `data-shape` 选择形状，`data-size="sm|md|lg"` 对齐控件高度；`data-width` `data-height` `data-ratio` 精确控制尺寸。 -->
+<div class="nv-skeleton-group doc-mid" data-gap="lg">
+  <div class="nv-skeleton-group" data-direction="row">
+    <span class="nv-skeleton" data-shape="circle" data-size="sm"></span>
+    <span class="nv-skeleton" data-shape="circle"></span>
+    <span class="nv-skeleton" data-shape="circle" data-size="lg"></span>
+    <span class="nv-skeleton" data-shape="button" data-size="sm"></span>
+    <span class="nv-skeleton" data-shape="button"></span>
+    <span class="nv-skeleton" data-shape="button" data-size="lg"></span>
+  </div>
+  <span class="nv-skeleton" data-shape="input"></span>
+  <div class="nv-skeleton-group" data-direction="row">
+    <span class="nv-skeleton" data-shape="rect" data-width="120" data-ratio="4/3"></span>
+    <div class="nv-skeleton-group" data-gap="sm">
+      <span class="nv-skeleton" data-size="lg" data-width="70%"></span>
+      <span class="nv-skeleton" data-width="90%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="40%"></span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 动画 | `data-animate="wave"`（默认，高光扫过）`pulse`（呼吸）`none`（静止）；写在 `.nv-skeleton-group` 上对整组生效。系统开启「减少动态效果」时自动静止。 -->
+<div class="nv-skeleton-group doc-mid" data-direction="row" data-align="start" data-gap="lg">
+  <div class="nv-skeleton-group">
+    <span class="doc-label">wave</span>
+    <span class="nv-skeleton" data-shape="circle"></span>
+    <div class="nv-skeleton" data-lines="3"></div>
+  </div>
+  <div class="nv-skeleton-group" data-animate="pulse">
+    <span class="doc-label">pulse</span>
+    <span class="nv-skeleton" data-shape="circle"></span>
+    <div class="nv-skeleton" data-lines="3"></div>
+  </div>
+  <div class="nv-skeleton-group" data-animate="none">
+    <span class="doc-label">none</span>
+    <span class="nv-skeleton" data-shape="circle"></span>
+    <div class="nv-skeleton" data-lines="3"></div>
+  </div>
+</div>
+
+<!-- @demo 卡片 | `.nv-skeleton-group` 负责排布，`data-card` 给出卡片外框；整组加 `aria-hidden` 对读屏隐藏。 | block -->
+<div class="nv-skeleton-group" data-direction="row" data-align="start" data-gap="lg" aria-hidden="true">
+  <div class="nv-skeleton-group" data-card>
+    <span class="nv-skeleton" data-shape="rect" data-ratio="16/9"></span>
+    <span class="nv-skeleton" data-size="lg" data-width="70%"></span>
+    <div class="nv-skeleton" data-lines="2"></div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="sm">
+      <span class="nv-skeleton" data-shape="circle" data-size="24"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="30%"></span>
+    </div>
+  </div>
+  <div class="nv-skeleton-group" data-card>
+    <span class="nv-skeleton" data-shape="rect" data-ratio="16/9"></span>
+    <span class="nv-skeleton" data-size="lg" data-width="55%"></span>
+    <div class="nv-skeleton" data-lines="2"></div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="sm">
+      <span class="nv-skeleton" data-shape="circle" data-size="24"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="40%"></span>
+    </div>
+  </div>
+  <div class="nv-skeleton-group" data-card>
+    <span class="nv-skeleton" data-shape="rect" data-ratio="16/9"></span>
+    <span class="nv-skeleton" data-size="lg" data-width="65%"></span>
+    <div class="nv-skeleton" data-lines="2"></div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="sm">
+      <span class="nv-skeleton" data-shape="circle" data-size="24"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="35%"></span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 列表与表格行 | `data-divided` 在行之间加分隔线；每行用 `data-direction="row"` 横排，列宽用 `data-width` 保持对齐。 | block -->
+<div class="nv-skeleton-group" data-direction="row" data-align="start" data-gap="lg" aria-hidden="true">
+  <div class="nv-skeleton-group" data-card data-divided>
+    <div class="nv-skeleton-group" data-direction="row">
+      <span class="nv-skeleton" data-shape="circle"></span>
+      <div class="nv-skeleton-group" data-gap="sm">
+        <span class="nv-skeleton" data-width="50%"></span>
+        <span class="nv-skeleton" data-size="sm" data-width="80%"></span>
+      </div>
+      <span class="nv-skeleton" data-shape="button" data-size="sm" data-width="56"></span>
+    </div>
+    <div class="nv-skeleton-group" data-direction="row">
+      <span class="nv-skeleton" data-shape="circle"></span>
+      <div class="nv-skeleton-group" data-gap="sm">
+        <span class="nv-skeleton" data-width="40%"></span>
+        <span class="nv-skeleton" data-size="sm" data-width="65%"></span>
+      </div>
+      <span class="nv-skeleton" data-shape="button" data-size="sm" data-width="56"></span>
+    </div>
+    <div class="nv-skeleton-group" data-direction="row">
+      <span class="nv-skeleton" data-shape="circle"></span>
+      <div class="nv-skeleton-group" data-gap="sm">
+        <span class="nv-skeleton" data-width="55%"></span>
+        <span class="nv-skeleton" data-size="sm" data-width="75%"></span>
+      </div>
+      <span class="nv-skeleton" data-shape="button" data-size="sm" data-width="56"></span>
+    </div>
+  </div>
+  <div class="nv-skeleton-group" data-card data-divided>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+      <span class="nv-skeleton" data-size="sm" data-width="28%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="18%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="22%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="12%"></span>
+    </div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+      <span class="nv-skeleton" data-width="28%"></span>
+      <span class="nv-skeleton" data-width="18%"></span>
+      <span class="nv-skeleton" data-width="22%"></span>
+      <span class="nv-skeleton" data-width="12%"></span>
+    </div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+      <span class="nv-skeleton" data-width="28%"></span>
+      <span class="nv-skeleton" data-width="18%"></span>
+      <span class="nv-skeleton" data-width="22%"></span>
+      <span class="nv-skeleton" data-width="12%"></span>
+    </div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+      <span class="nv-skeleton" data-width="28%"></span>
+      <span class="nv-skeleton" data-width="18%"></span>
+      <span class="nv-skeleton" data-width="22%"></span>
+      <span class="nv-skeleton" data-width="12%"></span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 个人资料 | 头像、姓名、简介与统计数据的组合骨架，结构与加载后的页面一致，避免内容出现时布局跳动。 -->
+<div class="nv-skeleton-group doc-mid" data-card data-gap="lg" aria-hidden="true">
+  <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+    <span class="nv-skeleton" data-shape="circle" data-size="64"></span>
+    <div class="nv-skeleton-group" data-gap="sm">
+      <span class="nv-skeleton" data-size="lg" data-width="45%"></span>
+      <span class="nv-skeleton" data-width="65%"></span>
+    </div>
+    <span class="nv-skeleton" data-shape="button" data-size="sm"></span>
+  </div>
+  <div class="nv-skeleton" data-lines="3"></div>
+  <div class="nv-skeleton-group" data-direction="row" data-gap="lg">
+    <div class="nv-skeleton-group" data-gap="sm">
+      <span class="nv-skeleton" data-size="lg" data-width="50%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="70%"></span>
+    </div>
+    <div class="nv-skeleton-group" data-gap="sm">
+      <span class="nv-skeleton" data-size="lg" data-width="50%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="70%"></span>
+    </div>
+    <div class="nv-skeleton-group" data-gap="sm">
+      <span class="nv-skeleton" data-size="lg" data-width="50%"></span>
+      <span class="nv-skeleton" data-size="sm" data-width="70%"></span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 加载完成后淡入替换 | 容器写 `aria-busy="true"` 并放一句读屏文字；数据到达后 `Nova.skeleton.replace(host, content)` 换入真实内容并淡入，`Nova.skeleton.loading(host, true)` 还原骨架。 -->
+<div class="doc-stack doc-mid">
+  <article class="nv-skeleton-group" data-card id="skeleton-feed" aria-busy="true" aria-live="polite">
+    <span class="nv-sr-only">正在加载文章…</span>
+    <span class="nv-skeleton" data-size="lg" data-width="60%"></span>
+    <div class="nv-skeleton" data-lines="3"></div>
+    <div class="nv-skeleton-group" data-direction="row" data-gap="sm">
+      <span class="nv-skeleton" data-shape="button" data-size="sm" data-width="84"></span>
+      <span class="nv-skeleton" data-shape="button" data-size="sm" data-width="64"></span>
+    </div>
+  </article>
+  <template id="skeleton-feed-tpl">
+    <b>Nova UI 1.0 正式发布</b>
+    <div class="nv-muted">零依赖、源码分发的组件库：复制即用，按需裁剪。本次发布包含导航、反馈、数据录入等 60 余个组件，全部支持亮暗主题与完整键盘操作。</div>
+    <div class="doc-row">
+      <button class="nv-btn" data-size="sm">阅读全文</button>
+      <button class="nv-btn" data-size="sm" data-variant="ghost"><i data-nv-icon="star"></i>收藏</button>
+    </div>
+  </template>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" id="skeleton-feed-reload"><i data-nv-icon="refresh"></i>重新加载</button>
+    <span class="doc-log" id="skeleton-feed-log"></span>
+  </div>
+</div>
+<script>
+  {
+    const host = document.getElementById('skeleton-feed');
+    const tpl = document.getElementById('skeleton-feed-tpl');
+    const log = document.getElementById('skeleton-feed-log');
+    let timer = 0;
+    const load = () => {
+      clearTimeout(timer);
+      Nova.skeleton.loading(host, true);
+      log.textContent = '加载中…';
+      timer = setTimeout(() => Nova.skeleton.replace(host, tpl), 1600); // 模拟请求
+    };
+    host.addEventListener('nv:loaded', () => { log.textContent = 'nv:loaded'; });
+    document.getElementById('skeleton-feed-reload').addEventListener('click', load);
+    Nova.ready(load);
+  }
+</script>
+
+<!-- @demo 包裹模式 | 把真实内容包在 `.nv-skeleton` 里：内容不可见、骨架自动贴合其尺寸；加 `data-loaded`（或 `Nova.skeleton.loading(host, false)`）后内容淡入，尺寸零跳动。 -->
+<div class="doc-stack doc-narrow">
+  <div class="nv-skeleton-group" data-card data-direction="row" id="skeleton-wrap" aria-busy="true">
+    <div class="nv-skeleton-group" data-gap="xs">
+      <span class="nv-skeleton"><b>林小雨</b></span>
+      <span class="nv-skeleton"><span class="nv-muted">产品设计师 · 杭州</span></span>
+    </div>
+    <span class="nv-skeleton"><button class="nv-btn" data-size="sm"><i data-nv-icon="plus"></i>关注</button></span>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" id="skeleton-wrap-toggle" aria-pressed="false">显示内容</button>
+  </div>
+</div>
+<script>
+  {
+    const host = document.getElementById('skeleton-wrap');
+    const btn = document.getElementById('skeleton-wrap-toggle');
+    btn.addEventListener('click', () => {
+      const loaded = host.getAttribute('aria-busy') === 'true';
+      Nova.skeleton.loading(host, !loaded);
+      btn.setAttribute('aria-pressed', String(loaded));
+      btn.textContent = loaded ? '恢复骨架' : '显示内容';
+    });
+  }
+</script>
+
+<!-- @api
+### 属性 · .nv-skeleton
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-skeleton"` | 骨架基础类。空元素为占位图形；包含内容时为「包裹模式」 | — | — |
+| `data-shape` | 形状 | `text` `circle` `rect` `button` `input` | `text` |
+| `data-size` | 尺寸。text：10 / 12 / 18px 行高；circle：32 / 40 / 56px，也可写数字（像素）；button/input：对齐 `--nv-h-sm/md/lg` | `sm` `md` `lg` \| 数字 | `md` |
+| `data-lines` | 生成 N 行文本，末行宽度为 `--nv-skeleton-last`（需 JS，上限 50）；值为空时使用手写的 `.nv-skeleton-line` 子元素（纯 CSS） | 数字 | — |
+| `data-width` | 宽度，纯数字按 px（需 JS） | `120` `60%` `8em`… | 随形状 |
+| `data-height` | 高度；在 `data-lines` 上表示每行高度（需 JS） | 同上 | 随形状 |
+| `data-ratio` | 宽高比，常用于图片占位（需 JS） | `16/9` `4/3` `1`… | — |
+| `data-animate` | 动画；写在 `.nv-skeleton-group` 或 `data-lines` 容器上对内部全部生效 | `wave` `pulse` `none` | `wave` |
+| `data-loaded` | 包裹模式下表示已加载：去掉骨架，内容淡入 | 布尔 | — |
+| `aria-hidden` | 占位骨架由 JS 自动设为 `true`（包裹模式不设置） | — | — |
+
+### 属性 · .nv-skeleton-group（组合布局）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-direction` | 排列方向；横排时子分组自动等分剩余宽度、窄屏换行 | `column` `row` | `column` |
+| `data-gap` | 间距 4 / 8 / 12 / 18px | `xs` `sm` `md` `lg` | `md` |
+| `data-align` | 横排时顶部对齐（默认垂直居中） | `start` | — |
+| `data-card` | 卡片外框（边框、圆角、内边距）；横排时卡片最小 220px 并自动换行 | 布尔 | — |
+| `data-divided` | 子项之间加分隔线（列表 / 表格行） | 布尔 | — |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:loaded` | `Nova.skeleton.replace()` 或 `loading(host, false)` 完成后在容器上派发 | `{ host }` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.skeleton.replace(host, content)` | 保存容器内的骨架，换入真实内容并淡入（减少动态时不做动画），设 `aria-busy="false"`。`content` 可为 Node、DocumentFragment、`<template>`（自动克隆）或节点数组；字符串按纯文本处理 |
+| `Nova.skeleton.loading(host, on = true)` | 切换加载态：同步 `aria-busy`；包裹模式骨架切换 `data-loaded`；对 `replace` 过的容器，`on=true` 时还原骨架 |
+| `Nova.skeleton.refresh(el)` | 修改 `data-lines` `data-width` 等属性后重新应用 |
+| `Nova.get(el, 'skeleton')` | 实例：`refresh()` `destroy()` |
+
+### 无障碍
+- 骨架只是视觉占位，对读屏隐藏（`aria-hidden="true"`）。
+- 正在更新的区域写 `aria-busy="true"`，并放一句 `.nv-sr-only` 文字（如「正在加载…」）；加载完成后改为 `false`（`replace` / `loading` 会自动同步）。需要播报结果时给容器加 `aria-live="polite"`。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-skeleton-bg` | 骨架底色 | `--nv-fg` 8% 透明混合 |
+| `--nv-skeleton-shine` | 波浪高光色 | 亮色白 72% / 暗色白 7% |
+| `--nv-skeleton-duration` | 动画周期 | `1.6s` |
+| `--nv-skeleton-radius` | 圆角 | 文本 `--nv-radius-sm`，矩形/按钮 `--nv-radius-md` |
+| `--nv-skeleton-w` `--nv-skeleton-h` | 宽 / 高（`data-width` `data-height` 写入的就是它们） | 随形状 |
+| `--nv-skeleton-size` | 圆形直径 | `40px` |
+| `--nv-skeleton-ratio` | 宽高比 | `16 / 9` |
+| `--nv-skeleton-gap` | 多行间距 / 分组间距 | `10px` / `12px` |
+| `--nv-skeleton-last` | 多行末行宽度 | `60%` |
+-->

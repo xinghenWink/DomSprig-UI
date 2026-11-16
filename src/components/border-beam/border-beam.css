@@ -1,0 +1,102 @@
+/* Nova UI · Border Beam 光束边框 / 流动渐变描边
+ * .nv-border-beam         给任意卡片加一束沿边框循环运动的光（光层由 border-beam.js 注入）
+ *   data-beams="2"        同时运行的光束数（1–4，均匀错开）
+ *   data-reverse          逆时针
+ *   --nv-beam-duration    绕一圈的时长（默认 6s）
+ *   --nv-beam-size        光束长度（默认 110px）
+ *   --nv-beam-width       光束粗细（默认 1.5px）
+ *   --nv-beam-from / --nv-beam-to   尾部 / 头部颜色
+ *   --nv-beam-offset      卡片自身边框宽度，光束压在边框上（默认 1px）
+ * .nv-gradient-border     流动的渐变描边（纯 CSS，背景双层裁剪，不占用伪元素）
+ *   --nv-gradient-border-width / -duration / -bg
+ * 运动：光束用 offset-path 沿圆角矩形匀速移动，只改 offset-distance（与 transform 同属合成层运动）；
+ *       渐变描边只动画 @property 注册的角度。离开视口时暂停。
+ */
+@property --_gb-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --_beam-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+.nv-border-beam,
+.nv-gradient-border {
+  --_h1: var(--nv-primary);
+  --_h2: color-mix(in oklab, var(--nv-primary) 55%, var(--nv-info));
+  --_h3: color-mix(in oklab, var(--nv-primary) 60%, var(--nv-danger));
+}
+@supports (color: oklch(from red l c h)) {
+  .nv-border-beam,
+  .nv-gradient-border {
+    --_h2: oklch(from var(--nv-primary) calc(l + 0.06) c calc(h + 60));
+    --_h3: oklch(from var(--nv-primary) l c calc(h - 50));
+  }
+}
+
+/* ———————————————— 光束 ———————————————— */
+:where(.nv-border-beam) { position: relative; }
+.nv-border-beam {
+  --_from: var(--nv-beam-from, var(--_h1));
+  --_to: var(--nv-beam-to, var(--_h2));
+  --_dur: var(--nv-beam-duration, 6s);
+}
+.nv-border-beam-track {
+  position: absolute;
+  inset: calc(-1 * var(--nv-beam-offset, 1px));
+  z-index: 1;
+  padding: var(--nv-beam-width, 1.5px);
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden; /* 光束在转角处会伸出卡片；mask 只裁视觉，不裁布局溢出 */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.nv-border-beam-light {
+  position: absolute;
+  width: var(--nv-beam-size, 110px);
+  aspect-ratio: 1;
+  offset-path: rect(0 auto auto 0 round var(--_r, var(--nv-radius-xl)));
+  offset-anchor: 100% 50%;
+  offset-rotate: auto;
+  background: linear-gradient(to left, var(--_to), var(--_from) 30%, transparent 100%);
+  animation: nv-beam-move var(--_dur) linear infinite;
+  animation-delay: calc(var(--_dur) * var(--_k, 0) / var(--_n, 1) * -1);
+}
+.nv-border-beam[data-reverse] .nv-border-beam-light {
+  animation-direction: reverse;
+  background: linear-gradient(to right, var(--_to), var(--_from) 30%, transparent 100%);
+  offset-anchor: 0% 50%;
+}
+.nv-border-beam[data-paused] .nv-border-beam-light,
+.nv-border-beam[data-paused] .nv-border-beam-track { animation-play-state: paused; }
+@keyframes nv-beam-move {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+
+/* 不支持 offset-path 圆角矩形的浏览器：退化为沿边框旋转的 conic 光带 */
+@supports not (offset-path: rect(0 auto auto 0 round 1px)) {
+  .nv-border-beam-light { display: none; }
+  .nv-border-beam-track {
+    background: conic-gradient(from var(--_beam-angle), transparent 0 78%, var(--_from) 90%, var(--_to) 99%, transparent 100%);
+    animation: nv-beam-spin var(--_dur) linear infinite;
+  }
+  .nv-border-beam[data-reverse] .nv-border-beam-track { animation-direction: reverse; }
+}
+@keyframes nv-beam-spin { to { --_beam-angle: 360deg; } }
+
+/* ———————————————— 流动渐变描边 ———————————————— */
+.nv-gradient-border {
+  --_gbw: var(--nv-gradient-border-width, 1.5px);
+  --_gbg: var(--nv-gradient-border-bg, var(--nv-surface));
+  border: var(--_gbw) solid transparent;
+  background:
+    linear-gradient(var(--_gbg), var(--_gbg)) padding-box,
+    conic-gradient(from var(--_gb-angle), var(--_h1), var(--_h2), var(--_h3), var(--_h1)) border-box;
+  animation: nv-gb-spin var(--nv-gradient-border-duration, 4s) linear infinite;
+}
+@keyframes nv-gb-spin { to { --_gb-angle: 360deg; } }
+
+/* ———————————————— 减少动态：光束停在上边框，渐变描边静止 ———————————————— */
+@media (prefers-reduced-motion: reduce) {
+  .nv-border-beam-light { animation: none; offset-distance: calc(12% + 25% * var(--_k, 0)); }
+  .nv-border-beam-track { animation: none; }
+  .nv-gradient-border { animation: none; --_gb-angle: 45deg; }
+}

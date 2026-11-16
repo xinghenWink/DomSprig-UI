@@ -1,0 +1,79 @@
+<!--
+@name segmented
+@title Segmented 分段控制器
+@category form
+@order 8
+@desc 在 2–5 个互斥选项之间切换，常用于视图切换、时间范围筛选。基于原生 radio，表单提交和方向键照常工作；选中底色是一个跟随移动的滑块。
+-->
+
+<!-- @demo 基础 | 每个选项是一个包着 radio 的 `label`。切换时原生 `change` 照常冒泡，容器上另外派发 `nv:change { value }`。 | col -->
+<div class="nv-segmented" aria-label="时间范围" id="seg-demo">
+  <label><input type="radio" name="seg-range" value="day">今日</label>
+  <label><input type="radio" name="seg-range" value="week" checked>本周</label>
+  <label><input type="radio" name="seg-range" value="month">本月</label>
+  <label><input type="radio" name="seg-range" value="year">全年</label>
+</div>
+<div class="doc-log" id="seg-log">value = week</div>
+<script>
+  document.getElementById('seg-demo').addEventListener('nv:change', (e) => {
+    document.getElementById('seg-log').textContent = `value = ${e.detail.value}`;
+  });
+</script>
+
+<!-- @demo 图标与尺寸 | 选项里可以放图标；只有图标时给 label 写 `aria-label`。`data-size` 取 sm / md / lg。 | col -->
+<div class="nv-segmented" data-size="sm" aria-label="视图">
+  <label aria-label="列表"><input type="radio" name="seg-view-sm" value="list" checked><i data-nv-icon="list"></i></label>
+  <label aria-label="网格"><input type="radio" name="seg-view-sm" value="grid"><i data-nv-icon="grid"></i></label>
+</div>
+<div class="nv-segmented" aria-label="视图">
+  <label><input type="radio" name="seg-view" value="list" checked><i data-nv-icon="list"></i>列表</label>
+  <label><input type="radio" name="seg-view" value="grid"><i data-nv-icon="grid"></i>网格</label>
+  <label><input type="radio" name="seg-view" value="calendar"><i data-nv-icon="calendar"></i>日历</label>
+</div>
+<div class="nv-segmented" data-size="lg" aria-label="主题">
+  <label><input type="radio" name="seg-theme" value="light"><i data-nv-icon="sun"></i>浅色</label>
+  <label><input type="radio" name="seg-theme" value="dark"><i data-nv-icon="moon"></i>深色</label>
+  <label><input type="radio" name="seg-theme" value="system" checked><i data-nv-icon="monitor"></i>跟随系统</label>
+</div>
+
+<!-- @demo 撑满与主色 | `data-block` 撑满容器并等分；`data-variant="primary"` 选中项为主色。单个选项可以 `disabled`。 | col -->
+<div class="doc-mid doc-stack">
+  <div class="nv-segmented" data-block aria-label="付款周期">
+    <label><input type="radio" name="seg-bill" value="month" checked>按月</label>
+    <label><input type="radio" name="seg-bill" value="year">按年（省 20%）</label>
+  </div>
+  <div class="nv-segmented" data-block data-variant="primary" aria-label="套餐">
+    <label><input type="radio" name="seg-plan" value="free">免费版</label>
+    <label><input type="radio" name="seg-plan" value="pro" checked>专业版</label>
+    <label><input type="radio" name="seg-plan" value="team">团队版</label>
+    <label><input type="radio" name="seg-plan" value="ent" disabled>企业版</label>
+  </div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-size` | `sm` `md` `lg` | `md` |
+| `data-block` | 撑满容器，选项等分 | — |
+| `data-variant` | `primary` 选中项为主色 | — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `change` | 原生 radio 事件 |
+| `nv:change` | 在容器上派发，`detail: { value }` |
+
+### 实例
+`Nova.get(el, 'segmented')` 返回：
+
+| 成员 | 说明 |
+|---|---|
+| `value` | 读写当前值；写入不派发事件 |
+| `refresh()` | 用 JS 改了 `input.checked` 后调用，重新定位滑块 |
+
+### 无障碍
+- 容器是 `role="radiogroup"`，要写 `aria-label`。
+- 方向键在选项间切换（浏览器原生 radio 行为），Tab 进出整组。
+- 没有 JS 时选中项直接显示底色，功能不受影响。
+-->

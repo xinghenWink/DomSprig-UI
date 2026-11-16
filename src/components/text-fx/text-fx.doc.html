@@ -1,0 +1,55 @@
+<!--
+@name text-fx
+@title Text FX 文字特效
+@category effects
+@order 6
+@deps button
+@desc 流动渐变、扫光、逐词模糊淡入、打字机、乱码解码、词语轮换。读屏始终读到完整原文，减少动态时直接显示原文。
+-->
+
+<!-- @demo 渐变与扫光 | 纯 CSS：`.nv-text-gradient` 流动渐变（随主色），`.nv-text-shine` 一道高光循环扫过。 | col -->
+<style>.tfx-big { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }</style>
+<p class="tfx-big"><span class="nv-text-gradient">一个变量，整套主题</span></p>
+<p class="tfx-big"><span class="nv-text-shine">正在生成回答…</span></p>
+
+<!-- @demo 打字机 | `data-nv-text="type"` + `data-words="a|b|c"` 循环打字、删除；`data-loop="false"` 打完最后一个词停住，`data-caret="false"` 隐藏光标。可与 `.nv-text-gradient` 叠加。 | col -->
+<p class="tfx-big">为<span data-nv-text="type" data-words="后台系统|营销页面|数据看板|AI 应用" class="nv-text-gradient">后台系统</span>而生</p>
+<p class="tfx-big" style="font-size: 22px"><span data-nv-text="type" data-words="安装依赖…|编译完成|部署成功 ✓" data-loop="false" data-speed="50"></span></p>
+
+<!-- @demo 模糊淡入 | `data-nv-text="blur-in"` 进入视口时逐词模糊淡入；`data-split="char"` 逐字，`data-stagger` 每个片段的间隔（ms）。 | col -->
+<p class="tfx-big" data-nv-text="blur-in">让界面本身成为产品的一部分</p>
+<p class="tfx-big" style="font-size: 22px" data-nv-text="blur-in" data-split="char" data-stagger="40">逐字出现，适合标题与口号</p>
+
+<!-- @demo 乱码解码与轮换 | `data-nv-text="scramble"` 进入视口时从随机字符解码出原文，悬停或聚焦时重播；`data-nv-text="rotate"` 在几个词之间上下轮换，`data-interval` 设定间隔。 | col -->
+<p class="tfx-big" style="font-family: var(--nv-font-mono); font-size: 26px" data-nv-text="scramble" tabindex="0">ACCESS GRANTED</p>
+<p class="tfx-big">交付<span data-nv-text="rotate" data-words="更快|更稳|更好看" class="nv-text-gradient"></span></p>
+
+<!-- @api
+### 类名与属性
+| 名称 | 说明 |
+|---|---|
+| `.nv-text-gradient` | 流动渐变文字。`--nv-text-gradient` 自定义渐变（首尾同色才能无缝），`--nv-text-gradient-duration` 默认 `8s` |
+| `.nv-text-shine` | 扫光。`--nv-text-shine-base` 底色、`--nv-text-shine-color` 高光、`--nv-text-shine-duration` 默认 `3.2s` |
+| `data-nv-text="type"` | 打字机 |
+| `data-nv-text="blur-in"` | 模糊淡入 |
+| `data-nv-text="scramble"` | 乱码解码 |
+| `data-nv-text="rotate"` | 词语轮换 |
+
+### 选项（写成 data-* 属性）
+| 特效 | 属性 | 默认 |
+|---|---|---|
+| type | `data-words`（竖线分隔）、`data-speed` 打字间隔、`data-delete-speed` 删除间隔、`data-pause` 停顿、`data-delay`、`data-loop`、`data-caret`、`data-reserve`（预留最长词宽度）、`data-label`（读屏文案） | `70` `35` `1600` `300` `true` `true` `false` |
+| blur-in | `data-split`（`word` / `char`）、`data-duration`、`data-stagger`、`data-delay`、`data-threshold` | `word` `700` `60` `0` `0.3` |
+| scramble | `data-duration`、`data-delay`、`data-chars` 随机字符集、`data-replay`（悬停重播）、`data-trigger`（`view` 进入视口 / 其他值不自动播放） | `900` `0` — `true` `view` |
+| rotate | `data-words`、`data-interval`、`data-label` | — `2200` — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `nv:done` | blur-in / scramble 播放结束、type 在 `data-loop="false"` 时打完最后一个词 |
+| `nv:change` | rotate 切换词语，`detail: { index, word }` |
+
+### 无障碍与降级
+- 拆分出的动画片段一律 `aria-hidden`，完整原文放在 `.nv-sr-only` 中；blur-in / scramble 结束后把原始节点放回去，复制、选中、换行都正常。
+- 减少动态：blur-in / scramble 直接显示原文，打字机显示第一个词，轮换停在第一个词。
+-->

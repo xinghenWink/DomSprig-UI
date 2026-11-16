@@ -1,0 +1,70 @@
+<!--
+@name tilt
+@title Tilt 3D 倾斜 / 磁吸
+@category effects
+@order 4
+@deps button
+@desc 悬停时卡片随光标 3D 倾斜并带高光反射，离开后弹性复位；`data-nv-magnetic` 让按钮被光标轻微吸引。触屏与减少动态时保持静止。
+-->
+
+<!-- @demo 3D 倾斜 | 给任意元素加 `data-nv-tilt`；`data-glare` 叠加高光反射层。 -->
+<style>
+  .tilt-card {
+    width: 260px; padding: 22px; border-radius: var(--nv-radius-xl);
+    border: 1px solid var(--nv-border); background: var(--nv-surface); box-shadow: var(--nv-shadow-md);
+  }
+  .tilt-card h4 { margin: 10px 0 6px; font-size: var(--nv-text-md); }
+  .tilt-card p { margin: 0; font-size: var(--nv-text-sm); color: var(--nv-fg-2); line-height: 1.6; }
+  .tilt-card.is-brand { background: var(--nv-gradient); color: #fff; border-color: transparent; }
+  .tilt-card.is-brand p { color: rgb(255 255 255 / 0.85); }
+</style>
+<div class="tilt-card" data-nv-tilt>
+  <i data-nv-icon="credit-card" data-size="22"></i>
+  <h4>默认倾斜</h4>
+  <p>最大 10°，悬停放大 1.03 倍。</p>
+</div>
+<div class="tilt-card is-brand" data-nv-tilt data-glare data-max="14">
+  <i data-nv-icon="star" data-size="22"></i>
+  <h4>高光反射</h4>
+  <p><code>data-glare</code> + <code>data-max="14"</code></p>
+</div>
+
+<!-- @demo 参数 | `data-max` 最大角度、`data-perspective` 透视距离、`data-scale` 悬停放大、`data-spring` 复位回弹（0 无回弹，1 最强）、`data-reverse` 让光标所在一侧抬起。 -->
+<div class="tilt-card" data-nv-tilt data-max="20" data-perspective="600" data-spring="0.9">
+  <h4>夸张 + 强回弹</h4>
+  <p>20° · 透视 600 · 回弹 0.9</p>
+</div>
+<div class="tilt-card" data-nv-tilt data-reverse data-scale="1">
+  <h4>反向 · 不放大</h4>
+  <p><code>data-reverse</code> <code>data-scale="1"</code></p>
+</div>
+
+<!-- @demo 磁吸 | `data-nv-magnetic` 让元素在光标靠近时被轻微吸引；`data-strength` 控制强度（0–1），`data-radius` 是元素外的感应距离。磁吸写独立的 `translate` 属性，不影响按钮原有的 `transform` 按压效果。 -->
+<button class="nv-btn" data-nv-magnetic>靠近我</button>
+<button class="nv-btn" data-variant="outline" data-nv-magnetic data-strength="0.6" data-radius="100">强磁吸</button>
+<button class="nv-btn" data-variant="soft" data-shape="circle" data-icon data-nv-magnetic aria-label="收藏"><i data-nv-icon="heart"></i></button>
+
+<!-- @api
+### 3D 倾斜 `[data-nv-tilt]`
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-max` | 最大倾斜角（度） | `10` |
+| `data-perspective` | 透视距离（px） | `900` |
+| `data-scale` | 悬停放大倍数 | `1.03` |
+| `data-spring` | 复位弹性，0 无回弹 – 1 强回弹 | `0.5` |
+| `data-reverse` | 反向：光标所在一侧抬起 | — |
+| `data-glare` | 注入高光层 `.nv-tilt-glare`；`--nv-tilt-glare` 定制颜色 | — |
+
+悬停期间元素带 `data-active`，可以据此写额外样式。
+
+### 磁吸 `[data-nv-magnetic]`
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-strength` | 吸引强度 0–1 | `0.35` |
+| `data-radius` | 元素外的感应距离（px） | `60` |
+
+### 实现与降级
+- 两者共用一个阻尼弹簧在 rAF 中积分，指针静止且弹簧到位后循环立即停止。
+- 倾斜写元素的 `transform`，复位后清空、恢复原有样式；磁吸写 `translate`，可与 `transform` 叠加。
+- 触屏指针与减少动态偏好：不倾斜、不吸附。
+-->

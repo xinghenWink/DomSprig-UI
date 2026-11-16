@@ -1,0 +1,161 @@
+/* Nova UI · Stat 统计数值
+ * <div class="nv-stat">
+ *   <div class="nv-stat-label"><i data-nv-icon="users"></i>活跃用户</div>
+ *   <div class="nv-stat-value">12,890<small>人</small></div>
+ *   <div class="nv-stat-meta"><span class="nv-stat-trend" data-trend="up">12.5%</span>较上周</div>
+ *   <svg class="nv-stat-spark" data-values="3 5 4 8 7 9"></svg>     可选：迷你走势图（需 stat.js）
+ * </div>
+ * .nv-stat 上：data-variant="card" 卡片外观；data-size sm | md（默认）| lg
+ * 趋势：data-trend up | down | flat；data-invert 反转好坏含义（如「流失率下降」是好事）
+ * 一组：<div class="nv-stat-group">…</div> 等宽排列，中间有分隔线
+ */
+.nv-stat {
+  --_fs: 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-family: var(--nv-font);
+  color: var(--nv-fg);
+}
+.nv-stat[data-size="sm"] { --_fs: 22px; gap: 4px; }
+.nv-stat[data-size="lg"] { --_fs: 36px; gap: 8px; }
+.nv-stat[data-variant="card"] {
+  padding: 18px 20px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-xl);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+}
+
+.nv-stat-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-sm);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.nv-stat-label > svg { width: 15px; height: 15px; color: var(--nv-fg-3); flex: none; }
+.nv-stat-label > .nv-stat-icon { margin-left: auto; }
+.nv-stat-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-primary-soft);
+  color: var(--nv-primary-text);
+}
+.nv-stat-icon > svg { width: 17px; height: 17px; }
+.nv-stat-icon[data-color="success"] { background: var(--nv-success-soft); color: var(--nv-success-text); }
+.nv-stat-icon[data-color="warning"] { background: var(--nv-warning-soft); color: var(--nv-warning-text); }
+.nv-stat-icon[data-color="danger"] { background: var(--nv-danger-soft); color: var(--nv-danger-text); }
+.nv-stat-icon[data-color="info"] { background: var(--nv-info-soft); color: var(--nv-info-text); }
+
+.nv-stat-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: var(--_fs);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--nv-fg);
+}
+.nv-stat-value > small { font-size: max(13px, calc(var(--_fs) * 0.45)); font-weight: 500; letter-spacing: 0; color: var(--nv-fg-3); }
+
+.nv-stat-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-sm);
+  line-height: 1.4;
+}
+
+/* 趋势 */
+.nv-stat-trend {
+  --_c: var(--nv-fg-2);
+  --_bg: var(--nv-surface-3);
+  --_arrow: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+  padding: 0 6px 0 4px;
+  border-radius: var(--nv-radius-full);
+  background: var(--_bg);
+  color: var(--_c);
+  font-size: var(--nv-text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.nv-stat-trend::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: var(--_arrow) center / contain no-repeat;
+  mask: var(--_arrow) center / contain no-repeat;
+}
+.nv-stat-trend[data-trend="up"],
+.nv-stat-trend[data-trend="down"][data-invert] { --_c: var(--nv-success-text); --_bg: var(--nv-success-soft); }
+.nv-stat-trend[data-trend="down"],
+.nv-stat-trend[data-trend="up"][data-invert] { --_c: var(--nv-danger-text); --_bg: var(--nv-danger-soft); }
+.nv-stat-trend[data-trend="up"] { --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E"); }
+.nv-stat-trend[data-trend="down"] { --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 7l10 10M17 8v9H8'/%3E%3C/svg%3E"); }
+.nv-stat-trend[data-trend="flat"] { --_arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E"); }
+.nv-stat-trend[data-variant="text"] { height: auto; padding: 0; background: none; }
+
+/* 迷你走势图（stat.js 根据 data-values 画 path） */
+.nv-stat-spark {
+  --_c: var(--nv-primary);
+  display: block;
+  width: 100%;
+  height: var(--nv-stat-spark-height, 40px);
+  margin-top: 4px;
+  overflow: visible;
+  color: var(--_c);
+}
+.nv-stat-spark[data-color="success"] { --_c: var(--nv-success); }
+.nv-stat-spark[data-color="danger"] { --_c: var(--nv-danger); }
+.nv-stat-spark[data-color="warning"] { --_c: var(--nv-warning); }
+.nv-stat-spark[data-color="info"] { --_c: var(--nv-info); }
+.nv-stat-spark-line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nv-stat-spark-area { fill: currentColor; opacity: 0.12; stroke: none; }
+.nv-stat-spark-dot { fill: var(--nv-surface); stroke: currentColor; stroke-width: 2; }
+.nv-stat-spark[data-animate] .nv-stat-spark-line { stroke-dasharray: var(--_len, 1000); stroke-dashoffset: var(--_len, 1000); }
+.nv-stat-spark[data-animate].is-in .nv-stat-spark-line { stroke-dashoffset: 0; transition: stroke-dashoffset 1.2s var(--nv-ease-out); }
+.nv-stat-spark[data-animate] :is(.nv-stat-spark-area, .nv-stat-spark-dot) { opacity: 0; }
+.nv-stat-spark[data-animate].is-in .nv-stat-spark-area { opacity: 0.12; transition: opacity var(--nv-dur-4) var(--nv-ease) 0.5s; }
+.nv-stat-spark[data-animate].is-in .nv-stat-spark-dot { opacity: 1; transition: opacity var(--nv-dur-3) var(--nv-ease) 1s; }
+
+/* 目标完成度条 */
+.nv-stat-bar { height: 6px; margin-top: 4px; border-radius: var(--nv-radius-full); background: var(--nv-surface-3); overflow: hidden; }
+.nv-stat-bar > i { display: block; width: var(--value, 0%); height: 100%; border-radius: inherit; background: var(--nv-primary); }
+
+/* 一组统计：每项向左上投 1px 阴影画分隔线，外框裁掉多余部分 */
+.nv-stat-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--nv-stat-min, 160px), 1fr));
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-xl);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+  overflow: hidden;
+}
+.nv-stat-group > .nv-stat { padding: 18px 20px; box-shadow: -1px 0 0 var(--nv-border), 0 -1px 0 var(--nv-border); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-stat-spark[data-animate] .nv-stat-spark-line { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
+  .nv-stat-spark[data-animate] .nv-stat-spark-area { opacity: 0.12; transition: none; }
+  .nv-stat-spark[data-animate] .nv-stat-spark-dot { opacity: 1; transition: none; }
+}

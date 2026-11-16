@@ -1,0 +1,61 @@
+/* Nova UI · Radio 单选框（纯 CSS，依赖 checkbox.css 中的 .nv-check / .nv-check-group / .nv-check-card 与颜色变量）
+ * <input type="radio" class="nv-radio" name="plan">     圆点弹性缩放动画
+ * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
+ */
+.nv-radio {
+  --_s: 16px;
+  --_c: var(--nv-primary);
+  --_c-hover: var(--nv-primary-hover);
+  --_on: var(--nv-primary-fg);
+  --_bd: color-mix(in oklab, var(--nv-fg-3) 72%, var(--nv-border-input));
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-content: center;
+  width: var(--_s);
+  height: var(--_s);
+  margin: 0;
+  border: 1px solid var(--_bd);
+  border-radius: 50%;
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+  vertical-align: middle;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--nv-dur-2) var(--nv-ease),
+    border-color var(--nv-dur-2) var(--nv-ease),
+    box-shadow var(--nv-dur-2) var(--nv-ease),
+    transform var(--nv-dur-3) var(--nv-ease-spring);
+}
+.nv-radio::before {
+  content: "";
+  width: calc(var(--_s) * 0.4);
+  height: calc(var(--_s) * 0.4);
+  border-radius: 50%;
+  background: var(--_on);
+  transform: scale(0);
+  transition: transform var(--nv-dur-1) var(--nv-ease);
+}
+.nv-radio:hover { border-color: var(--nv-fg-3); }
+.nv-check:hover > .nv-radio:not(:checked, :disabled) { border-color: var(--nv-fg-3); }
+.nv-radio:active:not(:disabled) { transform: scale(0.88); transition-duration: var(--nv-dur-1); }
+.nv-radio:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-radio:checked {
+  border-color: var(--_c);
+  background: var(--_c);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--_c) 30%, transparent);
+}
+.nv-radio:checked:hover { border-color: var(--_c-hover); background: var(--_c-hover); }
+.nv-radio:checked::before {
+  transform: scale(1);
+  transition: transform var(--nv-dur-3) var(--nv-ease-spring);
+}
+.nv-radio[aria-invalid="true"]:not(:checked) { border-color: var(--nv-danger); }
+.nv-radio:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.nv-radio:disabled:not(:checked) { background: var(--nv-surface-2); border-color: var(--nv-border-strong); }
+.nv-radio[data-size="sm"] { --_s: 14px; }
+.nv-radio[data-size="lg"] { --_s: 20px; }
+/* 组内任意一项出错时整组标红：<fieldset class="nv-check-group" aria-invalid="true"> */
+.nv-check-group[aria-invalid="true"] .nv-radio:not(:checked) { border-color: var(--nv-danger); }

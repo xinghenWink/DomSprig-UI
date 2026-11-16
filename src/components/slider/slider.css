@@ -1,0 +1,232 @@
+/* Nova UI · Slider 滑块
+ * 单值   <input type="range" class="nv-slider" min max step value>   无 JS 时也有完整外观（无填充色）
+ *        slider.js 会包进 .nv-slider-box：写入填充比例、数值气泡（data-tooltip）、刻度（data-marks）
+ * 范围   <div class="nv-slider-range" data-min="0" data-max="100" data-step="1" data-value="20,80" data-name="price">
+ * data-size="sm|md|lg"  data-color  data-tooltip（"always" 常显）  data-marks="0,50,100" 或 "0:低,100:高"
+ * data-prefix / data-suffix 数值格式（¥、%）   禁用：input[disabled] / 范围用 data-disabled
+ */
+.nv-slider,
+.nv-slider-box,
+.nv-slider-range {
+  --_tk: 6px;
+  --_t: 18px;
+  --_h: var(--nv-h-md);
+  --_c: var(--nv-primary);
+  --_track: color-mix(in oklab, var(--nv-fg) 12%, transparent);
+  --_hit: calc(var(--_t) + 10px);
+}
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-size="sm"] { --_tk: 4px; --_t: 14px; --_h: var(--nv-h-sm); }
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-size="lg"] { --_tk: 8px; --_t: 22px; --_h: var(--nv-h-lg); }
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-color="success"] { --_c: var(--nv-success); }
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-color="warning"] { --_c: var(--nv-warning); }
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-color="danger"] { --_c: var(--nv-danger); }
+:is(.nv-slider, .nv-slider-box, .nv-slider-range)[data-color="neutral"] { --_c: var(--nv-fg); }
+
+/* ———————— 原生 range ———————— */
+.nv-slider {
+  --_p: 0;
+  --_fill: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_p));
+  --_ring: 0 0 0 0 transparent;
+  --_scale: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--_hit);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+.nv-slider:focus { outline: 0; }
+.nv-slider::-webkit-slider-runnable-track {
+  height: var(--_tk);
+  border-radius: var(--nv-radius-full);
+  background: linear-gradient(to right, var(--_c) 0 var(--_fill), var(--_track) var(--_fill) 100%);
+}
+.nv-slider::-moz-range-track { height: var(--_tk); border-radius: var(--nv-radius-full); background: var(--_track); }
+.nv-slider::-moz-range-progress { height: var(--_tk); border-radius: var(--nv-radius-full); background: var(--_c); }
+.nv-slider::-webkit-slider-thumb {
+  width: var(--_t);
+  height: var(--_t);
+  margin-top: calc((var(--_tk) - var(--_t)) / 2);
+  border: 2px solid var(--_c);
+  border-radius: 50%;
+  background: var(--nv-primary-fg);
+  box-shadow: var(--_ring), 0 1px 3px color-mix(in oklab, var(--nv-shadow-c) 22%, transparent);
+  transform: scale(var(--_scale));
+  transition: box-shadow var(--nv-dur-2) var(--nv-ease), transform var(--nv-dur-2) var(--nv-ease-spring);
+  appearance: none;
+}
+.nv-slider::-moz-range-thumb {
+  box-sizing: border-box;
+  width: var(--_t);
+  height: var(--_t);
+  border: 2px solid var(--_c);
+  border-radius: 50%;
+  background: var(--nv-primary-fg);
+  box-shadow: var(--_ring), 0 1px 3px color-mix(in oklab, var(--nv-shadow-c) 22%, transparent);
+  transform: scale(var(--_scale));
+  transition: box-shadow var(--nv-dur-2) var(--nv-ease), transform var(--nv-dur-2) var(--nv-ease-spring);
+}
+.nv-slider:hover { --_ring: 0 0 0 5px color-mix(in oklab, var(--_c) 14%, transparent); }
+.nv-slider:focus-visible { --_ring: 0 0 0 4px color-mix(in oklab, var(--_c) 30%, transparent); }
+.nv-slider:active { --_ring: 0 0 0 6px color-mix(in oklab, var(--_c) 18%, transparent); --_scale: 1.08; }
+.nv-slider:disabled { opacity: 0.5; cursor: not-allowed; --_ring: 0 0 0 0 transparent; --_scale: 1; }
+
+/* ———————— 增强后的公共结构 ———————— */
+.nv-slider-box,
+.nv-slider-range {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--_h);
+  font: var(--nv-text-md) / 1.4 var(--nv-font);
+  -webkit-tap-highlight-color: transparent;
+}
+.nv-slider-body {
+  position: relative;
+  height: var(--_hit);
+}
+.nv-slider-range > .nv-slider-body { cursor: pointer; touch-action: pan-y; user-select: none; }
+.nv-slider-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--_tk);
+  margin-top: calc(var(--_tk) / -2);
+  border-radius: var(--nv-radius-full);
+  background: var(--_track);
+  pointer-events: none;
+}
+.nv-slider-fill {
+  --_a: 0;
+  --_b: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_a));
+  right: calc(var(--_t) / 2 + (100% - var(--_t)) * (1 - var(--_b)));
+  border-radius: var(--nv-radius-full);
+  background: var(--_c);
+}
+.nv-slider-box .nv-slider-fill { left: 0; }
+/* 增强后由 .nv-slider-track 画轨道，原生轨道透明，拇指浮在上面 */
+.nv-slider-body > .nv-slider { position: relative; z-index: 1; }
+.nv-slider-body > .nv-slider::-webkit-slider-runnable-track { background: transparent; }
+.nv-slider-body > .nv-slider::-moz-range-track { background: transparent; }
+.nv-slider-body > .nv-slider::-moz-range-progress { background: transparent; }
+
+/* —— 刻度 —— */
+.nv-slider-mark {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_m));
+  width: max(2px, calc(var(--_tk) - 2px));
+  height: max(2px, calc(var(--_tk) - 2px));
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--nv-fg) 32%, transparent);
+  translate: -50% -50%;
+}
+.nv-slider-mark[data-active] { background: color-mix(in oklab, var(--nv-primary-fg) 75%, transparent); }
+.nv-slider-labels {
+  position: relative;
+  height: 18px;
+  margin-top: 2px;
+  pointer-events: none;
+}
+.nv-slider-label {
+  position: absolute;
+  top: 0;
+  left: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_m));
+  translate: -50% 0;
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: color var(--nv-dur-2);
+}
+.nv-slider-label[data-edge="start"] { translate: calc(var(--_t) / -2) 0; }
+.nv-slider-label[data-edge="end"] { translate: calc(-100% + var(--_t) / 2) 0; }
+.nv-slider-label[data-active] { color: var(--nv-fg-2); }
+
+/* —— 范围滑块的拇指 —— */
+.nv-slider-thumb {
+  --_v: 0;
+  --_ring: 0 0 0 0 transparent;
+  --_scale: 1;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_v));
+  width: var(--_t);
+  height: var(--_t);
+  border: 2px solid var(--_c);
+  border-radius: 50%;
+  background: var(--nv-primary-fg);
+  box-shadow: var(--_ring), 0 1px 3px color-mix(in oklab, var(--nv-shadow-c) 22%, transparent);
+  translate: -50% -50%;
+  scale: var(--_scale);
+  cursor: grab;
+  outline: 0;
+  touch-action: none;
+  transition: box-shadow var(--nv-dur-2) var(--nv-ease), scale var(--nv-dur-2) var(--nv-ease-spring);
+}
+.nv-slider-thumb[data-active] { z-index: 2; }
+.nv-slider-thumb:hover { --_ring: 0 0 0 5px color-mix(in oklab, var(--_c) 14%, transparent); }
+.nv-slider-thumb:focus-visible { --_ring: 0 0 0 4px color-mix(in oklab, var(--_c) 30%, transparent); }
+.nv-slider-thumb[data-dragging] { --_ring: 0 0 0 6px color-mix(in oklab, var(--_c) 18%, transparent); --_scale: 1.08; cursor: grabbing; }
+
+/* —— 数值气泡 —— */
+.nv-slider-bubble {
+  position: absolute;
+  z-index: 3;
+  bottom: calc(50% + var(--_t) / 2 + 8px);
+  left: calc(var(--_t) / 2 + (100% - var(--_t)) * var(--_v, 0));
+  padding: 3px 8px;
+  border-radius: var(--nv-radius-sm);
+  background: var(--nv-fg);
+  color: var(--nv-fg-inverse);
+  font: 600 var(--nv-text-xs) / 1.4 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  box-shadow: var(--nv-shadow-md);
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  opacity: 0;
+  scale: 0.85;
+  pointer-events: none;
+  transition: opacity var(--nv-dur-1) var(--nv-ease), scale var(--nv-dur-2) var(--nv-ease-out);
+}
+.nv-slider-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  border: 4px solid transparent;
+  border-top-color: var(--nv-fg);
+  translate: -50% 0;
+}
+/* 范围拇指内的气泡：相对拇指居中 */
+.nv-slider-thumb > .nv-slider-bubble { left: 50%; bottom: calc(100% + 8px); }
+.nv-slider-body:has(> .nv-slider:is(:hover, :focus-visible, :active)) > .nv-slider-bubble,
+.nv-slider-body[data-dragging] > .nv-slider-bubble,
+.nv-slider-thumb:is(:hover, :focus-visible, [data-dragging]) > .nv-slider-bubble,
+:is(.nv-slider-box, .nv-slider-range)[data-tooltip="always"] .nv-slider-bubble {
+  opacity: 1;
+  scale: 1;
+}
+.nv-slider-body:has(> .nv-slider:disabled) > .nv-slider-bubble { opacity: 0; }
+
+/* —— 禁用 —— */
+.nv-slider-box:has(.nv-slider:disabled) .nv-slider-track,
+.nv-slider-box:has(.nv-slider:disabled) .nv-slider-labels { opacity: 0.5; }
+.nv-slider-range[data-disabled] { opacity: 0.5; }
+.nv-slider-range[data-disabled] > .nv-slider-body,
+.nv-slider-range[data-disabled] .nv-slider-thumb { cursor: not-allowed; --_ring: 0 0 0 0 transparent; }

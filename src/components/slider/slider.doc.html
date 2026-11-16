@@ -1,0 +1,129 @@
+<!--
+@name slider
+@title Slider 滑块
+@category form
+@order 7
+@deps field
+@desc 基于原生 range 的单值滑块与可键盘操作的双滑块范围选择。填充色、数值气泡、刻度与标签，拖动时拇指放大并带光环；无 JS 时仍是可用的原生控件。
+-->
+
+<!-- @demo 基础用法 | `<input type="range" class="nv-slider">`，`min` `max` `step` `value` 均为原生属性；JS 增强后写入填充色。 | col -->
+<div class="doc-stack doc-mid">
+  <input type="range" class="nv-slider" value="40" aria-label="音量">
+  <input type="range" class="nv-slider" min="0" max="10" step="0.5" value="6.5" aria-label="评分权重" data-tooltip>
+</div>
+
+<!-- @demo 尺寸与颜色 | `data-size="sm|md|lg"` 调整轨道与拇指；`data-color` 切换填充色。 | col -->
+<div class="doc-stack doc-mid">
+  <input type="range" class="nv-slider" data-size="sm" value="30" aria-label="小号">
+  <input type="range" class="nv-slider" value="50" aria-label="默认">
+  <input type="range" class="nv-slider" data-size="lg" value="70" aria-label="大号">
+  <input type="range" class="nv-slider" data-color="success" value="60" aria-label="成功色">
+  <input type="range" class="nv-slider" data-color="warning" value="45" aria-label="警告色">
+  <input type="range" class="nv-slider" data-color="danger" value="85" aria-label="危险色">
+</div>
+
+<!-- @demo 数值气泡与刻度 | `data-tooltip` 悬停 / 拖动 / 聚焦时显示数值，`"always"` 常显；`data-marks="0,25,50"` 画刻度点，写成 `值:文字` 时在下方显示标签。 | col -->
+<div class="doc-stack doc-mid">
+  <input type="range" class="nv-slider" id="slider-marks" step="25" value="50" aria-label="压缩等级" data-marks="0:无,25:低,50:中,75:高,100:极限" data-tooltip>
+  <div style="padding-top:28px">
+    <input type="range" class="nv-slider" min="0" max="100" value="65" aria-label="不透明度" data-suffix="%" data-tooltip="always" data-marks="0,25,50,75,100">
+  </div>
+</div>
+
+<!-- @demo 范围选择 | `.nv-slider-range` 生成两个 `role="slider"` 拇指，拖动轨道任意位置会移动最近的拇指，两者不会交叉。键盘：方向键 ±step、Shift ×10、PageUp/Down ±10%、Home/End。`data-name` 生成隐藏 input，值形如 `"200,800"`。 | col -->
+<form class="doc-mid" id="slider-price-form">
+  <div class="nv-field">
+    <div class="nv-field-head">
+      <label class="nv-field-label">价格区间</label>
+      <span class="nv-field-extra" id="slider-price-text"></span>
+    </div>
+    <div class="nv-slider-range" id="slider-price" data-min="0" data-max="1000" data-step="10" data-value="200,800" data-name="price" data-prefix="¥" data-tooltip data-labels="最低价,最高价" data-marks="0:¥0,500:¥500,1000:¥1000"></div>
+  </div>
+  <div class="doc-log" id="slider-price-log"></div>
+</form>
+<script>
+  {
+    const el = document.getElementById('slider-price');
+    const text = document.getElementById('slider-price-text');
+    const log = document.getElementById('slider-price-log');
+    const form = document.getElementById('slider-price-form');
+    const show = () => {
+      const [a, b] = (el.dataset.value || '').split(',');
+      text.textContent = `¥${a} – ¥${b}`;
+    };
+    el.addEventListener('input', show);
+    el.addEventListener('nv:change', (e) => {
+      show();
+      log.textContent = `nv:change → [${e.detail.value}]  表单：${new URLSearchParams(new FormData(form))}`;
+    });
+    Nova.ready(show);
+  }
+</script>
+
+<!-- @demo 实战：音频均衡 | 范围与单值混用，`data-suffix` 格式化气泡与读屏文字（`aria-valuetext`）。 | col -->
+<div class="doc-stack doc-mid">
+  <div class="nv-field">
+    <label class="nv-field-label">人声频段</label>
+    <div class="nv-slider-range" data-min="20" data-max="20000" data-step="10" data-value="300,3400" data-suffix=" Hz" data-tooltip data-size="sm" data-color="neutral"></div>
+  </div>
+  <div class="nv-field">
+    <label class="nv-field-label">增益</label>
+    <input type="range" class="nv-slider" min="-12" max="12" step="0.5" value="3" data-suffix=" dB" data-tooltip data-marks="-12:-12,0:0,12:+12">
+  </div>
+</div>
+
+<!-- @demo 禁用 | 单值用原生 `disabled`；范围写 `data-disabled`，可随时增删。 | col -->
+<div class="doc-stack doc-mid">
+  <input type="range" class="nv-slider" value="35" disabled aria-label="禁用单值">
+  <div class="nv-slider-range" id="slider-lock" data-value="25,60" data-disabled data-tooltip></div>
+  <label class="nv-check"><input type="checkbox" class="nv-checkbox" id="slider-lock-toggle" checked>锁定范围</label>
+</div>
+<script>
+  {
+    const el = document.getElementById('slider-lock');
+    document.getElementById('slider-lock-toggle').addEventListener('change', (e) => el.toggleAttribute('data-disabled', e.target.checked));
+  }
+</script>
+
+<!-- @api
+### 单值（`<input type="range" class="nv-slider">`）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `min` / `max` / `step` / `value` | 原生属性 | 数字 | `0` / `100` / `1` |
+| `data-size` | 尺寸，容器高 32 / 38 / 44px | `sm` `md` `lg` | `md` |
+| `data-color` | 填充色 | `success` `warning` `danger` `neutral` | 主色 |
+| `data-tooltip` | 数值气泡；`always` 常显 | 布尔 \| `always` | — |
+| `data-marks` | 刻度，`值` 或 `值:文字`，逗号分隔 | 如 `0,50,100` | — |
+| `data-prefix` / `data-suffix` | 数值格式，同时写入 `aria-valuetext` | 文本 | — |
+| `disabled` | 禁用 | 布尔 | — |
+
+### 范围（`<div class="nv-slider-range">`）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-min` / `data-max` / `data-step` | 取值范围与步长 | 数字 | `0` / `100` / `1` |
+| `data-value` | 初始值，组件会回写当前值 | `"20,80"` | 全范围 |
+| `data-name` | 生成隐藏 input 的 name，值为 `"a,b"` | 文本 | — |
+| `data-labels` | 两个拇指的读屏名称 | `"最小值,最大值"` | 同左 |
+| `data-disabled` | 禁用（可动态切换） | 布尔 | — |
+| `data-size` `data-color` `data-tooltip` `data-marks` `data-prefix` `data-suffix` | 同单值 | — | — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 单值为原生事件；范围在拖动中派发 `input`，松手或按键后派发 `change` |
+| `nv:change` | 仅范围：`detail.value` 为 `[a, b]` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.get(el, 'slider')` | 实例：`value` `set(v)` `refresh()` `destroy()` |
+| `Nova.slider.set(el, v)` | 设值，单值传数字，范围传 `[a, b]` 或 `"a,b"`；不派发事件 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-primary` | 默认填充与拇指边框色 |
+| `--_tk` / `--_t` | 轨道粗细 / 拇指直径（写在 `.nv-slider-box` / `.nv-slider-range` 上） |
+| `--_track` | 未填充轨道颜色 |
+-->

@@ -1,0 +1,156 @@
+/* Nova UI · Badge 徽标 / Indicator 角标
+ * <span class="nv-badge" data-color="success">已激活</span>
+ * data-variant  soft（默认）| solid | outline | surface
+ * data-color    neutral（默认）| primary | success | warning | danger | info
+ * data-size     sm | md（默认）| lg
+ * data-dot      文字前加状态圆点          data-shape="square" 小圆角
+ *
+ * <span class="nv-indicator" data-count="99+"><span class="nv-avatar">…</span></span>
+ * data-count    右上角数字（"0" 时隐藏，配合 data-show-zero 显示）
+ * data-dot      只显示圆点                data-pulse   圆点呼吸扩散
+ * data-placement top-end（默认）| top-start | bottom-end | bottom-start
+ * data-overlap  circle：贴合圆形元素（头像）
+ */
+.nv-badge {
+  --_c: var(--nv-fg-2);
+  --_text: var(--nv-fg-2);
+  --_soft: var(--nv-surface-3);
+  --_on: var(--nv-fg-inverse);
+  --_bg: var(--_soft);
+  --_fg: var(--_text);
+  --_bd: transparent;
+  --_h: 22px;
+  --_px: 8px;
+  --_fs: var(--nv-text-xs);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  height: var(--nv-badge-height, var(--_h));
+  min-width: var(--nv-badge-height, var(--_h));
+  padding: 0 var(--_px);
+  border: 1px solid var(--_bd);
+  border-radius: var(--nv-badge-radius, var(--nv-radius-full));
+  background: var(--nv-badge-bg, var(--_bg));
+  color: var(--nv-badge-fg, var(--_fg));
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.nv-badge > svg { width: 1.1em; height: 1.1em; flex: none; margin-inline: -1px; }
+.nv-badge[hidden] { display: none; }
+
+/* 尺寸 */
+.nv-badge[data-size="sm"] { --_h: 18px; --_px: 6px; gap: 3px; }
+.nv-badge[data-size="lg"] { --_h: 26px; --_px: 10px; --_fs: var(--nv-text-sm); gap: 6px; }
+.nv-badge[data-shape="square"] { border-radius: var(--nv-radius-sm); }
+
+/* 颜色 */
+.nv-badge[data-color="primary"] { --_c: var(--nv-primary); --_text: var(--nv-primary-text); --_soft: var(--nv-primary-soft); --_on: var(--nv-primary-fg); }
+.nv-badge[data-color="success"] { --_c: var(--nv-success); --_text: var(--nv-success-text); --_soft: var(--nv-success-soft); --_on: light-dark(#fff, oklch(0.22 0.05 155)); }
+.nv-badge[data-color="warning"] { --_c: var(--nv-warning); --_text: var(--nv-warning-text); --_soft: var(--nv-warning-soft); --_on: oklch(0.25 0.06 60); }
+.nv-badge[data-color="danger"] { --_c: var(--nv-danger); --_text: var(--nv-danger-text); --_soft: var(--nv-danger-soft); --_on: #fff; }
+.nv-badge[data-color="info"] { --_c: var(--nv-info); --_text: var(--nv-info-text); --_soft: var(--nv-info-soft); --_on: light-dark(#fff, oklch(0.22 0.05 245)); }
+
+/* 变体 */
+.nv-badge[data-variant="solid"] { --_bg: var(--_c); --_fg: var(--_on); }
+.nv-badge[data-variant="solid"][data-color="neutral"] { --_c: var(--nv-fg); }
+/* 未指定颜色的 solid 徽标用主色（醒目标记，如「新」） */
+.nv-badge[data-variant="solid"]:not([data-color]) { --_c: var(--nv-primary); --_on: var(--nv-primary-fg); }
+.nv-badge[data-variant="outline"] {
+  --_bg: transparent;
+  --_bd: color-mix(in oklab, var(--_c) 40%, transparent);
+}
+.nv-badge[data-variant="outline"]:is(:not([data-color]), [data-color="neutral"]) { --_bd: var(--nv-border-input); --_fg: var(--nv-fg-2); }
+.nv-badge[data-variant="surface"] {
+  --_bg: linear-gradient(var(--_soft) 0 0), var(--nv-surface);
+  --_bd: color-mix(in oklab, var(--_c) 28%, transparent);
+}
+.nv-badge[data-variant="surface"]:is(:not([data-color]), [data-color="neutral"]) { --_bd: var(--nv-border); --_bg: var(--nv-surface-2); }
+
+/* 状态圆点 */
+.nv-badge[data-dot]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  margin-inline-start: -1px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.nv-badge[data-dot]:not([data-variant="solid"])::before { background: var(--_c); }
+.nv-badge[data-dot]:empty { padding: 0; min-width: 0; width: 8px; height: 8px; border: 0; background: var(--_c); }
+.nv-badge[data-dot]:empty::before { display: none; }
+/* ————— Indicator：给任意元素加数字 / 圆点角标 ————— */
+.nv-indicator {
+  --_c: var(--nv-danger);
+  --_on: #fff;
+  --_ring: var(--nv-indicator-ring, var(--nv-surface));
+  --_x: 0px;
+  --_y: 0px;
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.nv-indicator[data-color="primary"] { --_c: var(--nv-primary); --_on: var(--nv-primary-fg); }
+.nv-indicator[data-color="success"] { --_c: var(--nv-success); --_on: light-dark(#fff, oklch(0.22 0.05 155)); }
+.nv-indicator[data-color="warning"] { --_c: var(--nv-warning); --_on: oklch(0.25 0.06 60); }
+.nv-indicator[data-color="info"] { --_c: var(--nv-info); --_on: light-dark(#fff, oklch(0.22 0.05 245)); }
+.nv-indicator[data-color="neutral"] { --_c: var(--nv-fg-3); }
+
+.nv-indicator:is([data-count], [data-dot])::after {
+  position: absolute;
+  z-index: 1;
+  top: var(--_y);
+  right: var(--_x);
+  translate: 50% -50%;
+  box-sizing: border-box;
+  pointer-events: none;
+  border-radius: var(--nv-radius-full);
+  background: var(--nv-indicator-bg, var(--_c));
+  box-shadow: 0 0 0 2px var(--_ring);
+  color: var(--_on);
+  transition: scale var(--nv-dur-2) var(--nv-ease-spring), opacity var(--nv-dur-2) var(--nv-ease);
+}
+.nv-indicator[data-count]::after {
+  content: attr(data-count);
+  height: 18px;
+  min-width: 18px;
+  padding: 0 5px;
+  font: 600 var(--nv-text-xs) / 18px var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+.nv-indicator[data-dot]::after { content: ""; width: 10px; height: 10px; min-width: 0; padding: 0; }
+.nv-indicator[data-size="sm"][data-count]::after { height: 16px; min-width: 16px; padding: 0 4px; font-size: 11px; line-height: 16px; }
+.nv-indicator[data-size="sm"][data-dot]::after { width: 8px; height: 8px; }
+
+/* 数字为 0 时默认隐藏（data-show-zero 强制显示） */
+.nv-indicator[data-count="0"]:not([data-show-zero])::after,
+.nv-indicator[data-count=""]::after { scale: 0; opacity: 0; }
+
+/* 位置 */
+.nv-indicator[data-placement="top-start"]::after { right: auto; left: var(--_x); translate: -50% -50%; }
+.nv-indicator[data-placement="bottom-end"]::after { top: auto; bottom: var(--_y); translate: 50% 50%; }
+.nv-indicator[data-placement="bottom-start"]::after { top: auto; right: auto; bottom: var(--_y); left: var(--_x); translate: -50% 50%; }
+/* 圆形元素（头像）：角标移到圆周 45° 处，而不是外接正方形的角上 */
+.nv-indicator[data-overlap="circle"] { --_x: 14.6%; --_y: 14.6%; }
+.nv-indicator[data-overlap="inset"] { --_x: 6px; --_y: 6px; }
+
+/* 呼吸扩散：用于「有新消息」「直播中」 */
+.nv-indicator[data-pulse]::after { animation: nv-indicator-pulse 1.8s var(--nv-ease-out) infinite; }
+@keyframes nv-indicator-pulse {
+  0% { box-shadow: 0 0 0 2px var(--_ring), 0 0 0 2px color-mix(in oklab, var(--_c) 55%, transparent); }
+  80%, 100% { box-shadow: 0 0 0 2px var(--_ring), 0 0 0 9px color-mix(in oklab, var(--_c) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-indicator[data-pulse]::after { animation: none; }
+  .nv-indicator:is([data-count], [data-dot])::after { transition: none; }
+}

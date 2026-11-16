@@ -1,0 +1,160 @@
+<!--
+@name radio
+@title Radio 单选框
+@category form
+@order 5
+@deps checkbox
+@desc 原生单选框的精致外观：圆点弹性缩放动画，复用 Checkbox 的标签包装、分组与可选卡片；方向键切换与表单提交完全原生。
+-->
+
+<!-- @demo 基础用法 | 同一组用相同 `name`；放在 `role="radiogroup"` 或 `<fieldset>` 中并提供分组名称。 -->
+<div class="nv-check-group" data-orientation="horizontal" role="radiogroup" aria-label="配送方式">
+  <label class="nv-check"><input type="radio" class="nv-radio" name="radio-ship" value="express" checked>顺丰速运</label>
+  <label class="nv-check"><input type="radio" class="nv-radio" name="radio-ship" value="standard">普通快递</label>
+  <label class="nv-check"><input type="radio" class="nv-radio" name="radio-ship" value="pickup">到店自提</label>
+</div>
+
+<!-- @demo 标题与说明 | 与复选框相同的 `.nv-check-text` 结构。 | col -->
+<fieldset class="nv-check-group doc-mid">
+  <legend>文档可见范围</legend>
+  <label class="nv-check">
+    <input type="radio" class="nv-radio" name="radio-scope" value="private" checked>
+    <span class="nv-check-text">
+      <span class="nv-check-label">仅自己</span>
+      <span class="nv-check-desc">只有你可以查看和编辑。</span>
+    </span>
+  </label>
+  <label class="nv-check">
+    <input type="radio" class="nv-radio" name="radio-scope" value="team">
+    <span class="nv-check-text">
+      <span class="nv-check-label">团队成员</span>
+      <span class="nv-check-desc">「增长实验室」的 12 位成员可以查看。</span>
+    </span>
+  </label>
+  <label class="nv-check">
+    <input type="radio" class="nv-radio" name="radio-scope" value="public">
+    <span class="nv-check-text">
+      <span class="nv-check-label">公开链接</span>
+      <span class="nv-check-desc">任何拿到链接的人都可以查看。</span>
+    </span>
+  </label>
+</fieldset>
+
+<!-- @demo 尺寸、颜色与状态 | `data-size` / `data-color` 与复选框一致；`disabled` 禁用；组上 `aria-invalid="true"` 整组标红。 | col -->
+<div class="doc-stack">
+  <div class="doc-row" role="radiogroup" aria-label="尺寸">
+    <label class="nv-check" data-size="sm"><input type="radio" class="nv-radio" data-size="sm" name="radio-size" checked>小号</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-size">默认</label>
+    <label class="nv-check" data-size="lg"><input type="radio" class="nv-radio" data-size="lg" name="radio-size">大号</label>
+  </div>
+  <div class="doc-row">
+    <label class="nv-check"><input type="radio" class="nv-radio" data-color="success" name="radio-c1" checked>成功</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" data-color="warning" name="radio-c2" checked>警告</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" data-color="danger" name="radio-c3" checked>危险</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" data-color="neutral" name="radio-c4" checked>中性</label>
+  </div>
+  <div class="doc-row">
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-dis" disabled>不可选</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-dis" disabled checked>已选禁用</label>
+  </div>
+  <fieldset class="nv-check-group" data-orientation="horizontal" aria-invalid="true" aria-describedby="radio-err">
+    <legend>性别</legend>
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-err" value="m">男</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-err" value="f">女</label>
+    <label class="nv-check"><input type="radio" class="nv-radio" name="radio-err" value="x">不愿透露</label>
+    <span class="doc-hint" id="radio-err">请选择一项</span>
+  </fieldset>
+</div>
+
+<!-- @demo 实战：选择套餐 | `.nv-check-card` + radio，选中边框高亮；`.nv-check-card-extra` 显示价格。方向键在选项间切换并选中。 | block -->
+<form id="radio-plan-form">
+  <fieldset class="nv-check-group" data-columns="3">
+    <legend>选择套餐</legend>
+    <label class="nv-check-card">
+      <input type="radio" class="nv-radio" name="plan" value="starter">
+      <span class="nv-check-text">
+        <span class="nv-check-label">入门版</span>
+        <span class="nv-check-desc">3 位成员 · 5 GB</span>
+      </span>
+      <span class="nv-check-card-extra">免费</span>
+    </label>
+    <label class="nv-check-card">
+      <input type="radio" class="nv-radio" name="plan" value="pro" checked>
+      <span class="nv-check-text">
+        <span class="nv-check-label">专业版</span>
+        <span class="nv-check-desc">20 位成员 · 100 GB</span>
+      </span>
+      <span class="nv-check-card-extra">¥99</span>
+    </label>
+    <label class="nv-check-card">
+      <input type="radio" class="nv-radio" name="plan" value="team">
+      <span class="nv-check-text">
+        <span class="nv-check-label">团队版</span>
+        <span class="nv-check-desc">不限成员 · 1 TB</span>
+      </span>
+      <span class="nv-check-card-extra">¥299</span>
+    </label>
+  </fieldset>
+  <div class="doc-log" id="radio-plan-log"></div>
+</form>
+<script>
+  {
+    const form = document.getElementById('radio-plan-form');
+    const log = document.getElementById('radio-plan-log');
+    const show = () => { log.textContent = `plan = ${new FormData(form).get('plan')}`; };
+    form.addEventListener('change', show);
+    show();
+  }
+</script>
+
+<!-- @demo 无圆点卡片 | `data-indicator="none"` 隐藏单选圆点（仍可键盘操作），只用边框表达选中，适合图标选项。 | block -->
+<fieldset class="nv-check-group" data-columns="3">
+  <legend>支付方式</legend>
+  <label class="nv-check-card" data-indicator="none">
+    <input type="radio" class="nv-radio" name="radio-pay" value="card" checked>
+    <span class="nv-check-card-icon"><i data-nv-icon="credit-card"></i></span>
+    <span class="nv-check-text"><span class="nv-check-label">银行卡</span><span class="nv-check-desc">储蓄卡 / 信用卡</span></span>
+  </label>
+  <label class="nv-check-card" data-indicator="none">
+    <input type="radio" class="nv-radio" name="radio-pay" value="wallet">
+    <span class="nv-check-card-icon"><i data-nv-icon="zap"></i></span>
+    <span class="nv-check-text"><span class="nv-check-label">快捷支付</span><span class="nv-check-desc">扫码一键付款</span></span>
+  </label>
+  <label class="nv-check-card" data-indicator="none">
+    <input type="radio" class="nv-radio" name="radio-pay" value="invoice">
+    <span class="nv-check-card-icon"><i data-nv-icon="file"></i></span>
+    <span class="nv-check-text"><span class="nv-check-label">对公转账</span><span class="nv-check-desc">企业开票</span></span>
+  </label>
+</fieldset>
+
+<!-- @api
+### 属性（写在 `<input type="radio" class="nv-radio">` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `name` | 同组单选共用 | 字符串 | — |
+| `data-size` | 尺寸 14 / 16 / 20px | `sm` `md` `lg` | `md` |
+| `data-color` | 选中颜色 | `primary` `success` `warning` `danger` `neutral` | `primary` |
+| `checked` / `disabled` | 原生属性 | 布尔 | — |
+| `aria-invalid="true"` | 错误态；也可写在 `.nv-check-group` 上整组标红 | — | — |
+
+### 结构
+标签包装 `.nv-check`、分组 `.nv-check-group`、卡片 `.nv-check-card`（`data-indicator="end"` / `"none"`）与 Checkbox 完全相同，见 Checkbox 文档。
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `change` / `input` | 原生事件，在新选中的单选框上触发 |
+
+### 键盘
+| 按键 | 说明 |
+|---|---|
+| `Tab` | 进入组内（聚焦已选项） |
+| `↑` `↓` `←` `→` | 切换并选中上一个 / 下一个 |
+| `Space` | 选中当前聚焦项 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-primary` | 选中颜色 |
+| `--nv-ease-spring` | 圆点弹出缓动 |
+-->

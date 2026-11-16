@@ -1,0 +1,80 @@
+/* Nova UI · Popover 弹出层
+ * <div class="nv-popover" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）
+ *   .nv-popover-title / .nv-popover-desc / .nv-popover-footer   可选的内容部件
+ *   .nv-popover-arrow                                           data-arrow 时自动插入
+ * --nv-popover-width   固定宽度（默认随内容，最大 360px）
+ */
+.nv-popover {
+  width: var(--nv-popover-width, max-content);
+  max-width: min(var(--nv-popover-max-width, 360px), 100vw - 16px);
+  padding: 14px 16px;
+  font-size: var(--nv-text-sm);
+  color: var(--nv-fg-2);
+  overflow-wrap: anywhere;
+}
+.nv-popover[hidden] { display: none; }
+/* 面板容器本身获得焦点（内部没有可聚焦元素）时不画焦点环 */
+.nv-popover.nv-panel:focus-visible { outline: 0; }
+
+.nv-popover-title {
+  margin: 0;
+  color: var(--nv-fg);
+  font-size: var(--nv-text-md);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.nv-popover-desc { margin: 4px 0 0; color: var(--nv-fg-2); font-size: var(--nv-text-sm); line-height: 1.55; }
+.nv-popover-desc:first-child { margin-top: 0; }
+.nv-popover-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+/* 面板内的分隔线：贴满面板左右 */
+.nv-popover .nv-panel-sep { margin: 12px -16px; }
+/* 面板内的设置列表：<label class="nv-item"><span class="nv-item-label">…</span><input type="checkbox"></label> */
+.nv-popover .nv-item { margin-inline: -8px; color: var(--nv-fg); font-size: var(--nv-text-sm); }
+.nv-popover label.nv-item:hover { background: var(--nv-surface-2); }
+.nv-popover :is(input[type="checkbox"], input[type="radio"]) { flex: none; width: 16px; height: 16px; margin: 0; accent-color: var(--nv-primary); cursor: pointer; }
+
+/* —— 箭头：旋转方块，只画朝外的两条边，盖住面板边框形成无缝尖角 —— */
+.nv-popover-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--nv-border);
+  background: var(--nv-surface-raised);
+  rotate: 45deg;
+  pointer-events: none;
+}
+.nv-popover[data-side="bottom"] > .nv-popover-arrow {
+  top: -6px;
+  left: calc(var(--nv-arrow-x, 50%) - 6px);
+  border-right: 0;
+  border-bottom: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.nv-popover[data-side="top"] > .nv-popover-arrow {
+  bottom: -6px;
+  left: calc(var(--nv-arrow-x, 50%) - 6px);
+  border-left: 0;
+  border-top: 0;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.nv-popover[data-side="right"] > .nv-popover-arrow {
+  left: -6px;
+  top: calc(var(--nv-arrow-y, 50%) - 6px);
+  border-top: 0;
+  border-right: 0;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+.nv-popover[data-side="left"] > .nv-popover-arrow {
+  right: -6px;
+  top: calc(var(--nv-arrow-y, 50%) - 6px);
+  border-bottom: 0;
+  border-left: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}

@@ -1,0 +1,231 @@
+<!--
+@name empty
+@title Empty 空状态
+@category feedback
+@order 50
+@deps button
+@desc 没有数据、没有搜索结果、加载失败或离线时的占位提示。5 套内置线性插画自动适配亮暗主题，默认文案可覆盖，支持自定义插画与图标、三种尺寸。
+-->
+
+<!-- @demo 基础用法 | 插画由 `data-image` 决定并自动注入；标题、描述、操作区都可省略。 -->
+<div class="nv-empty" data-image="default">
+  <div class="nv-empty-title">暂无数据</div>
+  <div class="nv-empty-desc">当前筛选条件下没有记录，调整条件或新建一条试试。</div>
+  <div class="nv-empty-actions">
+    <button class="nv-btn"><i data-nv-icon="plus"></i>新建记录</button>
+  </div>
+</div>
+
+<!-- @demo 内置插画 | `default` `search` `inbox` `error` `network` 五种，配色只取自主题变量，切换主色与明暗时自动跟随。不写标题时使用该类型的默认文案。 -->
+<div class="nv-empty" data-image="default" data-size="sm" data-description=""></div>
+<div class="nv-empty" data-image="search" data-size="sm" data-description=""></div>
+<div class="nv-empty" data-image="inbox" data-size="sm" data-description=""></div>
+<div class="nv-empty" data-image="error" data-size="sm" data-description=""></div>
+<div class="nv-empty" data-image="network" data-size="sm" data-description=""></div>
+
+<!-- @demo 尺寸 | `data-size="sm|md|lg"` 同时缩放插画、标题与间距：sm 用于表格和下拉面板，lg 用于整页空状态。 -->
+<div class="nv-empty" data-image="inbox" data-size="sm">
+  <div class="nv-empty-title">小号</div>
+  <div class="nv-empty-desc">表格、侧栏</div>
+</div>
+<div class="nv-empty" data-image="inbox">
+  <div class="nv-empty-title">默认</div>
+  <div class="nv-empty-desc">卡片、列表</div>
+</div>
+<div class="nv-empty" data-image="inbox" data-size="lg">
+  <div class="nv-empty-title">大号</div>
+  <div class="nv-empty-desc">整页空状态</div>
+</div>
+
+<!-- @demo 空列表 | 首次使用时引导用户迈出第一步；`data-bordered` 加虚线外框，`.nv-empty-extra` 放补充链接。 | block -->
+<div class="nv-empty" data-image="default" data-bordered>
+  <div class="nv-empty-title">还没有项目</div>
+  <div class="nv-empty-desc">创建第一个项目，邀请团队成员一起协作。项目可随时归档或删除。</div>
+  <div class="nv-empty-actions">
+    <button class="nv-btn"><i data-nv-icon="plus"></i>新建项目</button>
+    <button class="nv-btn" data-variant="outline"><i data-nv-icon="upload"></i>从模板导入</button>
+  </div>
+  <div class="nv-empty-extra">不知道从哪开始？<a href="#">查看入门指南</a></div>
+</div>
+
+<!-- @demo 无搜索结果 | 把搜索词写进描述（用 `textContent`），并提供「清除搜索」；结果区域加 `aria-live`，读屏会播报空状态。 | block -->
+<div class="doc-stack doc-mid">
+  <label class="nv-control">
+    <span class="nv-control-affix"><i data-nv-icon="search"></i></span>
+    <input type="search" id="empty-search-input" value="财务" placeholder="搜索成员姓名或部门" aria-label="搜索成员" aria-controls="empty-search-results">
+  </label>
+  <div id="empty-search-results" aria-live="polite">
+    <div role="list" id="empty-search-list">
+      <div class="nv-item" role="listitem"><i data-nv-icon="user"></i><span class="nv-item-label">林小雨</span><span class="nv-item-desc">设计部</span></div>
+      <div class="nv-item" role="listitem"><i data-nv-icon="user"></i><span class="nv-item-label">周以安</span><span class="nv-item-desc">研发部</span></div>
+      <div class="nv-item" role="listitem"><i data-nv-icon="user"></i><span class="nv-item-label">陈思远</span><span class="nv-item-desc">市场部</span></div>
+      <div class="nv-item" role="listitem"><i data-nv-icon="user"></i><span class="nv-item-label">王梓涵</span><span class="nv-item-desc">研发部</span></div>
+    </div>
+    <div class="nv-empty" data-image="search" data-size="sm" id="empty-search-empty" hidden>
+      <div class="nv-empty-title">没有找到相关成员</div>
+      <div class="nv-empty-desc">没有与「<b id="empty-search-term"></b>」匹配的姓名或部门，换个关键词试试。</div>
+      <div class="nv-empty-actions">
+        <button class="nv-btn" data-variant="outline" data-size="sm" id="empty-search-clear">清除搜索</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  {
+    const input = document.getElementById('empty-search-input');
+    const list = document.getElementById('empty-search-list');
+    const empty = document.getElementById('empty-search-empty');
+    const term = document.getElementById('empty-search-term');
+    const filter = () => {
+      const q = input.value.trim().toLowerCase();
+      let shown = 0;
+      for (const item of list.children) {
+        const hit = !q || item.textContent.toLowerCase().includes(q);
+        item.hidden = !hit;
+        shown += hit;
+      }
+      term.textContent = input.value.trim(); // 用户输入一律走 textContent
+      list.hidden = shown === 0;
+      empty.hidden = shown > 0;
+    };
+    input.addEventListener('input', filter);
+    document.getElementById('empty-search-clear').addEventListener('click', () => {
+      input.value = '';
+      filter();
+      input.focus();
+    });
+    filter();
+  }
+</script>
+
+<!-- @demo 加载失败与离线 | `error` 与 `network` 自动使用危险色与警告色；重试按钮配合 `Nova.button.loading` 防止重复点击。 -->
+<div class="nv-empty" data-image="error" id="empty-error">
+  <div class="nv-empty-title">报表加载失败</div>
+  <div class="nv-empty-desc" id="empty-error-desc">服务器响应超时（错误码 504），请稍后重试。</div>
+  <div class="nv-empty-actions">
+    <button class="nv-btn" id="empty-error-retry"><i data-nv-icon="refresh"></i>重试</button>
+    <button class="nv-btn" data-variant="ghost">联系支持</button>
+  </div>
+</div>
+<div class="nv-empty" data-image="network">
+  <div class="nv-empty-title">网络连接已断开</div>
+  <div class="nv-empty-desc">请检查 Wi-Fi 或网线，恢复连接后页面会自动刷新。</div>
+  <div class="nv-empty-actions">
+    <button class="nv-btn" data-variant="outline">检查网络设置</button>
+  </div>
+</div>
+<script>
+  {
+    const btn = document.getElementById('empty-error-retry');
+    const desc = document.getElementById('empty-error-desc');
+    let tries = 0;
+    btn.addEventListener('click', () => {
+      Nova.button.loading(btn, true);
+      setTimeout(() => {
+        Nova.button.loading(btn, false);
+        desc.textContent = `第 ${++tries} 次重试仍未成功，请稍后再试。`;
+      }, 1200);
+    });
+  }
+</script>
+
+<!-- @demo 表格与卡片内 | 紧凑场景用 `.nv-empty-icon` 图标方块代替插画（作者提供的图形会被保留，不再注入）；`data-size="sm"` 收紧间距。 | block -->
+<div class="doc-table-wrap">
+  <table class="doc-table">
+    <thead>
+      <tr><th>订单号</th><th>商品</th><th>金额</th><th>状态</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="4">
+          <div class="nv-empty" data-size="sm">
+            <span class="nv-empty-icon"><i data-nv-icon="file"></i></span>
+            <div class="nv-empty-title">暂无订单</div>
+            <div class="nv-empty-desc">符合筛选条件的订单会显示在这里。</div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- @demo 自定义插画与文案 | `Nova.empty.images` 注册新插画（可信 SVG 字符串，复用 `nv-empty-*` 绘制类即可自动适配主题），`Nova.empty.texts` 设置默认文案；单个实例用 `data-title` `data-description` 覆盖。 -->
+<div class="nv-empty" data-image="cart">
+  <div class="nv-empty-actions">
+    <button class="nv-btn">去逛逛</button>
+  </div>
+</div>
+<div class="nv-empty" data-image="inbox" data-title="全部处理完了" data-description="所有通知都已读，休息一下吧。"></div>
+<script>
+  {
+    // 在页面初始化前注册；之后注册需调用 Nova.empty.refresh()
+    Nova.empty.images.cart = `<svg viewBox="0 0 160 120" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle class="nv-empty-halo" cx="80" cy="58" r="50"/>
+      <ellipse class="nv-empty-ground" cx="80" cy="106" rx="50" ry="5.5"/>
+      <path class="nv-empty-paper" d="M43 42h79l-9 32H50.5z"/>
+      <path class="nv-empty-faint" d="M66 51v14M84 51v14M102 51v14" stroke-width="2.5"/>
+      <path class="nv-empty-stroke" d="M30 32h11l11 48h58"/>
+      <circle class="nv-empty-paper" cx="60" cy="92" r="6"/>
+      <circle class="nv-empty-paper" cx="104" cy="92" r="6"/>
+      <path class="nv-empty-accent" d="M84 18v8M80 22h8M106 26v5M103.5 28.5h5"/>
+    </svg>`;
+    Nova.empty.texts.cart = { title: '购物车是空的', description: '挑几件喜欢的商品放进来吧。' };
+  }
+</script>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-empty"` | 空状态容器 | — | — |
+| `data-image` | 内置插画；`none` 不显示插画；也可以是 `Nova.empty.images` 中注册的名称。未知名称回退到 `default` | `default` `search` `inbox` `error` `network` `none` | `default` |
+| `data-size` | 尺寸：插画 96 / 136 / 184px，标题 14 / 16 / 18px | `sm` `md` `lg` | `md` |
+| `data-bordered` | 虚线外框与卡片底色 | 布尔 | — |
+| `data-title` | 覆盖默认标题；写 `data-title=""` 不显示标题。已手写 `.nv-empty-title` 时忽略 | 文本 | 按类型 |
+| `data-description` | 覆盖默认描述；写 `data-description=""` 不显示。已手写 `.nv-empty-desc` 时忽略 | 文本 | 按类型 |
+
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-empty-image` | 插画容器。手写时放任意 `<img>` / `<svg>`，不再注入内置插画 |
+| `.nv-empty-icon` | 图标方块（紧凑场景），内放 `<i data-nv-icon>` |
+| `.nv-empty-title` | 标题 |
+| `.nv-empty-desc` | 描述 |
+| `.nv-empty-actions` | 操作按钮区，居中换行 |
+| `.nv-empty-extra` | 页脚补充说明或链接 |
+| `.nv-empty-halo` `.nv-empty-ground` `.nv-empty-paper` `.nv-empty-shade` `.nv-empty-stroke` `.nv-empty-faint` `.nv-empty-dot` `.nv-empty-accent` `.nv-empty-accent-soft` `.nv-empty-accent-dot` `.nv-empty-lens` | 插画绘制类（光晕、地面投影、纸面、阴影面、线条、浅线、圆点、强调线、强调填充、强调点、镜片），自定义插画复用它们即可与内置风格一致 |
+
+### 默认文案
+| 类型 | 标题 | 描述 |
+|---|---|---|
+| `default` | 暂无数据 | 这里还没有任何内容。 |
+| `search` | 没有找到相关结果 | 换个关键词，或减少筛选条件后再试试。 |
+| `inbox` | 暂无消息 | 新的通知和消息会显示在这里。 |
+| `error` | 加载失败 | 服务暂时不可用，请稍后重试。 |
+| `network` | 网络连接已断开 | 请检查网络设置，恢复连接后刷新页面。 |
+
+只在没有手写标题时补默认标题；手写了标题就不再补默认描述。
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.empty.images[name]` | 插画注册表：值为可信 SVG 字符串，或 `(id) => string`（`id` 为唯一前缀，用于内部 `mask` / `gradient` 引用） |
+| `Nova.empty.texts[name]` | 默认文案：`{ title, description }`，可整体替换实现多语言 |
+| `Nova.empty.refresh(el?)` | 重绘指定空状态；不传参数时重绘页面上全部空状态 |
+| `Nova.get(el, 'empty')` | 实例：`refresh()` `destroy()` |
+
+`data-image` `data-title` `data-description` 被修改时会自动重绘，无需手动调用。
+
+### 无障碍
+- 插画为装饰性，注入时带 `aria-hidden="true"`；信息由标题与描述承担。
+- 搜索、筛选等动态出现的空状态，给结果区域加 `aria-live="polite"`，读屏会播报标题与描述。
+- 用户输入（如搜索词）写入描述时使用 `textContent`。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-empty-image-size` | 插画宽度（覆盖尺寸档位） | `96px` / `136px` / `184px` |
+| `--nv-empty-accent` | 插画强调色 | `--nv-primary`；error 为 `--nv-danger`，network 为 `--nv-warning` |
+| `--nv-empty-line` | 插画线条色 | `--nv-fg` 30% 混合 `--nv-surface` |
+| `--nv-empty-paper` | 插画纸面填充色（放在非 surface 底色上时可改为该底色） | `--nv-surface` |
+-->

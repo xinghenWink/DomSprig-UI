@@ -1,0 +1,76 @@
+/* Nova UI · Textarea 多行输入
+ * <textarea class="nv-textarea" rows="3"></textarea>       外观、聚焦、错误、禁用与 .nv-control 一致
+ * data-size="sm|md|lg"   data-variant="filled"   aria-invalid="true"   disabled   readonly
+ * 需要 textarea.js：data-autosize（data-min-rows / data-max-rows）· maxlength + data-count 右下角字数
+ */
+.nv-textarea {
+  --_px: 12px;
+  --_py: 8px;
+  --_fs: var(--nv-text-md);
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--nv-h-md);
+  margin: 0;
+  padding: var(--_py) var(--_px);
+  border: 1px solid var(--nv-border-input);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface);
+  color: var(--nv-fg);
+  font: var(--_fs) / 1.55 var(--nv-font);
+  box-shadow: var(--nv-shadow-xs);
+  outline: 0;
+  resize: vertical;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-textarea[data-size="sm"] { --_px: 10px; --_py: 6px; --_fs: var(--nv-text-sm); min-height: var(--nv-h-sm); border-radius: calc(var(--nv-radius-md) * 0.85); }
+.nv-textarea[data-size="lg"] { --_px: 14px; --_py: 10px; --_fs: var(--nv-text-lg); min-height: var(--nv-h-lg); border-radius: var(--nv-radius-lg); }
+.nv-textarea::placeholder { color: var(--nv-fg-3); opacity: 1; }
+.nv-textarea:hover { border-color: var(--nv-border-strong); }
+.nv-textarea:focus {
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+.nv-textarea[aria-invalid="true"] { border-color: var(--nv-danger); }
+.nv-textarea[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-textarea[readonly]:not(:disabled) { background: var(--nv-surface-2); box-shadow: none; }
+.nv-textarea:disabled {
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-3);
+  box-shadow: none;
+  cursor: not-allowed;
+  border-color: var(--nv-border);
+  resize: none;
+}
+.nv-textarea[data-variant="filled"] { background: var(--nv-surface-2); border-color: transparent; box-shadow: none; }
+.nv-textarea[data-variant="filled"]:hover { background: var(--nv-surface-3); }
+.nv-textarea[data-variant="filled"]:focus { background: var(--nv-surface); border-color: var(--nv-primary); box-shadow: 0 0 0 3px var(--nv-ring); }
+.nv-textarea[data-variant="filled"][aria-invalid="true"] { border-color: var(--nv-danger); }
+.nv-textarea[data-variant="filled"][aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-textarea[data-variant="filled"]:disabled { background: var(--nv-surface-2); border-color: transparent; }
+.nv-textarea[data-resize="none"], .nv-textarea[data-autosize] { resize: none; }
+.nv-textarea[data-autosize] { overflow-y: hidden; transition-property: border-color, box-shadow, background-color; }
+
+/* —— 字数统计（JS 包装） —— */
+.nv-textarea-box { position: relative; display: block; width: 100%; min-width: 0; }
+.nv-textarea-box > .nv-textarea { padding-bottom: calc(var(--_py) + 22px); }
+.nv-textarea-count {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  padding: 2px 10px 6px 8px;
+  border-radius: 0 0 var(--nv-radius-md) var(--nv-radius-sm);
+  background: var(--nv-surface);
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  pointer-events: none;
+  transition: color var(--nv-dur-2);
+}
+.nv-textarea-count[data-full] { color: var(--nv-warning-text); font-weight: 500; }
+.nv-textarea-box:has(> :is(:disabled, [readonly], [data-variant="filled"]:not(:focus))) > .nv-textarea-count { background: var(--nv-surface-2); }
+.nv-textarea-box:has(> [data-variant="filled"]:hover:not(:focus, :disabled)) > .nv-textarea-count { background: var(--nv-surface-3); }
+.nv-textarea-box:has(> :disabled) > .nv-textarea-count { opacity: 0.6; }

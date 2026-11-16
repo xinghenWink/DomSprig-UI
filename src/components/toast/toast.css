@@ -1,0 +1,145 @@
+/* Nova UI · Toast
+ * 由 toast.js 生成，不需要写 HTML：Nova.toast.success('已保存')
+ * .nv-toast-region[data-position]   6 个位置的容器（top|bottom × left|center|right），带 data-nv-layer-ignore
+ * .nv-toast[data-type]              success | error | warning | info | loading；[data-paused] 计时暂停
+ * 部件：.nv-toast-icon  .nv-toast-body  .nv-toast-title  .nv-toast-desc  .nv-toast-actions  .nv-toast-close  .nv-toast-progress
+ */
+.nv-toast-region {
+  --_offset: var(--nv-toast-offset, 20px);
+  --_dir: -1; /* 入场方向：顶部从上方滑入，底部从下方滑入 */
+  position: fixed;
+  z-index: var(--nv-z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nv-toast-gap, 10px);
+  width: min(var(--nv-toast-width, 360px), calc(100vw - 32px));
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  outline: 0;
+}
+.nv-toast-region[data-position^="top"] { top: var(--_offset); }
+.nv-toast-region[data-position^="bottom"] { bottom: var(--_offset); --_dir: 1; }
+.nv-toast-region[data-position$="center"] { left: 50%; translate: -50% 0; }
+.nv-toast-region[data-position$="left"] { left: var(--_offset); }
+.nv-toast-region[data-position$="right"] { right: var(--_offset); }
+
+/* 窄屏：全宽（两侧 16px），保留上 / 下位置 */
+@media (max-width: 639px) {
+  .nv-toast-region[data-position] {
+    --_offset: 16px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    translate: none;
+  }
+  .nv-toast-region[data-position^="bottom"] { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+}
+
+.nv-toast {
+  --_c: var(--nv-info);
+  --_text: var(--nv-info-text);
+  --_soft: var(--nv-info-soft);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 10px 13px 12px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface-raised);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  box-shadow: var(--nv-shadow-lg);
+  overflow: hidden;
+  pointer-events: auto;
+  outline: 0;
+  transform-origin: 50% 0;
+}
+.nv-toast-region[data-position^="bottom"] .nv-toast { transform-origin: 50% 100%; }
+.nv-toast:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+
+.nv-toast[data-type="success"] { --_c: var(--nv-success); --_text: var(--nv-success-text); --_soft: var(--nv-success-soft); }
+.nv-toast[data-type="error"] { --_c: var(--nv-danger); --_text: var(--nv-danger-text); --_soft: var(--nv-danger-soft); }
+.nv-toast[data-type="warning"] { --_c: var(--nv-warning); --_text: var(--nv-warning-text); --_soft: var(--nv-warning-soft); }
+.nv-toast[data-type="loading"] { --_c: var(--nv-fg-3); --_text: var(--nv-fg-2); --_soft: var(--nv-surface-3); }
+
+/* 进出场：沿边缘方向位移 14px + 缩放 .97，弹性回弹；退场 180ms */
+.nv-toast[data-state="open"] {
+  animation:
+    nv-toast-in var(--nv-dur-4) var(--nv-ease-spring) both,
+    nv-fade-in var(--nv-dur-2) var(--nv-ease-out) both;
+}
+.nv-toast[data-state="closed"] { animation: nv-toast-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+@keyframes nv-toast-in {
+  from { transform: translateY(calc(var(--_dir) * 14px)) scale(0.97); }
+  to { transform: none; }
+}
+@keyframes nv-toast-out {
+  to { opacity: 0; transform: translateY(calc(var(--_dir) * 8px)) scale(0.97); }
+}
+
+/* 状态图标：32px 圆角方块，类型浅色底 */
+.nv-toast-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--nv-radius-md);
+  background: var(--_soft);
+  color: var(--_text);
+}
+.nv-toast-icon > svg { width: 18px; height: 18px; }
+.nv-toast-icon > .nv-spinner { font-size: 16px; }
+.nv-toast-icon[data-pop] { animation: nv-toast-pop var(--nv-dur-4) var(--nv-ease-spring); }
+@keyframes nv-toast-pop { from { transform: scale(0.6); opacity: 0.4; } }
+
+.nv-toast-body { flex: 1; min-width: 0; padding-top: 5px; }
+.nv-toast:not(:has(> .nv-toast-icon)) .nv-toast-body { padding: 3px 0 0 4px; }
+.nv-toast-title { font-size: var(--nv-text-md); font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+.nv-toast-desc { margin-top: 2px; font-size: var(--nv-text-sm); line-height: 1.5; color: var(--nv-fg-2); overflow-wrap: anywhere; }
+.nv-toast-title:empty { display: none; }
+.nv-toast-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+.nv-toast-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-toast-close:hover { background: var(--nv-surface-2); color: var(--nv-fg); }
+.nv-toast-close:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-toast-close > svg { width: 15px; height: 15px; }
+
+/* 倒计时进度条：悬停 / 聚焦时与计时器同步暂停 */
+.nv-toast-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--_c);
+  opacity: 0.7;
+  transform-origin: left center;
+  pointer-events: none;
+  animation: nv-toast-progress var(--_dur, 3000ms) linear forwards;
+}
+.nv-toast[data-paused] .nv-toast-progress { animation-play-state: paused; }
+@keyframes nv-toast-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-toast-progress { display: none; }
+}

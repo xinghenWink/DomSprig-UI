@@ -1,0 +1,208 @@
+<!--
+@name dropdown
+@title Dropdown 下拉菜单
+@category overlay
+@order 50
+@deps button
+@desc 按钮触发的操作菜单与右键菜单。图标、快捷键、分组、危险项、勾选 / 单选项、多级子菜单；完整的 WAI-ARIA 菜单键盘交互（方向键、Home / End、首字母跳转、Esc / Tab）。
+-->
+
+<!-- @demo 基础用法 | 触发器写 `data-nv-dropdown="#菜单id"`；菜单项是 `.nv-item[role=menuitem]`（button 或 a），`<kbd class="nv-item-kbd">` 显示快捷键。选择后在触发器上派发 `nv:select`。 -->
+<div class="doc-stack">
+  <button class="nv-btn" data-variant="outline" data-nv-dropdown="#dropdown-basic">文件<i data-nv-icon="chevron-down"></i></button>
+  <div class="doc-log" id="dropdown-basic-log">选择一个菜单项…</div>
+</div>
+<div class="nv-menu" id="dropdown-basic" hidden>
+  <button class="nv-item" role="menuitem" data-value="new"><i data-nv-icon="plus"></i>新建文档<kbd class="nv-item-kbd">Ctrl N</kbd></button>
+  <button class="nv-item" role="menuitem" data-value="open"><i data-nv-icon="folder"></i>打开…<kbd class="nv-item-kbd">Ctrl O</kbd></button>
+  <button class="nv-item" role="menuitem" data-value="copy"><i data-nv-icon="copy"></i>创建副本<kbd class="nv-item-kbd">Ctrl D</kbd></button>
+  <button class="nv-item" role="menuitem" data-value="download"><i data-nv-icon="download"></i>下载</button>
+  <hr class="nv-panel-sep">
+  <button class="nv-item" role="menuitem" data-value="delete" data-color="danger"><i data-nv-icon="trash"></i>移到回收站<kbd class="nv-item-kbd">Del</kbd></button>
+</div>
+<script>
+  {
+    const log = document.getElementById('dropdown-basic-log');
+    document.querySelector('[data-nv-dropdown="#dropdown-basic"]').addEventListener('nv:select', (e) => {
+      log.textContent = `nv:select · value = ${e.detail.value}`;
+    });
+  }
+</script>
+
+<!-- @demo 用户菜单 | 真实场景：头像按钮 + `.nv-menu-header` 账号信息 + 分组 + 子菜单。「外观」子菜单里的单选项会真的切换文档站主题。 -->
+<button class="nv-btn" data-icon data-shape="circle" data-variant="soft" aria-label="账号菜单" data-nv-dropdown="#dropdown-user" data-placement="bottom-end">林</button>
+<div class="nv-menu" id="dropdown-user" hidden>
+  <div class="nv-menu-header">
+    <span class="nv-menu-avatar" aria-hidden="true">林</span>
+    <div>
+      <div class="nv-menu-title">林小满</div>
+      <div class="nv-menu-desc">xiaoman@nova.dev</div>
+    </div>
+  </div>
+  <hr class="nv-panel-sep">
+  <a class="nv-item" role="menuitem" href="#/dropdown"><i data-nv-icon="user"></i>个人资料</a>
+  <a class="nv-item" role="menuitem" href="#/dropdown"><i data-nv-icon="credit-card"></i>账单与套餐</a>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="settings"></i>偏好设置<kbd class="nv-item-kbd">Ctrl ,</kbd></button>
+  <button class="nv-item" role="menuitem" data-nv-submenu="#dropdown-user-theme"><i data-nv-icon="palette"></i>外观</button>
+  <hr class="nv-panel-sep">
+  <button class="nv-item" role="menuitem" data-color="danger"><i data-nv-icon="log-out"></i>退出登录</button>
+</div>
+<div class="nv-menu" id="dropdown-user-theme" hidden>
+  <div role="group">
+    <button class="nv-item" role="menuitemradio" data-value="light" aria-checked="false">浅色</button>
+    <button class="nv-item" role="menuitemradio" data-value="dark" aria-checked="false">深色</button>
+    <button class="nv-item" role="menuitemradio" data-value="system" aria-checked="true">跟随系统</button>
+  </div>
+</div>
+<script>
+  {
+    const trigger = document.querySelector('[data-nv-dropdown="#dropdown-user"]');
+    trigger.addEventListener('nv:select', (e) => {
+      if (e.detail.item.getAttribute('role') === 'menuitemradio') Nova.theme.set(e.detail.value);
+    });
+  }
+</script>
+
+<!-- @demo 勾选与单选 | `role="menuitemcheckbox"` 与 `role="menuitemradio"`，状态写在 `aria-checked`；单选按最近的 `[role=group]` 分组。点击与空格切换时菜单保持打开，回车切换并关闭。 -->
+<div class="doc-stack">
+  <button class="nv-btn" data-variant="outline" data-nv-dropdown="#dropdown-view"><i data-nv-icon="grid"></i>视图选项</button>
+  <div class="doc-log" id="dropdown-view-log">网格 开 · 标尺 关 · 缩放 100%</div>
+</div>
+<div class="nv-menu" id="dropdown-view" hidden>
+  <div role="group">
+    <div class="nv-panel-label">显示</div>
+    <button class="nv-item" role="menuitemcheckbox" data-value="grid" aria-checked="true">网格<kbd class="nv-item-kbd">Ctrl '</kbd></button>
+    <button class="nv-item" role="menuitemcheckbox" data-value="ruler" aria-checked="false">标尺<kbd class="nv-item-kbd">Shift R</kbd></button>
+    <button class="nv-item" role="menuitemcheckbox" data-value="snap" aria-checked="true" aria-disabled="true">吸附到像素（需专业版）</button>
+  </div>
+  <hr class="nv-panel-sep">
+  <div role="group">
+    <div class="nv-panel-label">缩放</div>
+    <button class="nv-item" role="menuitemradio" data-value="50%" aria-checked="false">50%</button>
+    <button class="nv-item" role="menuitemradio" data-value="100%" aria-checked="true">100%</button>
+    <button class="nv-item" role="menuitemradio" data-value="200%" aria-checked="false">200%</button>
+  </div>
+</div>
+<script>
+  {
+    const menu = document.getElementById('dropdown-view');
+    const log = document.getElementById('dropdown-view-log');
+    document.querySelector('[data-nv-dropdown="#dropdown-view"]').addEventListener('nv:select', () => {
+      const on = (v) => (menu.querySelector(`[data-value="${v}"]`).getAttribute('aria-checked') === 'true' ? '开' : '关');
+      const zoom = menu.querySelector('[role="menuitemradio"][aria-checked="true"]').dataset.value;
+      log.textContent = `网格 ${on('grid')} · 标尺 ${on('ruler')} · 缩放 ${zoom}`;
+    });
+  }
+</script>
+
+<!-- @demo 多级子菜单 | 菜单项加 `data-nv-submenu="#子菜单id"`：悬停或 → 打开，← / Esc 关闭并回到父项；空间不足时向左展开。`aria-disabled="true"` 的项不可选，键盘导航自动跳过。 -->
+<button class="nv-btn" data-variant="soft" data-nv-dropdown="#dropdown-share"><i data-nv-icon="external"></i>分享</button>
+<div class="nv-menu" id="dropdown-share" hidden>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="link"></i>复制链接</button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="mail"></i>通过邮件发送</button>
+  <button class="nv-item" role="menuitem" data-nv-submenu="#dropdown-share-export"><i data-nv-icon="download"></i>导出为</button>
+  <button class="nv-item" role="menuitem" aria-disabled="true"><i data-nv-icon="globe"></i>发布到网页</button>
+</div>
+<div class="nv-menu" id="dropdown-share-export" hidden>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="file"></i>PDF 文档</button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="image"></i>PNG 图片</button>
+  <button class="nv-item" role="menuitem" data-nv-submenu="#dropdown-share-code"><i data-nv-icon="code"></i>代码</button>
+</div>
+<div class="nv-menu" id="dropdown-share-code" hidden>
+  <button class="nv-item" role="menuitem">HTML</button>
+  <button class="nv-item" role="menuitem">React 组件</button>
+  <button class="nv-item" role="menuitem">Vue 组件</button>
+</div>
+
+<!-- @demo 右键菜单 | 任意区域加 `data-nv-context-menu="#菜单id"`，在指针位置打开；键盘用户聚焦区域后按菜单键或 Shift + F10。页面滚动或缩放时自动关闭。 -->
+<div class="nv-menu-zone" tabindex="0" data-nv-context-menu="#dropdown-context">
+  <i data-nv-icon="image" data-size="22"></i>
+  <span>在此处点击右键</span>
+</div>
+<div class="nv-menu" id="dropdown-context" hidden>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="arrow-left"></i>返回<kbd class="nv-item-kbd">Alt ←</kbd></button>
+  <button class="nv-item" role="menuitem" aria-disabled="true"><i data-nv-icon="arrow-right"></i>前进<kbd class="nv-item-kbd">Alt →</kbd></button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="refresh"></i>重新加载<kbd class="nv-item-kbd">Ctrl R</kbd></button>
+  <hr class="nv-panel-sep">
+  <button class="nv-item" role="menuitem"><i data-nv-icon="copy"></i>复制图片</button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="download"></i>图片另存为…</button>
+  <hr class="nv-panel-sep">
+  <button class="nv-item" role="menuitem"><i data-nv-icon="code"></i>检查</button>
+</div>
+
+<!-- @demo 位置 | `data-placement` 取 `bottom-start`（默认）`bottom-end` `top-start` `right-start` 等，空间不足时自动翻转。禁用的触发器不会打开。 -->
+<button class="nv-btn" data-variant="outline" data-nv-dropdown="#dropdown-pos" data-placement="bottom-end">右对齐<i data-nv-icon="chevron-down"></i></button>
+<button class="nv-btn" data-variant="outline" data-nv-dropdown="#dropdown-pos" data-placement="top-start">向上展开<i data-nv-icon="chevron-up"></i></button>
+<button class="nv-btn" data-variant="outline" data-nv-dropdown="#dropdown-pos" data-placement="right-start">向右展开<i data-nv-icon="chevron-right"></i></button>
+<button class="nv-btn" data-icon data-variant="ghost" aria-label="更多操作" data-nv-dropdown="#dropdown-pos" disabled><i data-nv-icon="more"></i></button>
+<div class="nv-menu" id="dropdown-pos" hidden>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="pencil"></i>重命名</button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="star"></i>加入收藏</button>
+  <button class="nv-item" role="menuitem"><i data-nv-icon="folder"></i>移动到…</button>
+</div>
+
+<!-- @api
+### 触发器属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-nv-dropdown` | 菜单选择器。同一个菜单可被多个触发器共用 | `#id` | — |
+| `data-placement` | 位置，空间不足自动翻转 | `top` `bottom` `left` `right` + `-start` `-end` | `bottom-start` |
+| `data-offset` | 与触发器的距离（px） | 数字 | `6` |
+| `data-nv-context-menu` | 放在任意区域上：右键（或菜单键 / Shift+F10）在指针位置打开菜单 | `#id` | — |
+| `data-menu-label` | 右键菜单的可访问名称 | 字符串 | `右键菜单` |
+
+触发器自动获得 `aria-haspopup="menu"`、`aria-expanded`、`aria-controls`，菜单以触发器为 `aria-labelledby`。`disabled` / `aria-disabled="true"` 时不打开。
+
+### 菜单结构
+| 元素 | 说明 |
+|---|---|
+| `.nv-menu` | 菜单容器，必须带 `hidden` 与 `id`；自动获得 `role="menu"` |
+| `.nv-item[role="menuitem"]` | 菜单项，`<button>` 或 `<a href>`（链接照常跳转） |
+| `[role="menuitemcheckbox"]` | 复选项，状态写在 `aria-checked`，自动插入勾选指示器 |
+| `[role="menuitemradio"]` | 单选项，按最近的 `[role="group"]`（或整个菜单）互斥 |
+| `[data-nv-submenu="#id"]` | 打开子菜单的菜单项，自动加箭头与 `aria-haspopup` `aria-expanded` |
+| `.nv-item-kbd` / `.nv-item-desc` | 右侧快捷键 / 次要文字 |
+| `.nv-panel-label` | 分组标题（放在 `[role="group"]` 内时作为分组名称） |
+| `.nv-panel-sep` | 分隔线 |
+| `.nv-menu-header` | 顶部信息区：`.nv-menu-avatar` `.nv-menu-title` `.nv-menu-desc` |
+| `data-color="danger"` | 危险项 |
+| `aria-disabled="true"` / `disabled` | 禁用项，键盘导航跳过 |
+| `data-value` | `nv:select` 的 `value`（缺省为菜单项文字） |
+| `data-keep-open` | 选择后不关闭菜单 |
+| `.nv-menu-zone` | 可选的右键区域样式（虚线框） |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.dropdown.open(trigger)` | 打开并聚焦第一项 |
+| `Nova.dropdown.close(trigger)` | 关闭 |
+| `Nova.dropdown.toggle(trigger)` / `.isOpen(trigger)` | 切换 / 是否打开 |
+| `Nova.dropdown.openContext(area, x, y)` | 在视口坐标处打开右键菜单 |
+
+### 事件
+| 事件 | 触发位置 | detail |
+|---|---|---|
+| `nv:select` | 触发器 / 右键区域 | `{ item, value, checked, target }`：`checked` 仅勾选项有；`target` 为右键时指针下的元素 |
+| `nv:open` | 同上 | `{ menu }`（右键菜单另有 `target` `x` `y`） |
+| `nv:close` | 同上 | `{ reason }`：`select` `escape` `outside` `tab` `trigger` `scroll` `api` |
+
+选择普通项时先关闭菜单、焦点回到触发器，再派发 `nv:select`，因此可以直接在回调里打开对话框。
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Enter` / `空格` / `↓`（触发器） | 打开并聚焦第一项 |
+| `↑`（触发器） | 打开并聚焦最后一项 |
+| `↓` `↑` | 移动到下 / 上一项（循环，跳过禁用项） |
+| `Home` / `End` | 第一项 / 最后一项 |
+| 字母键 | 跳到以该字符开头的项 |
+| `Enter` / `空格` | 选择；勾选项用空格切换不关闭 |
+| `→` / `←` | 打开子菜单并聚焦首项 / 关闭子菜单回到父项 |
+| `Esc` | 关闭当前一级菜单，焦点回到触发器（或父项） |
+| `Tab` | 关闭菜单，焦点移到下一个元素 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-menu-min-width` | 菜单最小宽度，默认 `12rem`（且不小于触发器宽度） |
+-->

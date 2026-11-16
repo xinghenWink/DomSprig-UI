@@ -1,0 +1,669 @@
+{
+  "$schema": "./registry.schema.json",
+  "name": "nova-ui",
+  "version": "1.0.0",
+  "core": {
+    "description": "设计变量、基础样式与运行时，所有组件都需要",
+    "files": [
+      "src/tokens.css",
+      "src/base.css",
+      "src/core.js"
+    ]
+  },
+  "items": [
+    {
+      "name": "button",
+      "title": "Button 按钮",
+      "category": "general",
+      "description": "触发一个操作。6 种变体 × 5 种颜色 × 4 种尺寸，支持图标、加载、按钮组与按压水波纹；纯 CSS 即可使用。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/button/button.css",
+        "src/components/button/button.js"
+      ]
+    },
+    {
+      "name": "badge",
+      "title": "Badge 徽标",
+      "category": "general",
+      "description": "小号的状态、分类与计数标记。.nv-badge 用于行内文字徽标（soft / solid / outline / surface 四种外观、六种语义色、状态圆点）；.nv-indicator 给图标、按钮、头像加数字或圆点角标，支持 99+、呼吸动效和四个方位。纯 CSS。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/badge/badge.css"
+      ]
+    },
+    {
+      "name": "input",
+      "title": "Input 输入框",
+      "category": "form",
+      "description": "单行文本输入。独立写法或带前后缀图标的包装写法，附加块组合、清除按钮、密码显示切换、字数统计、填充变体与完整状态；外观与所有表单控件统一。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/input/input.css",
+        "src/components/input/input.js"
+      ]
+    },
+    {
+      "name": "field",
+      "title": "Field 表单项",
+      "category": "form",
+      "description": "表单项包装：标签、必填星号、说明与错误文字。自动关联 label、aria-describedby 与 aria-invalid，错误文字可随时改写；支持横向布局与 .nv-form 纵向表单间距。",
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        "src/components/field/field.css",
+        "src/components/field/field.js"
+      ]
+    },
+    {
+      "name": "textarea",
+      "title": "Textarea 多行输入",
+      "category": "form",
+      "description": "多行文本输入。随内容自动增高（可设最小/最大行数）、右下角字数统计、填充变体与错误/禁用/只读状态，外观与输入框一致。",
+      "registryDependencies": [
+        "field"
+      ],
+      "files": [
+        "src/components/textarea/textarea.css",
+        "src/components/textarea/textarea.js"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "title": "Checkbox 复选框",
+      "category": "form",
+      "description": "原生复选框的精致外观：对勾描边绘制动画、半选态、标签与说明、横纵分组与可选卡片；纯 CSS，表单提交与键盘操作完全原生。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/checkbox/checkbox.css"
+      ]
+    },
+    {
+      "name": "radio",
+      "title": "Radio 单选框",
+      "category": "form",
+      "description": "原生单选框的精致外观：圆点弹性缩放动画，复用 Checkbox 的标签包装、分组与可选卡片；方向键切换与表单提交完全原生。",
+      "registryDependencies": [
+        "checkbox"
+      ],
+      "files": [
+        "src/components/radio/radio.css"
+      ]
+    },
+    {
+      "name": "switch",
+      "title": "Switch 开关",
+      "category": "form",
+      "description": "立即生效的开关。原生 checkbox + role=\"switch\"，滑块弹性滑动、按住拉伸，支持尺寸、颜色、加载态、轨道内图标与带说明的设置项布局。",
+      "registryDependencies": [
+        "checkbox"
+      ],
+      "files": [
+        "src/components/switch/switch.css",
+        "src/components/switch/switch.js"
+      ]
+    },
+    {
+      "name": "slider",
+      "title": "Slider 滑块",
+      "category": "form",
+      "description": "基于原生 range 的单值滑块与可键盘操作的双滑块范围选择。填充色、数值气泡、刻度与标签，拖动时拇指放大并带光环；无 JS 时仍是可用的原生控件。",
+      "registryDependencies": [
+        "field"
+      ],
+      "files": [
+        "src/components/slider/slider.css",
+        "src/components/slider/slider.js"
+      ]
+    },
+    {
+      "name": "segmented",
+      "title": "Segmented 分段控制器",
+      "category": "form",
+      "description": "在 2–5 个互斥选项之间切换，常用于视图切换、时间范围筛选。基于原生 radio，表单提交和方向键照常工作；选中底色是一个跟随移动的滑块。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/segmented/segmented.css",
+        "src/components/segmented/segmented.js"
+      ]
+    },
+    {
+      "name": "number-input",
+      "title": "Number Input 数字输入框",
+      "category": "form",
+      "description": "带步进按钮的数字输入：键盘方向键步进、按住按钮连续增减、自动夹在 min / max 之间、按精度消除浮点误差。基于原生 `input[type=number]`，表单提交和校验照常工作。",
+      "registryDependencies": [
+        "field"
+      ],
+      "files": [
+        "src/components/number-input/number-input.css",
+        "src/components/number-input/number-input.js"
+      ]
+    },
+    {
+      "name": "pin-input",
+      "title": "Pin Input 验证码输入",
+      "category": "form",
+      "description": "短信验证码、一次性密码这类定长输入。只有一个真实的 input 盖在格子上，表单提交、短信验证码自动填充、粘贴和读屏都由浏览器原生完成，格子只负责显示。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/pin-input/pin-input.css",
+        "src/components/pin-input/pin-input.js"
+      ]
+    },
+    {
+      "name": "avatar",
+      "title": "Avatar 头像",
+      "category": "data",
+      "description": "图片、文字或图标头像。只写 `data-name` 就能生成文字头像，配色由名字推导，同一个人每次颜色都一样；图片加载失败时自动回退。头像组重叠排列，超出部分显示 +N。",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        "src/components/avatar/avatar.css",
+        "src/components/avatar/avatar.js"
+      ]
+    },
+    {
+      "name": "tag",
+      "title": "Tag 标签",
+      "category": "data",
+      "description": "用于分类、筛选和关键词的内容标签。可以带图标、头像或状态点，可以关闭，也可以作为筛选项点击选中。只做状态标记时用 Badge。",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        "src/components/tag/tag.css",
+        "src/components/tag/tag.js"
+      ]
+    },
+    {
+      "name": "tag-input",
+      "title": "Tag Input 标签输入",
+      "category": "form",
+      "description": "把输入变成一串标签：回车或逗号确认，退格删除最后一个，粘贴 \"a, b, c\" 一次变三个。每个标签对应一个隐藏 input，表单提交得到多个同名值。",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        "src/components/tag-input/tag-input.css",
+        "src/components/tag-input/tag-input.js"
+      ]
+    },
+    {
+      "name": "rating",
+      "title": "Rating 评分",
+      "category": "form",
+      "description": "星级评分。每颗星是一个原生 radio，表单提交、方向键和读屏都由浏览器完成；半星、悬停预览和再点清空是增强。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/rating/rating.css",
+        "src/components/rating/rating.js"
+      ]
+    },
+    {
+      "name": "select",
+      "title": "Select 选择器",
+      "category": "form",
+      "description": "增强原生 select：统一外观、可搜索、分组、说明与图标、多选胶囊；原生值与 change 事件照常，键盘与读屏完整可用。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/select/select.css",
+        "src/components/select/select.js"
+      ]
+    },
+    {
+      "name": "combobox",
+      "title": "Combobox 自动补全",
+      "category": "form",
+      "description": "输入时按关联的 datalist 过滤出建议，方向键选择、回车确认。选中后写回 input 并派发原生 input / change，表单提交照常工作。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/combobox/combobox.css",
+        "src/components/combobox/combobox.js"
+      ]
+    },
+    {
+      "name": "datepicker",
+      "title": "DatePicker 日期选择",
+      "category": "form",
+      "description": "增强原生日期输入：日历面板、月份/年份快速切换、日期时间、日期范围（双月并排 + 悬停预览 + 快捷预设），支持手动输入多种格式；原生值与 input/change 事件照常。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/datepicker/datepicker.css",
+        "src/components/datepicker/datepicker.js"
+      ]
+    },
+    {
+      "name": "upload",
+      "title": "Upload 上传",
+      "category": "form",
+      "description": "文件上传：点击选择、拖拽、粘贴截图。内部保留原生 input[type=file] 并同步已选文件，表单提交照常带上文件；类型、大小、数量校验和进度展示由组件完成，上传逻辑可以交给 data-action 或自己写。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/upload/upload.css",
+        "src/components/upload/upload.js"
+      ]
+    },
+    {
+      "name": "pagination",
+      "title": "Pagination 分页",
+      "category": "navigation",
+      "description": "把长列表拆成多页。自动折叠页码（省略号可一键跳 5 页），支持总数、每页条数、快速跳转、简洁模式与三种外观；声明式 data-* 或 Nova.pagination() 都能用。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/pagination/pagination.css",
+        "src/components/pagination/pagination.js"
+      ]
+    },
+    {
+      "name": "table",
+      "title": "Table 表格",
+      "category": "data",
+      "description": "展示结构化数据。纯 CSS 写法开箱即用；Nova.table() 提供三态排序、跨页勾选与批量操作栏、分页、吸顶表头、固定列、可展开行、加载骨架与远程数据，render 默认按纯文本输出杜绝 XSS。",
+      "registryDependencies": [
+        "pagination",
+        "checkbox"
+      ],
+      "files": [
+        "src/components/table/table.css",
+        "src/components/table/table.js"
+      ]
+    },
+    {
+      "name": "number-ticker",
+      "title": "Number Ticker 数字滚动",
+      "category": "effects",
+      "description": "进入视口时数字从起始值滚动到目标值，支持千分位、小数、前后缀、紧凑记数与里程表样式；`Nova.ticker.set` 平滑过渡到新值，宽度不跳动。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/number-ticker/number-ticker.css",
+        "src/components/number-ticker/number-ticker.js"
+      ]
+    },
+    {
+      "name": "stat",
+      "title": "Stat 统计数值",
+      "category": "data",
+      "description": "仪表盘里的指标卡：标签、数值、单位、同比环比趋势、迷你走势图和目标完成度。数值可以配合 Number Ticker 做滚动计数。",
+      "registryDependencies": [
+        "number-ticker"
+      ],
+      "files": [
+        "src/components/stat/stat.css",
+        "src/components/stat/stat.js"
+      ]
+    },
+    {
+      "name": "card",
+      "title": "Card 卡片",
+      "category": "data",
+      "description": "承载一组相关内容的容器：标题、说明、右上角操作、封面、正文和底部操作区。支持四种外观、横向布局、整卡可点击，以及用 radio / checkbox 做选择卡片。纯 CSS。",
+      "registryDependencies": [
+        "button",
+        "avatar",
+        "badge"
+      ],
+      "files": [
+        "src/components/card/card.css"
+      ]
+    },
+    {
+      "name": "accordion",
+      "title": "Accordion 折叠面板",
+      "category": "data",
+      "description": "把长内容分组收起，按需展开。基于原生 `<details>`，无脚本也可用；脚本增加平滑高度动画、单开/多开、禁用项与方向键导航。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/accordion/accordion.css",
+        "src/components/accordion/accordion.js"
+      ]
+    },
+    {
+      "name": "descriptions",
+      "title": "Descriptions 描述列表",
+      "category": "data",
+      "description": "成组展示只读的字段与值，常用于详情页、订单信息、个人资料。基于原生 `<dl>`，支持 1–4 列、跨列、标签在上或在左、表格边框样式，并随容器宽度自动减少列数。纯 CSS。",
+      "registryDependencies": [
+        "button",
+        "badge"
+      ],
+      "files": [
+        "src/components/descriptions/descriptions.css"
+      ]
+    },
+    {
+      "name": "kbd",
+      "title": "Kbd 按键",
+      "category": "data",
+      "description": "显示键盘按键与快捷键组合。写 `data-keys=\"mod+k\"` 会按平台自动渲染：Mac 显示 ⌘ K，Windows 显示 Ctrl K。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/kbd/kbd.css",
+        "src/components/kbd/kbd.js"
+      ]
+    },
+    {
+      "name": "timeline",
+      "title": "Timeline 时间轴",
+      "category": "data",
+      "description": "按时间顺序展示事件：操作记录、订单物流、版本发布。支持语义色、图标或头像节点、进行中状态、时间单独一栏和左右交替布局。纯 CSS。",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        "src/components/timeline/timeline.css"
+      ]
+    },
+    {
+      "name": "alert",
+      "title": "Alert 警告提示",
+      "category": "feedback",
+      "description": "页面内的重要提示。5 种语义色 × 4 种变体（柔和 / 描边 / 实心 / 顶部横幅），自动配图标与 ARIA 角色，支持标题、描述、操作区与带收起动画的关闭。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/alert/alert.css",
+        "src/components/alert/alert.js"
+      ]
+    },
+    {
+      "name": "progress",
+      "title": "Progress 进度条",
+      "category": "feedback",
+      "description": "展示任务进度。线性、环形与分段三种形态，支持尺寸、语义色、品牌渐变、动态条纹、不确定态与标签数值；`Nova.progress.set()` 平滑过渡，纯 CSS 也能用。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/progress/progress.css",
+        "src/components/progress/progress.js"
+      ]
+    },
+    {
+      "name": "toast",
+      "title": "Toast 轻提示",
+      "category": "feedback",
+      "description": "轻量、非阻断的操作反馈。5 种类型、6 个位置，悬停暂停与倒计时进度条，同 id 更新、操作按钮与 Promise 流转；纯 JS 调用，无需写 HTML。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/toast/toast.css",
+        "src/components/toast/toast.js"
+      ]
+    },
+    {
+      "name": "spinner",
+      "title": "Spinner 加载中",
+      "category": "feedback",
+      "description": "表示正在加载。基础旋转圈 `nv-spinner` 纯 CSS、跟随文字大小与颜色；`nv-loader` 提供跳动圆点、音频条、渐变圆环、脉冲四种动画；`nv-loading-overlay` 给任意区域盖上模糊加载遮罩。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/spinner/spinner.css",
+        "src/components/spinner/spinner.js"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "title": "Skeleton 骨架屏",
+      "category": "feedback",
+      "description": "在内容加载前展示页面结构的占位图形。文本行、圆形、矩形、按钮等形状，波浪/脉冲动画，组合出卡片、列表、表格与个人资料骨架，并提供加载完成后的淡入替换。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/skeleton/skeleton.css",
+        "src/components/skeleton/skeleton.js"
+      ]
+    },
+    {
+      "name": "empty",
+      "title": "Empty 空状态",
+      "category": "feedback",
+      "description": "没有数据、没有搜索结果、加载失败或离线时的占位提示。5 套内置线性插画自动适配亮暗主题，默认文案可覆盖，支持自定义插画与图标、三种尺寸。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/empty/empty.css",
+        "src/components/empty/empty.js"
+      ]
+    },
+    {
+      "name": "modal",
+      "title": "Modal 对话框",
+      "category": "overlay",
+      "description": "打断当前流程、要求用户处理的模态窗口。焦点陷阱、滚动锁定、关闭还焦、可嵌套；遮罩淡入 + 面板弹性入场，窄屏自动变为底部弹出；附带 Nova.confirm / Nova.alert 命令式确认框。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/modal/modal.css",
+        "src/components/modal/modal.js"
+      ]
+    },
+    {
+      "name": "drawer",
+      "title": "Drawer 抽屉",
+      "category": "overlay",
+      "description": "从屏幕边缘滑入的模态面板，适合设置、详情与移动端导航。与 Modal 共用同一套内核：焦点陷阱、滚动锁定、Esc / 遮罩关闭、嵌套与还焦，动画方向随 data-side。",
+      "registryDependencies": [
+        "modal"
+      ],
+      "files": [
+        "src/components/drawer/drawer.css",
+        "src/components/drawer/drawer.js"
+      ]
+    },
+    {
+      "name": "popover",
+      "title": "Popover 弹出层",
+      "category": "overlay",
+      "description": "锚定在触发器旁的非模态浮层，可放表单、设置等任意可交互内容。点击或悬停触发，自动翻转与夹紧，可选箭头；打开后焦点进入面板，Esc / 点击外部关闭并还焦。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/popover/popover.css",
+        "src/components/popover/popover.js"
+      ]
+    },
+    {
+      "name": "tooltip",
+      "title": "Tooltip 文字提示",
+      "category": "overlay",
+      "description": "为图标按钮、截断文本、置灰按钮和指标口径补充简短说明。只需 `data-tip`，事件委托、全页单例、自动翻转，键盘聚焦同样触发。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/tooltip/tooltip.css",
+        "src/components/tooltip/tooltip.js"
+      ]
+    },
+    {
+      "name": "dropdown",
+      "title": "Dropdown 下拉菜单",
+      "category": "overlay",
+      "description": "按钮触发的操作菜单与右键菜单。图标、快捷键、分组、危险项、勾选 / 单选项、多级子菜单；完整的 WAI-ARIA 菜单键盘交互（方向键、Home / End、首字母跳转、Esc / Tab）。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/dropdown/dropdown.css",
+        "src/components/dropdown/dropdown.js"
+      ]
+    },
+    {
+      "name": "command",
+      "title": "Command 命令面板",
+      "category": "overlay",
+      "description": "⌘K 式的命令面板与内嵌命令菜单：模糊匹配评分（前缀 / 词首 / 缩写）、命中字符高亮、分组与快捷键、拼音关键词，完整键盘与读屏支持。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/command/command.css",
+        "src/components/command/command.js"
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "title": "Breadcrumb 面包屑",
+      "category": "navigation",
+      "description": "显示当前页面在层级中的位置，并能快速回到上级。基于 `nav > ol` 语义结构，四种分隔符；层级过深时把中间项折叠进下拉菜单。",
+      "registryDependencies": [
+        "dropdown"
+      ],
+      "files": [
+        "src/components/breadcrumb/breadcrumb.css",
+        "src/components/breadcrumb/breadcrumb.js"
+      ]
+    },
+    {
+      "name": "tabs",
+      "title": "Tabs 标签页",
+      "category": "navigation",
+      "description": "在同一区域内切换多组内容。三种变体、横纵两向、滑动指示器、WAI-ARIA 键盘（含手动激活）、图标与计数徽标、溢出滚动与渐隐边缘；只写简洁标记，ARIA 由脚本补齐。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/tabs/tabs.css",
+        "src/components/tabs/tabs.js"
+      ]
+    },
+    {
+      "name": "steps",
+      "title": "Steps 步骤条",
+      "category": "navigation",
+      "description": "展示多步流程的进度。横向/纵向、四种状态、序号/对勾/自定义图标、点状变体、可点击切换；空间不足时自动转为纵向。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/steps/steps.css",
+        "src/components/steps/steps.js"
+      ]
+    },
+    {
+      "name": "shimmer-button",
+      "title": "Shimmer Button 流光按钮",
+      "category": "effects",
+      "description": "一束光沿边框环绕、表面高光扫过的强调按钮；另有可用于任意元素的扫光 `data-shine` 与柔和光晕 `data-glow`。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/shimmer-button/shimmer-button.css",
+        "src/components/shimmer-button/shimmer-button.js"
+      ]
+    },
+    {
+      "name": "border-beam",
+      "title": "Border Beam 光束边框",
+      "category": "effects",
+      "description": "一束光沿卡片圆角边框匀速环绕；另有流动渐变描边 `.nv-gradient-border`。适合定价卡、推荐方案与 AI 输入框。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/border-beam/border-beam.css",
+        "src/components/border-beam/border-beam.js"
+      ]
+    },
+    {
+      "name": "spotlight",
+      "title": "Spotlight 聚光卡片",
+      "category": "effects",
+      "description": "光标经过时卡片内出现柔和光斑、附近边框被照亮；放进 `.nv-spotlight-group` 后多张卡片共享同一光源。只写 CSS 变量，不触发布局。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/spotlight/spotlight.css",
+        "src/components/spotlight/spotlight.js"
+      ]
+    },
+    {
+      "name": "tilt",
+      "title": "Tilt 3D 倾斜 / 磁吸",
+      "category": "effects",
+      "description": "悬停时卡片随光标 3D 倾斜并带高光反射，离开后弹性复位；`data-nv-magnetic` 让按钮被光标轻微吸引。触屏与减少动态时保持静止。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/tilt/tilt.css",
+        "src/components/tilt/tilt.js"
+      ]
+    },
+    {
+      "name": "text-fx",
+      "title": "Text FX 文字特效",
+      "category": "effects",
+      "description": "流动渐变、扫光、逐词模糊淡入、打字机、乱码解码、词语轮换。读屏始终读到完整原文，减少动态时直接显示原文。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/text-fx/text-fx.css",
+        "src/components/text-fx/text-fx.js"
+      ]
+    },
+    {
+      "name": "marquee",
+      "title": "Marquee 无限滚动",
+      "category": "effects",
+      "description": "无缝循环滚动的内容带，适合客户 Logo、用户评价与公告。自动按容器宽度复制副本，悬停暂停、离开视口暂停，减少动态时改为可手动滚动。",
+      "registryDependencies": [],
+      "files": [
+        "src/components/marquee/marquee.css",
+        "src/components/marquee/marquee.js"
+      ]
+    },
+    {
+      "name": "confetti",
+      "title": "Confetti 彩带",
+      "category": "effects",
+      "description": "庆祝时刻的彩带喷发：一行属性绑定到按钮，或用 `Nova.confetti()` 自定义角度、扇形、重力与颜色。共享画布，落完即移除；减少动态时不播放。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/confetti/confetti.css",
+        "src/components/confetti/confetti.js"
+      ]
+    },
+    {
+      "name": "backdrop",
+      "title": "Backdrop 装饰背景",
+      "category": "effects",
+      "description": "点阵、网格、极光、噪点与流星背景层，配色随主色和明暗主题变化；不拦截指针，默认垫在内容下方，离开视口自动暂停。",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        "src/components/backdrop/backdrop.css",
+        "src/components/backdrop/backdrop.js"
+      ]
+    }
+  ]
+}

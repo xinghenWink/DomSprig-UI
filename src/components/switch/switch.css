@@ -1,0 +1,115 @@
+/* Nova UI · Switch 开关
+ * <input type="checkbox" role="switch" class="nv-switch">   滑块弹性滑动，按住时拉伸
+ * data-size="sm|md|lg"  data-color="primary|success|warning|danger|neutral"
+ * data-loading           滑块显示加载圈并阻止切换（需 switch.js 拦截键盘）
+ * data-icons             轨道内图标：默认 ✓ / ✕；data-icons="theme" 为 月亮 / 太阳
+ * 带标签：<label class="nv-check"><input … class="nv-switch">文字</label>（结构同 Checkbox）
+ */
+.nv-switch {
+  --_w: 36px;
+  --_h: 20px;
+  --_t: 16px;
+  --_p: 2px;
+  --_stretch: 4px;
+  --_s: var(--_h);
+  --_c: var(--nv-primary);
+  --_c-hover: var(--nv-primary-hover);
+  --_on: var(--nv-primary-fg);
+  --_off: light-dark(color-mix(in oklab, var(--nv-fg-3) 42%, var(--nv-surface-3)), color-mix(in oklab, var(--nv-fg-3) 38%, var(--nv-surface-3)));
+  --_free: calc(var(--_w) - var(--_t) - var(--_p) * 2);
+  --_x: 0px;
+  position: relative;
+  flex: none;
+  display: inline-block;
+  width: var(--_w);
+  height: var(--_h);
+  margin: 0;
+  border: 0;
+  border-radius: var(--nv-radius-full);
+  background: var(--_off);
+  box-shadow: inset 0 1px 2px color-mix(in oklab, var(--nv-shadow-c) 10%, transparent);
+  vertical-align: middle;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), opacity var(--nv-dur-2);
+}
+/* 滑块 */
+.nv-switch::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: var(--_p);
+  left: var(--_p);
+  width: var(--_t);
+  height: var(--_t);
+  border: 0 solid transparent;
+  border-radius: var(--nv-radius-full);
+  background: var(--nv-primary-fg) padding-box;
+  box-shadow:
+    0 1px 2px color-mix(in oklab, var(--nv-shadow-c) 18%, transparent),
+    0 2px 6px -1px color-mix(in oklab, var(--nv-shadow-c) 16%, transparent);
+  translate: var(--_x) 0;
+  transition:
+    translate var(--nv-dur-4) var(--nv-ease-spring),
+    width var(--nv-dur-3) var(--nv-ease-spring),
+    background-color var(--nv-dur-2);
+}
+.nv-switch:hover { background-color: color-mix(in oklab, var(--_off) 88%, var(--nv-fg)); }
+.nv-switch:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-switch:checked { --_x: calc(var(--_free)); background: var(--_c); box-shadow: none; }
+.nv-switch:checked:hover { background: var(--_c-hover); }
+/* 按住拉伸：未选中向右伸、选中向左伸 */
+.nv-switch:active:not(:disabled, [data-loading])::before { width: calc(var(--_t) + var(--_stretch)); }
+.nv-switch:checked:active:not(:disabled, [data-loading]) { --_x: calc(var(--_free) - var(--_stretch)); }
+.nv-switch[aria-invalid="true"]:not(:checked) { box-shadow: inset 0 0 0 1px var(--nv-danger); }
+.nv-switch:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* —— 尺寸 —— */
+.nv-switch[data-size="sm"] { --_w: 28px; --_h: 16px; --_t: 12px; --_stretch: 3px; }
+.nv-switch[data-size="lg"] { --_w: 44px; --_h: 24px; --_t: 20px; --_stretch: 5px; }
+
+/* —— 加载：滑块变成旋转圈 —— */
+.nv-switch[data-loading] { cursor: progress; }
+.nv-switch[data-loading]::before {
+  border-width: 2px;
+  border-top-color: var(--_spin, var(--nv-fg-3));
+  border-right-color: var(--_spin, var(--nv-fg-3));
+  animation: nv-spin 0.75s linear infinite;
+}
+.nv-switch[data-loading]:checked { --_spin: var(--_c); }
+
+/* —— 轨道内图标 —— */
+.nv-switch[data-icons] {
+  --_icon-on: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  --_icon-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'%3E%3Cpath d='M17 7 7 17M7 7l10 10'/%3E%3C/svg%3E");
+  --_i: calc(var(--_h) * 0.5);
+}
+.nv-switch[data-icons="theme"] {
+  --_icon-on: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6z'/%3E%3C/svg%3E");
+  --_icon-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4' fill='black'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E");
+  --_i: calc(var(--_h) * 0.58);
+}
+.nv-switch[data-icons]::after {
+  content: "";
+  position: absolute;
+  top: calc((var(--_h) - var(--_i)) / 2);
+  left: calc(var(--_p) * 2 + var(--_t) + (var(--_free) - var(--_i)) / 2 - var(--_p));
+  width: var(--_i);
+  height: var(--_i);
+  background: var(--nv-fg-2);
+  -webkit-mask: var(--_icon-off) center / contain no-repeat;
+  mask: var(--_icon-off) center / contain no-repeat;
+  transition: left var(--nv-dur-4) var(--nv-ease-spring), opacity var(--nv-dur-2);
+  pointer-events: none;
+}
+.nv-switch[data-icons]:checked::after {
+  left: calc(var(--_p) + (var(--_free) - var(--_i)) / 2);
+  background: var(--_on);
+  -webkit-mask-image: var(--_icon-on);
+  mask-image: var(--_icon-on);
+}
+.nv-switch[data-icons][data-size="sm"]::after { display: none; }
+/* 有图标时默认用稍宽的轨道 */
+.nv-switch[data-icons]:not([data-size]) { --_w: 40px; }
+.nv-switch[data-icons][data-size="lg"] { --_w: 50px; }

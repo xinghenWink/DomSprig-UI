@@ -1,0 +1,75 @@
+/* Nova UI · Marquee 无限滚动
+ * <div class="nv-marquee">…任意子元素…</div>
+ * JS 把内容包进 .nv-marquee-track > .nv-marquee-group，并按容器尺寸复制足够的副本（aria-hidden + inert）实现无缝循环。
+ * data-reverse              反向            data-vertical          纵向（默认高 320px，--nv-marquee-height）
+ * data-speed="50"           按像素/秒设定速度（覆盖时长，便于多行同速）
+ * data-pause-on-hover="false"  悬停不暂停（默认悬停 / 键盘聚焦其中元素时暂停）
+ * --nv-marquee-duration     滚动一组内容的时长（默认 40s）
+ * --nv-marquee-gap          项目间距（默认 16px）      --nv-marquee-fade  两端渐隐长度（默认 48px，0 关闭）
+ * 只动画 transform；离开视口时暂停。减少动态：停止滚动、隐藏副本，容器可直接横向（纵向）滚动浏览。
+ */
+.nv-marquee {
+  --_dur: var(--nv-marquee-duration, 40s);
+  --_gap: var(--nv-marquee-gap, 16px);
+  --_fade: var(--nv-marquee-fade, 48px);
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--_fade), #000 calc(100% - var(--_fade)), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 var(--_fade), #000 calc(100% - var(--_fade)), transparent);
+}
+.nv-marquee-track {
+  display: flex;
+  flex: none;
+  width: max-content;
+  animation: nv-marquee-x var(--_dur) linear infinite;
+}
+.nv-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--_gap);
+  padding-inline-end: var(--_gap);
+}
+.nv-marquee[data-reverse] .nv-marquee-track { animation-direction: reverse; }
+.nv-marquee:not([data-pause-on-hover="false"]):is(:hover, :focus-within) .nv-marquee-track,
+.nv-marquee[data-paused] .nv-marquee-track { animation-play-state: paused; }
+
+/* —— 纵向 —— */
+.nv-marquee[data-vertical] {
+  flex-direction: column;
+  height: var(--nv-marquee-height, 320px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--_fade), #000 calc(100% - var(--_fade)), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--_fade), #000 calc(100% - var(--_fade)), transparent);
+}
+.nv-marquee[data-vertical] .nv-marquee-track {
+  flex-direction: column;
+  width: auto;
+  height: max-content;
+  animation-name: nv-marquee-y;
+}
+.nv-marquee[data-vertical] .nv-marquee-group {
+  flex-direction: column;
+  align-items: stretch;
+  padding-inline-end: 0;
+  padding-block-end: var(--_gap);
+}
+
+/* track 内有 --_copies 份相同内容，移动 1/copies 即一组的长度，首尾无缝衔接 */
+@keyframes nv-marquee-x { to { transform: translateX(calc(-100% / var(--_copies, 2))); } }
+@keyframes nv-marquee-y { to { transform: translateY(calc(-100% / var(--_copies, 2))); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-marquee {
+    overflow: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--nv-border-strong) transparent;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .nv-marquee-track { animation: none; }
+  .nv-marquee-group[aria-hidden="true"] { display: none; }
+}

@@ -1,0 +1,89 @@
+/* Nova UI · Segmented 分段控制器
+ * 基于原生 radio：表单提交、方向键切换、读屏都按 radio 组工作。
+ * <div class="nv-segmented" role="radiogroup" aria-label="视图">
+ *   <label><input type="radio" name="view" value="list" checked><i data-nv-icon="list"></i>列表</label>
+ *   <label><input type="radio" name="view" value="grid"><i data-nv-icon="grid"></i>网格</label>
+ * </div>
+ * data-size sm | md（默认）| lg     data-block 撑满宽度、等分     data-variant="primary" 选中项为主色
+ * 只有图标时给 label 写 aria-label 或在里面放 .nv-sr-only 文字。
+ * 滑动指示器需 segmented.js；没有 JS 时选中项直接显示底色。
+ */
+.nv-segmented {
+  --_h: var(--nv-h-md);
+  --_fs: var(--nv-text-sm);
+  --_pad: 3px;
+  --_r: var(--nv-radius-md);
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 2px;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: var(--_h);
+  padding: var(--_pad);
+  border-radius: var(--_r);
+  background: var(--nv-surface-3);
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  isolation: isolate;
+  vertical-align: middle;
+}
+.nv-segmented[data-size="sm"] { --_h: var(--nv-h-sm); --_fs: var(--nv-text-xs); --_pad: 2px; --_r: calc(var(--nv-radius-md) * 0.85); }
+.nv-segmented[data-size="lg"] { --_h: var(--nv-h-lg); --_fs: var(--nv-text-md); --_pad: 4px; --_r: var(--nv-radius-lg); }
+.nv-segmented[data-block] { display: flex; width: 100%; }
+.nv-segmented[data-block] > label { flex: 1; }
+
+.nv-segmented > label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 12px;
+  border-radius: calc(var(--_r) - var(--_pad));
+  color: var(--nv-fg-2);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-segmented[data-size="sm"] > label { padding: 0 9px; gap: 4px; }
+.nv-segmented > label > svg { width: 15px; height: 15px; flex: none; }
+.nv-segmented > label:hover { color: var(--nv-fg); }
+.nv-segmented > label > input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: inherit; }
+.nv-segmented > label:has(> input:checked) { color: var(--nv-fg); }
+.nv-segmented > label:has(> input:focus-visible) { outline: 2px solid var(--nv-primary); outline-offset: 1px; }
+.nv-segmented > label:has(> input:disabled) { opacity: 0.45; cursor: not-allowed; }
+.nv-segmented:has(> label > input:disabled):not(:has(> label > input:enabled)) { opacity: 0.6; }
+
+/* 选中底色：无 JS 时画在 label 上；有指示器时画在指示器上 */
+.nv-segmented > label:has(> input:checked) {
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-sm);
+}
+.nv-segmented.is-ready > label:has(> input:checked) { background: transparent; box-shadow: none; }
+.nv-segmented-indicator {
+  position: absolute;
+  z-index: -1;
+  top: var(--_pad);
+  bottom: var(--_pad);
+  left: 0;
+  width: var(--_w, 0);
+  border-radius: calc(var(--_r) - var(--_pad));
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-sm), 0 0 0 1px color-mix(in oklab, var(--nv-border) 50%, transparent);
+  transform: translateX(var(--_x, 0));
+  pointer-events: none;
+}
+.nv-segmented.is-animated .nv-segmented-indicator {
+  transition: transform var(--nv-dur-3) var(--nv-ease-spring), width var(--nv-dur-3) var(--nv-ease-spring);
+}
+
+/* 主色 */
+.nv-segmented[data-variant="primary"] > label:has(> input:checked) { color: var(--nv-primary-fg); background: var(--nv-primary); }
+.nv-segmented[data-variant="primary"].is-ready > label:has(> input:checked) { background: transparent; }
+.nv-segmented[data-variant="primary"] .nv-segmented-indicator { background: var(--nv-primary); box-shadow: var(--nv-shadow-sm); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-segmented.is-animated .nv-segmented-indicator { transition: none; }
+}

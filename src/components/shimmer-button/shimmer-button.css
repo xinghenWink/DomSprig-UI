@@ -1,0 +1,178 @@
+/* Nova UI · Shimmer Button 流光按钮 / 扫光 / 发光
+ * .nv-shimmer           流光按钮：一束光沿边框环绕，表面有高光扫过。可单独使用，也可叠加在 .nv-btn 上
+ *   data-size           sm | md | lg（仅单独使用时；叠加 .nv-btn 时沿用按钮尺寸）
+ * [data-shine]          扫光：悬停 / 键盘聚焦 / 触屏按下时一道高光扫过，任意容器元素可用（光层由 JS 注入）
+ *   data-shine="loop"   自动循环扫光（触屏设备也能看到）
+ * [data-glow]           发光：元素四周柔和的光晕，悬停时增强；data-glow="pulse" 呼吸
+ * 动画只改 transform / opacity 与 @property 注册的自定义属性。
+ */
+@property --_shimmer-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --_glow { syntax: '<number>'; inherits: false; initial-value: 0.5; }
+
+/* ———————————————— 流光按钮 ———————————————— */
+.nv-shimmer {
+  --_sc: var(--nv-shimmer-color, color-mix(in oklab, var(--nv-primary) 30%, white));
+  --_dur: var(--nv-shimmer-duration, 3s);
+  --_bw: var(--nv-shimmer-width, 1.5px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+/* 单独使用时自带外观：深色主色底 + 白字（暗色主题同样成立） */
+.nv-shimmer:not(.nv-btn) {
+  --_h: var(--nv-h-lg);
+  --_px: 22px;
+  --_fs: var(--nv-text-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--_h);
+  padding: 0 var(--_px);
+  border: 0;
+  border-radius: var(--nv-radius-full);
+  background-color: var(--nv-shimmer-bg, color-mix(in oklab, var(--nv-primary) 32%, black));
+  background-image: linear-gradient(to bottom, color-mix(in oklab, white 10%, transparent), transparent 60%);
+  color: #fff;
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, white 9%, transparent),
+    0 10px 28px -12px color-mix(in oklab, var(--nv-primary) 80%, transparent);
+  transition: transform var(--nv-dur-2) var(--nv-ease);
+}
+.nv-shimmer:not(.nv-btn)[data-size="sm"] { --_h: var(--nv-h-sm); --_px: 14px; --_fs: var(--nv-text-sm); gap: 6px; }
+.nv-shimmer:not(.nv-btn)[data-size="md"] { --_h: var(--nv-h-md); --_px: 18px; }
+.nv-shimmer:not(.nv-btn)[data-size="lg"] { --_h: 52px; --_px: 28px; --_fs: var(--nv-text-lg); gap: 10px; }
+.nv-shimmer:not(.nv-btn):hover { transform: translateY(-1px); }
+.nv-shimmer:not(.nv-btn):active { transform: scale(0.97); }
+.nv-shimmer:not(.nv-btn):focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-shimmer:not(.nv-btn):is(:disabled, [aria-disabled="true"]) { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.nv-shimmer > :is(svg, .nv-icon) { width: 16px; height: 16px; flex: none; transition: transform var(--nv-dur-2) var(--nv-ease); }
+.nv-shimmer:hover > :is(svg, .nv-icon):last-child:not(:first-child) { transform: translateX(3px); }
+
+/* 叠加在浅底按钮上时，光带改用主色 */
+.nv-btn.nv-shimmer:is([data-variant="outline"], [data-variant="soft"], [data-variant="ghost"]) {
+  --_sc: var(--nv-shimmer-color, var(--_c, var(--nv-primary)));
+}
+
+/* 边框光环：conic 渐变 + 遮罩只露出 --_bw 宽的边框环（遮罩只取 alpha，#000 不参与配色） */
+.nv-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: var(--_bw);
+  border-radius: inherit;
+  background: conic-gradient(from var(--_shimmer-angle),
+    transparent 0 62%,
+    color-mix(in oklab, var(--_sc) 35%, transparent) 80%,
+    var(--_sc) 93%,
+    transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+  animation: nv-shimmer-spin var(--_dur) linear infinite;
+}
+/* 表面高光：一道斜向光带扫过（加载态时 ::before 让给 .nv-btn 的旋转圈） */
+.nv-shimmer:not([data-loading])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(105deg,
+    transparent 30%,
+    color-mix(in oklab, var(--_sc) 22%, transparent) 46%,
+    color-mix(in oklab, var(--_sc) 34%, transparent) 50%,
+    color-mix(in oklab, var(--_sc) 22%, transparent) 54%,
+    transparent 70%);
+  transform: translateX(-100%);
+  pointer-events: none;
+  animation: nv-shimmer-sweep var(--_dur) var(--nv-ease-in-out) infinite;
+}
+@keyframes nv-shimmer-spin { to { --_shimmer-angle: 360deg; } }
+@keyframes nv-shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  55%, 100% { transform: translateX(100%); }
+}
+
+/* ———————————————— 扫光 [data-shine] ———————————————— */
+:where([data-shine]) { position: relative; overflow: hidden; isolation: isolate; }
+.nv-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.nv-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg,
+    transparent 32%,
+    var(--nv-shine-color, color-mix(in oklab, white 38%, transparent)) 50%,
+    transparent 68%);
+  transform: translateX(-100%);
+}
+@media (hover: hover) {
+  [data-shine]:hover > .nv-shine::before {
+    transform: translateX(100%);
+    transition: transform var(--nv-shine-duration, 800ms) var(--nv-ease-out);
+  }
+}
+/* 键盘聚焦与触屏按下同样触发，不依赖 hover */
+[data-shine]:is(:focus-visible, :active) > .nv-shine::before {
+  transform: translateX(100%);
+  transition: transform var(--nv-shine-duration, 800ms) var(--nv-ease-out);
+}
+[data-shine="loop"] > .nv-shine::before { animation: nv-shine-loop var(--nv-shine-interval, 3.6s) var(--nv-ease-in-out) infinite; }
+@keyframes nv-shine-loop {
+  0% { transform: translateX(-100%); }
+  35%, 100% { transform: translateX(100%); }
+}
+
+/* ———————————————— 发光 [data-glow] ———————————————— */
+[data-glow] {
+  --_gc: var(--nv-glow-color, var(--_c, var(--nv-primary)));
+  --_gs: var(--nv-glow-size, 28px);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--_gc) calc(var(--_glow) * 45%), transparent),
+    0 4px calc(var(--_gs) * 0.5) -4px color-mix(in oklab, var(--_gc) calc(var(--_glow) * 55%), transparent),
+    0 10px var(--_gs) -6px color-mix(in oklab, var(--_gc) calc(var(--_glow) * 75%), transparent);
+  transition: --_glow var(--nv-dur-4) var(--nv-ease);
+}
+/* 实心按钮保留顶部高光 */
+.nv-btn[data-glow]:not([data-variant]),
+.nv-btn[data-glow]:is([data-variant="solid"], [data-variant="gradient"]) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 18%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--_gc) calc(40% + var(--_glow) * 40%), transparent),
+    0 4px calc(var(--_gs) * 0.5) -4px color-mix(in oklab, var(--_gc) calc(var(--_glow) * 55%), transparent),
+    0 10px var(--_gs) -6px color-mix(in oklab, var(--_gc) calc(var(--_glow) * 75%), transparent);
+}
+[data-glow]:is(:hover, :focus-visible) { --_glow: 1; }
+[data-glow="pulse"] { animation: nv-glow-pulse 2.6s var(--nv-ease-in-out) infinite; }
+@keyframes nv-glow-pulse {
+  0%, 100% { --_glow: 0.35; }
+  50% { --_glow: 1; }
+}
+
+/* ———————————————— 减少动态：静态的最终状态 ———————————————— */
+@media (prefers-reduced-motion: reduce) {
+  .nv-shimmer::after { animation: none; --_shimmer-angle: 70deg; }
+  .nv-shimmer::before { animation: none; opacity: 0; }
+  .nv-shine::before { display: none; }
+  [data-glow] { animation: none; transition: none; }
+  [data-glow="pulse"] { --_glow: 0.8; }
+}

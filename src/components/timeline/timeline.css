@@ -1,0 +1,155 @@
+/* Nova UI · Timeline 时间轴（纯 CSS）
+ * <ol class="nv-timeline">
+ *   <li class="nv-timeline-item" data-color="success">
+ *     <span class="nv-timeline-dot"><i data-nv-icon="check"></i></span>   可选：不写显示小圆点，里面放图标或头像则显示为图标圆
+ *     <div class="nv-timeline-content">
+ *       <div class="nv-timeline-title">标题 <time class="nv-timeline-time">10:24</time></div>
+ *       <p class="nv-timeline-desc">说明</p>
+ *     </div>
+ *   </li>
+ * </ol>
+ * 项目上：data-color  primary | success | warning | danger | info | neutral（默认）
+ *        data-state="pending"  进行中：圆点呼吸，通往它的连接线变虚线
+ * 列表上：data-time="left"  时间单独放在左侧一栏（把 .nv-timeline-time 作为 li 的直接子元素）
+ *        data-align="alternate"  左右交替（宽度 ≥ 640px 生效）     data-size="sm"  紧凑
+ */
+.nv-timeline {
+  --_dot: 10px;
+  --_rail: 28px;
+  --_gap: 22px;
+  --_col: 12px;
+  --_tw: var(--nv-timeline-time-width, 88px);
+  --_x: calc(var(--_rail) / 2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  color: var(--nv-fg);
+}
+.nv-timeline[data-size="sm"] { --_gap: 14px; --_rail: 24px; font-size: var(--nv-text-sm); }
+
+.nv-timeline-item {
+  --_c: var(--nv-border-strong);
+  --_soft: var(--nv-surface-3);
+  --_text: var(--nv-fg-2);
+  --_cy: 11px; /* 圆点中心到项目顶部的距离 = 标题行高的一半 */
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--_rail) minmax(0, 1fr);
+  column-gap: var(--_col);
+  padding-bottom: var(--_gap);
+}
+.nv-timeline-item:last-child { padding-bottom: 0; }
+.nv-timeline-item[data-color="primary"] { --_c: var(--nv-primary); --_soft: var(--nv-primary-soft); --_text: var(--nv-primary-text); }
+.nv-timeline-item[data-color="success"] { --_c: var(--nv-success); --_soft: var(--nv-success-soft); --_text: var(--nv-success-text); }
+.nv-timeline-item[data-color="warning"] { --_c: var(--nv-warning); --_soft: var(--nv-warning-soft); --_text: var(--nv-warning-text); }
+.nv-timeline-item[data-color="danger"] { --_c: var(--nv-danger); --_soft: var(--nv-danger-soft); --_text: var(--nv-danger-text); }
+.nv-timeline-item[data-color="info"] { --_c: var(--nv-info); --_soft: var(--nv-info-soft); --_text: var(--nv-info-text); }
+/* 图标圆：圆心下移到图标中心，内容同步下移让标题与图标对齐 */
+.nv-timeline-item:has(> .nv-timeline-dot > *) { --_cy: calc(var(--_rail) / 2); }
+.nv-timeline-item:has(> .nv-timeline-dot > *) > .nv-timeline-content { padding-top: calc(var(--_cy) - 11px); }
+
+/* 连接线：从本项圆心延伸到下一项圆心，圆点盖在线上 */
+.nv-timeline-item::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--_x) - 1px);
+  top: var(--_cy);
+  bottom: -11px;
+  width: 2px;
+  background: var(--nv-border);
+}
+.nv-timeline-item:last-child::before { display: none; }
+.nv-timeline-item:has(+ [data-state="pending"])::before {
+  background: repeating-linear-gradient(to bottom, var(--nv-border-strong) 0 4px, transparent 4px 8px);
+}
+
+/* 圆点：写了 .nv-timeline-dot 用元素，没写用伪元素 */
+.nv-timeline-dot,
+.nv-timeline-item:not(:has(> .nv-timeline-dot))::after {
+  box-sizing: border-box;
+  width: var(--_dot);
+  height: var(--_dot);
+  border-radius: 50%;
+  background: var(--_c);
+  box-shadow: 0 0 0 3px var(--nv-timeline-ring, var(--nv-surface));
+}
+.nv-timeline-item:not(:has(> .nv-timeline-dot))::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--_x) - var(--_dot) / 2);
+  top: calc(var(--_cy) - var(--_dot) / 2);
+}
+.nv-timeline-dot {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  margin-top: calc(var(--_cy) - var(--_dot) / 2);
+  color: var(--_text);
+}
+.nv-timeline-dot[data-variant="outline"] { background: var(--nv-surface); border: 2px solid var(--_c); }
+.nv-timeline-dot:has(> *) {
+  --_dot: var(--_rail);
+  background: var(--_soft);
+  border: 1px solid color-mix(in oklab, var(--_c) 28%, transparent);
+}
+.nv-timeline-dot > svg { width: 14px; height: 14px; }
+.nv-timeline-dot:has(> .nv-avatar) { border: 0; background: none; }
+.nv-timeline-dot > .nv-avatar { --_s: var(--_rail); font-size: calc(var(--_s) * 0.38); }
+
+.nv-timeline-item[data-state="pending"] > .nv-timeline-dot:not(:has(> *)),
+.nv-timeline-item[data-state="pending"]:not(:has(> .nv-timeline-dot))::after {
+  animation: nv-timeline-pulse 1.8s var(--nv-ease-out) infinite;
+}
+@keyframes nv-timeline-pulse {
+  0% { box-shadow: 0 0 0 3px var(--nv-timeline-ring, var(--nv-surface)), 0 0 0 3px color-mix(in oklab, var(--_c) 50%, transparent); }
+  100% { box-shadow: 0 0 0 3px var(--nv-timeline-ring, var(--nv-surface)), 0 0 0 11px transparent; }
+}
+
+/* 内容 */
+.nv-timeline-content { grid-column: 2; grid-row: 1; min-width: 0; }
+.nv-timeline-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; font-weight: 500; line-height: 22px; }
+.nv-timeline-time { color: var(--nv-fg-3); font-size: var(--nv-text-sm); font-weight: 400; font-variant-numeric: tabular-nums; }
+.nv-timeline-desc { margin: 2px 0 0; color: var(--nv-fg-2); font-size: var(--nv-text-sm); }
+.nv-timeline-box {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-sm);
+}
+
+/* 时间放左侧一栏 */
+.nv-timeline[data-time="left"] { --_x: calc(var(--_tw) + var(--_col) + var(--_rail) / 2); }
+.nv-timeline[data-time="left"] > .nv-timeline-item { grid-template-columns: var(--_tw) var(--_rail) minmax(0, 1fr); }
+.nv-timeline[data-time="left"] > .nv-timeline-item > .nv-timeline-dot { grid-column: 2; }
+.nv-timeline[data-time="left"] > .nv-timeline-item > .nv-timeline-content { grid-column: 3; }
+.nv-timeline[data-time="left"] > .nv-timeline-item > .nv-timeline-time {
+  grid-column: 1;
+  grid-row: 1;
+  padding-top: calc(var(--_cy) - 11px);
+  text-align: right;
+  line-height: 22px;
+}
+
+/* 左右交替 */
+@media (min-width: 640px) {
+  .nv-timeline[data-align="alternate"] { --_x: 50%; }
+  .nv-timeline[data-align="alternate"] > .nv-timeline-item { grid-template-columns: minmax(0, 1fr) var(--_rail) minmax(0, 1fr); }
+  .nv-timeline[data-align="alternate"] > .nv-timeline-item > .nv-timeline-dot { grid-column: 2; }
+  .nv-timeline[data-align="alternate"] > .nv-timeline-item:nth-child(odd) > .nv-timeline-content { grid-column: 3; }
+  .nv-timeline[data-align="alternate"] > .nv-timeline-item:nth-child(even) > .nv-timeline-content { grid-column: 1; text-align: right; }
+  .nv-timeline[data-align="alternate"] > .nv-timeline-item:nth-child(even) .nv-timeline-title { justify-content: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-timeline-item[data-state="pending"] > .nv-timeline-dot,
+  .nv-timeline-item[data-state="pending"]::after { animation: none !important; }
+}

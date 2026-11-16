@@ -1,0 +1,92 @@
+<!--
+@name combobox
+@title Combobox 自动补全
+@category form
+@order 21
+@desc 输入时按关联的 datalist 过滤出建议，方向键选择、回车确认。选中后写回 input 并派发原生 input / change，表单提交照常工作。
+-->
+
+<!-- @demo 基础 | 输入「北」或「沪」过滤，↓ 打开建议，↑ ↓ 移动，Enter 选中，Esc 关闭。选中后派发 `nv:select { value }`。 | col -->
+<div class="doc-narrow doc-stack">
+  <input class="nv-combobox" id="cb-basic" list="cb-cities" placeholder="搜索城市" aria-label="城市">
+  <datalist id="cb-cities">
+    <option value="北京">首都</option>
+    <option value="上海">直辖市</option>
+    <option value="广州"></option>
+    <option value="深圳"></option>
+    <option value="杭州">浙江省会</option>
+    <option value="成都"></option>
+    <option value="武汉"></option>
+    <option value="西安"></option>
+  </datalist>
+  <div class="doc-log" id="cb-log">未选择</div>
+</div>
+<script>
+  document.getElementById('cb-basic').addEventListener('nv:select', (e) => {
+    document.getElementById('cb-log').textContent = `选中：${e.detail.value}${e.detail.label ? '（' + e.detail.label + '）' : ''}`;
+  });
+</script>
+
+<!-- @demo 带图标与说明 | option 的文字或 label 显示在右侧作为说明；`data-icon` 显示图标。匹配的那段文字会加粗。 | col -->
+<div class="doc-narrow">
+  <input class="nv-combobox" list="cb-cmds" data-clearable placeholder="搜索命令" aria-label="命令">
+  <datalist id="cb-cmds">
+    <option value="新建文件" data-icon="file">Ctrl N</option>
+    <option value="打开文件夹" data-icon="folder">Ctrl O</option>
+    <option value="保存" data-icon="download">Ctrl S</option>
+    <option value="搜索" data-icon="search">Ctrl F</option>
+    <option value="设置" data-icon="settings">Ctrl ,</option>
+    <option value="用户" data-icon="user"></option>
+  </datalist>
+</div>
+
+<!-- @demo 尺寸与清除 | `data-size` 取 sm / md / lg；`data-clearable` 有值时显示清除按钮。 | col -->
+<div class="doc-narrow doc-stack">
+  <input class="nv-combobox" data-size="sm" list="cb-cities" data-clearable placeholder="小号" aria-label="小号城市">
+  <input class="nv-combobox" data-size="lg" list="cb-cities" value="杭州" data-clearable aria-label="大号城市">
+</div>
+
+<!-- @demo 最少字符 | `data-min-length` 至少输入几个字符才弹出建议，适合选项很多的场景。 | col -->
+<div class="doc-narrow">
+  <input class="nv-combobox" list="cb-cities" data-min-length="1" placeholder="至少输入 1 个字符" aria-label="城市搜索">
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `list` | 关联的 datalist id | — |
+| `data-clearable` | 有值时显示清除按钮 | — |
+| `data-empty` | 无匹配时的提示；`none` 不提示 | 无匹配项 |
+| `data-min-length` | 至少输入几个字符才弹出 | `0` |
+| `data-size` | `sm` `md` `lg` | `md` |
+
+datalist 的 option：`value` 是写入输入框的值，文字或 `label` 作为右侧说明，`data-icon` 显示图标，`disabled` 禁用该项。
+
+### 键盘
+| 按键 | 作用 |
+|---|---|
+| ↓ / ↑ | 面板关闭时打开；打开时移动高亮 |
+| Enter | 选中高亮项 |
+| Esc | 关闭面板 |
+| Home / End / PageUp / PageDown | 跳到首项 / 末项 / 翻页 |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 选中建议或清除时派发原生事件 |
+| `nv:select` | 选中一项时派发，`detail: { value, label }` |
+
+### 实例
+`Nova.get(input, 'combobox')`：
+
+| 成员 | 说明 |
+|---|---|
+| `open()` / `close()` | 打开 / 关闭建议面板 |
+| `refresh()` | datalist 变化后重新过滤 |
+
+### 无障碍
+- input 是 `role="combobox"`，`aria-autocomplete="list"`，高亮项通过 `aria-activedescendant` 暴露给读屏。
+- 面板是 `role="listbox"`，每一项是 `role="option"`。
+- 没有 JS 时退化成带 datalist 的普通输入框，浏览器原生的建议列表照常可用。
+-->

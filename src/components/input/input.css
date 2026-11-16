@@ -1,0 +1,151 @@
+/* Nova UI · Input 输入框
+ * 独立写法     <input class="nv-input" placeholder="…">           （外观与 .nv-control 完全一致）
+ * 包装写法     <div class="nv-control"><span class="nv-control-affix">图标</span><input …></div>
+ * 附加块       <div class="nv-input-group"><span class="nv-input-addon">https://</span><input class="nv-input"></div>
+ * data-size="sm|md|lg"   data-variant="filled"   aria-invalid="true"   disabled   readonly
+ * 需要 input.js：data-clearable 清除按钮 · type="password" data-toggle 显示/隐藏 · maxlength + data-count 字数统计
+ */
+
+/* —— 独立 <input class="nv-input">：复刻 .nv-control 的外观与状态 —— */
+.nv-input:not(.nv-control *) {
+  --_h: var(--nv-h-md);
+  --_px: 12px;
+  --_fs: var(--nv-text-md);
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--_h);
+  margin: 0;
+  padding: 0 var(--_px);
+  border: 1px solid var(--nv-border-input);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface);
+  color: var(--nv-fg);
+  font: var(--_fs) / 1.4 var(--nv-font);
+  box-shadow: var(--nv-shadow-xs);
+  outline: 0;
+  appearance: none;
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-input:not(.nv-control *)[data-size="sm"] { --_h: var(--nv-h-sm); --_px: 10px; --_fs: var(--nv-text-sm); border-radius: calc(var(--nv-radius-md) * 0.85); }
+.nv-input:not(.nv-control *)[data-size="lg"] { --_h: var(--nv-h-lg); --_px: 14px; --_fs: var(--nv-text-lg); border-radius: var(--nv-radius-lg); }
+.nv-input:not(.nv-control *)::placeholder { color: var(--nv-fg-3); opacity: 1; }
+.nv-input:not(.nv-control *):hover { border-color: var(--nv-border-strong); }
+.nv-input:not(.nv-control *):focus {
+  outline: 0;
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+.nv-input:not(.nv-control *)[aria-invalid="true"] { border-color: var(--nv-danger); }
+.nv-input:not(.nv-control *)[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-input:not(.nv-control *):disabled {
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-3);
+  box-shadow: none;
+  cursor: not-allowed;
+  border-color: var(--nv-border);
+}
+.nv-input::-webkit-search-cancel-button { appearance: none; }
+.nv-input[type="password"]:not(:placeholder-shown) { letter-spacing: 0.08em; }
+
+/* —— 只读：保留可聚焦与可复制，弱化背景 —— */
+.nv-input[readonly]:not(.nv-control *),
+.nv-control:has(> input[readonly]:not(:disabled)) {
+  background: var(--nv-surface-2);
+  box-shadow: none;
+}
+.nv-control:has(> input[readonly]) > input { cursor: default; }
+
+/* —— 填充变体 —— */
+:is(.nv-input:not(.nv-control *), .nv-control)[data-variant="filled"] {
+  background: var(--nv-surface-2);
+  border-color: transparent;
+  box-shadow: none;
+}
+:is(.nv-input:not(.nv-control *), .nv-control)[data-variant="filled"]:hover { background: var(--nv-surface-3); border-color: transparent; }
+.nv-input:not(.nv-control *)[data-variant="filled"]:focus,
+.nv-control[data-variant="filled"]:is(:focus-within, .is-focused) {
+  background: var(--nv-surface);
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+.nv-input:not(.nv-control *)[data-variant="filled"][aria-invalid="true"],
+.nv-control[data-variant="filled"]:is([aria-invalid="true"], .is-invalid, :has(> [aria-invalid="true"])) { border-color: var(--nv-danger); }
+.nv-input:not(.nv-control *)[data-variant="filled"][aria-invalid="true"]:focus,
+.nv-control[data-variant="filled"]:has(> [aria-invalid="true"]):focus-within { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-input:not(.nv-control *)[data-variant="filled"]:disabled,
+.nv-control[data-variant="filled"]:has(> :disabled) { background: var(--nv-surface-2); border-color: transparent; }
+
+/* —— 包装写法里的部件 —— */
+.nv-input-box { cursor: text; }
+.nv-control:has(> :disabled) .nv-control-affix { opacity: 0.6; }
+.nv-control:has(> :disabled) .nv-control-btn { pointer-events: none; opacity: 0.5; }
+.nv-control:focus-within > .nv-control-affix:has(> svg) { color: var(--nv-fg-2); }
+.nv-input-clear { animation: nv-input-pop var(--nv-dur-2) var(--nv-ease-out); }
+.nv-input-clear[hidden] { display: none; }
+.nv-input-count {
+  flex: none;
+  font-size: var(--nv-text-xs);
+  color: var(--nv-fg-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: color var(--nv-dur-2);
+}
+.nv-input-count[data-full] { color: var(--nv-warning-text); font-weight: 500; }
+.nv-input-toggle[aria-pressed="true"] { color: var(--nv-fg-2); }
+@keyframes nv-input-pop { from { opacity: 0; transform: scale(0.6); } }
+/* 包装内的 kbd 提示（如 Ctrl K） */
+.nv-control > kbd {
+  flex: none;
+  padding: 2px 6px;
+  border: 1px solid var(--nv-border);
+  border-radius: 6px;
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  font: 500 11px / 1.3 var(--nv-font-mono);
+}
+
+/* —— 附加块组合 .nv-input-group —— */
+.nv-input-group {
+  --_h: var(--nv-h-md);
+  --_px: 12px;
+  --_fs: var(--nv-text-md);
+  --_r: var(--nv-radius-md);
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  isolation: isolate;
+}
+.nv-input-group[data-size="sm"] { --_h: var(--nv-h-sm); --_px: 10px; --_fs: var(--nv-text-sm); --_r: calc(var(--nv-radius-md) * 0.85); }
+.nv-input-group[data-size="lg"] { --_h: var(--nv-h-lg); --_px: 14px; --_fs: var(--nv-text-lg); --_r: var(--nv-radius-lg); }
+.nv-input-group > :is(.nv-input, .nv-control) {
+  --_h: inherit; --_px: inherit; --_fs: inherit;
+  flex: 1 1 auto;
+  width: auto;
+  border-radius: 0;
+}
+.nv-input-group > * { border-radius: 0; }
+.nv-input-group > :first-child { border-start-start-radius: var(--_r); border-end-start-radius: var(--_r); }
+.nv-input-group > :last-child { border-start-end-radius: var(--_r); border-end-end-radius: var(--_r); }
+.nv-input-group > * + * { margin-left: -1px; }
+.nv-input-group > :is(:hover, :focus, :focus-within) { position: relative; z-index: 1; }
+.nv-input-group > :is(:focus, :focus-within) { z-index: 2; }
+.nv-input-group > .nv-btn { height: auto; min-height: var(--_h); box-shadow: none; }
+.nv-input-group > .nv-btn[data-variant="outline"] { border-color: var(--nv-border-input); }
+.nv-input-addon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--_h);
+  padding: 0 var(--_px);
+  border: 1px solid var(--nv-border-input);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  font: var(--_fs) / 1.4 var(--nv-font);
+  white-space: nowrap;
+  user-select: none;
+}
+.nv-input-addon > svg { width: 16px; height: 16px; }
+.nv-input-group:has(:disabled) > .nv-input-addon { color: var(--nv-fg-3); }

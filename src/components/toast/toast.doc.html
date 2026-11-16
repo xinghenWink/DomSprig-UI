@@ -1,0 +1,199 @@
+<!--
+@name toast
+@title Toast 轻提示
+@category feedback
+@order 20
+@deps button
+@desc 轻量、非阻断的操作反馈。5 种类型、6 个位置，悬停暂停与倒计时进度条，同 id 更新、操作按钮与 Promise 流转；纯 JS 调用，无需写 HTML。
+-->
+
+<!-- @demo 类型 | `success` `error` `warning` `info` `loading`。错误默认停留 5 秒并以 `role="alert"` 即时播报，加载中默认常驻。 -->
+<button class="nv-btn" data-variant="soft" data-color="success" id="toast-type-success"><i data-nv-icon="circle-check"></i>成功</button>
+<button class="nv-btn" data-variant="soft" data-color="danger" id="toast-type-error"><i data-nv-icon="circle-x"></i>失败</button>
+<button class="nv-btn" data-variant="soft" data-color="warning" id="toast-type-warning"><i data-nv-icon="triangle-alert"></i>警告</button>
+<button class="nv-btn" data-variant="soft" id="toast-type-info"><i data-nv-icon="info"></i>信息</button>
+<button class="nv-btn" data-variant="soft" data-color="neutral" id="toast-type-loading"><i data-nv-icon="loader"></i>加载中</button>
+<script>
+  {
+    const on = (id, fn) => document.getElementById(id).addEventListener('click', fn);
+    on('toast-type-success', () => Nova.toast.success('设置已保存'));
+    on('toast-type-error', () => Nova.toast.error('保存失败', { description: '网络连接已断开，请检查网络后重试。' }));
+    on('toast-type-warning', () => Nova.toast.warning('存储空间即将用完', { description: '已使用 92%，超出后将无法上传新文件。' }));
+    on('toast-type-info', () => Nova.toast.info('有 3 位成员加入了项目'));
+    on('toast-type-loading', () => {
+      const t = Nova.toast.loading('正在同步数据…');
+      setTimeout(() => t.dismiss(), 2400);
+    });
+  }
+</script>
+
+<!-- @demo 位置 | `position` 支持 6 个位置，默认 `top-center`。新提示贴近屏幕边缘出现，其余依次让位；同一位置最多 3 条，超出时移除最旧的。 -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-toast-pos="top-left">左上</button>
+    <button class="nv-btn" data-variant="outline" data-toast-pos="top-center">顶部居中</button>
+    <button class="nv-btn" data-variant="outline" data-toast-pos="top-right">右上</button>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-toast-pos="bottom-left">左下</button>
+    <button class="nv-btn" data-variant="outline" data-toast-pos="bottom-center">底部居中</button>
+    <button class="nv-btn" data-variant="outline" data-toast-pos="bottom-right">右下</button>
+  </div>
+</div>
+<script>
+  {
+    const labels = { 'top-left': '左上', 'top-center': '顶部居中', 'top-right': '右上', 'bottom-left': '左下', 'bottom-center': '底部居中', 'bottom-right': '右下' };
+    let n = 0;
+    document.querySelectorAll('[data-toast-pos]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const position = btn.dataset.toastPos;
+        Nova.toast.info(`第 ${++n} 条通知`, { position, description: `显示在${labels[position]}` });
+      });
+    });
+  }
+</script>
+
+<!-- @demo 操作按钮：撤销删除 | `action: { label, onClick }` 在提示内放一个操作按钮，点击后自动关闭（`onClick` 返回 `false` 可保持）。带操作的提示建议停留 6 秒以上。 -->
+<button class="nv-btn" data-variant="outline" data-color="danger" id="toast-undo"><i data-nv-icon="trash"></i>删除 3 个文件</button>
+<script>
+  {
+    document.getElementById('toast-undo').addEventListener('click', () => {
+      Nova.toast.success('已移到回收站', {
+        description: '「设计稿 v3.fig」等 3 个文件',
+        duration: 6000,
+        action: { label: '撤销', onClick: () => Nova.toast.info('已恢复 3 个文件') },
+      });
+    });
+  }
+</script>
+
+<!-- @demo Promise | `Nova.toast.promise(p, { loading, success, error })` 先显示加载中，完成后原地变为成功或失败，并重新开始计时。文案可以是函数，接收结果或错误。 -->
+<button class="nv-btn" id="toast-promise-ok"><i data-nv-icon="cloud-upload"></i>上传（成功）</button>
+<button class="nv-btn" data-variant="outline" id="toast-promise-fail">上传（失败）</button>
+<script>
+  {
+    const upload = (ok) => new Promise((resolve, reject) => {
+      setTimeout(() => (ok ? resolve({ name: '季度报告.pdf', size: '2.4 MB' }) : reject(new Error('文件超过 20 MB 上限'))), 1600);
+    });
+    const run = (ok) => Nova.toast.promise(upload(ok), {
+      loading: '正在上传…',
+      success: (file) => ({ title: '上传完成', description: `${file.name}（${file.size}）` }),
+      error: (err) => ({ title: '上传失败', description: err.message }),
+    });
+    document.getElementById('toast-promise-ok').addEventListener('click', () => run(true));
+    document.getElementById('toast-promise-fail').addEventListener('click', () => run(false));
+  }
+</script>
+
+<!-- @demo 更新同一条 | 同一个 `id` 再次调用会更新原提示而不是新增；`update()` 可以把加载中变为成功，图标带一次弹性反馈。 -->
+<button class="nv-btn" data-variant="outline" id="toast-same-id"><i data-nv-icon="refresh"></i>自动保存</button>
+<button class="nv-btn" data-variant="outline" id="toast-update"><i data-nv-icon="download"></i>导出报表</button>
+<script>
+  {
+    let saves = 0;
+    document.getElementById('toast-same-id').addEventListener('click', () => {
+      saves++;
+      Nova.toast.success('草稿已保存', { id: 'toast-autosave', description: saves > 1 ? `本次会话已保存 ${saves} 次` : null });
+    });
+    document.getElementById('toast-update').addEventListener('click', () => {
+      const t = Nova.toast.loading('正在生成报表…', { description: '约需 2 秒' });
+      setTimeout(() => t.update({ type: 'success', title: '报表已生成', description: '已保存到「下载」文件夹' }), 2000);
+    });
+  }
+</script>
+
+<!-- @demo 常驻与不可关闭 | `duration: 0` 常驻，直到手动关闭；`closable: false` 隐藏关闭按钮（务必配合自动关闭或操作按钮）。`Nova.toast.dismissAll()` 关闭全部。 -->
+<button class="nv-btn" data-variant="outline" id="toast-sticky">常驻提示</button>
+<button class="nv-btn" data-variant="outline" id="toast-noclose">不可关闭</button>
+<button class="nv-btn" data-variant="ghost" id="toast-clear">全部关闭</button>
+<script>
+  {
+    document.getElementById('toast-sticky').addEventListener('click', () => {
+      Nova.toast.warning('新版本已就绪', {
+        description: '刷新页面后生效，未保存的内容会丢失。',
+        duration: 0,
+        action: { label: '立即刷新', onClick: () => Nova.toast.info('演示中不会真的刷新') },
+      });
+    });
+    document.getElementById('toast-noclose').addEventListener('click', () => {
+      Nova.toast.info('已复制链接', { closable: false, duration: 2000 });
+    });
+    document.getElementById('toast-clear').addEventListener('click', () => Nova.toast.dismissAll());
+  }
+</script>
+
+<!-- @demo 全局配置与键盘 | `Nova.toast.config()` 修改默认位置、时长与数量上限。按 **Alt+T** 聚焦最新一条提示，聚焦或悬停时暂停计时，Esc 关闭当前提示。 -->
+<button class="nv-btn" data-variant="outline" id="toast-config-br">默认右下、最多 5 条</button>
+<button class="nv-btn" data-variant="ghost" id="toast-config-reset">恢复默认</button>
+<button class="nv-btn" data-variant="soft" id="toast-config-try">发送一条</button>
+<script>
+  {
+    document.getElementById('toast-config-br').addEventListener('click', () => {
+      Nova.toast.config({ position: 'bottom-right', max: 5, duration: 4000 });
+      Nova.toast.success('已切换到右下角', { description: '之后的提示默认显示在这里' });
+    });
+    document.getElementById('toast-config-reset').addEventListener('click', () => {
+      Nova.toast.config({ position: 'top-center', max: 3, duration: 3000 });
+      Nova.toast.info('已恢复默认配置');
+    });
+    document.getElementById('toast-config-try').addEventListener('click', () => Nova.toast('你有一条新消息', { description: '来自 林小夏：周会改到下午 3 点' }));
+  }
+</script>
+
+<!-- @api
+### 调用方式
+| 方法 | 说明 |
+|---|---|
+| `Nova.toast(titleOrOptions, opts?)` | 显示一条提示：传字符串即标题（类型 `info`），或传完整选项对象 |
+| `Nova.toast.show(opts)` | 显示一条提示，返回 `{ id, update, dismiss }` |
+| `Nova.toast.success(title, opts?)` | 同 `show`，类型固定；`error` `warning` `info` `loading` 同理 |
+| `Nova.toast.update(id, patch)` | 合并更新已有提示并重新计时；改了 `type` 而没传 `duration` 时按新类型取默认时长 |
+| `Nova.toast.dismiss(id)` | 关闭指定提示（带退场动画）；不传 `id` 等同 `dismissAll()` |
+| `Nova.toast.dismissAll()` | 关闭全部提示 |
+| `Nova.toast.promise(p, { loading, success, error })` | 先显示加载中，`p` 完成后原地更新为成功 / 失败；返回 `p` 本身 |
+| `Nova.toast.config(opts)` | 修改全局默认，返回当前配置 |
+
+### 选项 `show(opts)`
+| 选项 | 说明 | 类型 | 默认 |
+|---|---|---|---|
+| `title` | 标题，建议「动词 + 结果」、不带句号 | `string` \| `Node` | — |
+| `description` | 描述：补充原因或下一步，≤ 2 行 | `string` \| `Node` | — |
+| `type` | 类型 | `success` `error` `warning` `info` `loading` | `info` |
+| `duration` | 停留毫秒数，`0` 为常驻 | `number` | 3000；`error` 5000；`loading` 0 |
+| `position` | 位置（创建后不可改） | `top-left` `top-center` `top-right` `bottom-left` `bottom-center` `bottom-right` | `top-center` |
+| `id` | 自定义 id；同 id 再次调用会更新原提示 | `string` | 自动生成 |
+| `closable` | 显示关闭按钮 | `boolean` | `true` |
+| `action` | 操作按钮 `{ label, onClick(event, handle) }`，点击后关闭，`onClick` 返回 `false` 则保持 | `object` | — |
+| `icon` | 图标名（`Nova.icons` 中的名称）、`Node`，或 `false` 隐藏 | `string` \| `Node` \| `false` | 按类型 |
+| `closeLabel` | 关闭按钮的 `aria-label` | `string` | `关闭提示` |
+| `onClose` | 移除后回调，参数 `{ id, reason }`，`reason` 为 `timeout` `close` `action` `overflow` `dismiss` | `function` | — |
+
+### Promise 文案
+`loading` 为字符串或选项对象；`success` / `error` 可以是字符串、选项对象，或接收结果 / 错误并返回二者之一的函数。省略时使用配置里的默认文案。也可以传 `id`、`position`。
+
+### 全局配置 `config(opts)`
+| 字段 | 说明 | 默认 |
+|---|---|---|
+| `position` | 默认位置 | `top-center` |
+| `duration` | 默认停留时长（毫秒） | `3000` |
+| `errorDuration` | 错误类型的默认停留时长 | `5000` |
+| `max` | 同一位置最多同时显示的条数，超出移除最旧的 | `3` |
+| `hotkey` | 是否启用 Alt+T 聚焦最新提示 | `true` |
+| `closeLabel` `regionLabel` | 关闭按钮与容器的无障碍名称 | `关闭提示` `通知` |
+| `loadingText` `successText` `errorText` | `promise()` 的默认文案 | `处理中…` `操作成功` `操作失败` |
+
+### 行为与无障碍
+- 鼠标悬停或焦点在提示内时暂停计时，进度条同步暂停，离开后继续剩余时间；页面切到后台时也会暂停。
+- `error` 使用 `role="alert"` 即时播报，其余 `role="status"`；容器是带名称的 `aria-live` 区域，默认位置的容器在页面就绪时预先创建。
+- **Alt+T** 聚焦最新一条提示，Tab 可到达操作与关闭按钮，Esc 关闭当前提示；关闭后焦点交给下一条或归还原处。
+- 容器带 `data-nv-layer-ignore`：点击提示不会关闭打开着的 Popover / Modal。
+- 用户内容一律按文本渲染。窄屏（< 640px）下提示占满宽度，两侧留 16px。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-toast-width` | 提示宽度 | `360px` |
+| `--nv-toast-offset` | 与屏幕边缘的距离 | `20px`（窄屏 16px） |
+| `--nv-toast-gap` | 多条提示的间距 | `10px` |
+| `--nv-z-toast` | 层级 | `1200` |
+-->

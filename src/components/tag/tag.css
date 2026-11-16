@@ -1,0 +1,105 @@
+/* Nova UI · Tag 标签
+ * 与 Badge 的区别：Tag 是可交互的「内容标签」，可关闭、可选中，能带图标或头像；Badge 只做状态标记。
+ * <span class="nv-tag">设计</span>
+ * <span class="nv-tag" data-closable>可关闭</span>                    需 tag.js：追加关闭按钮
+ * <button class="nv-tag" data-checkable aria-pressed="false">可选</button> 需 tag.js：点击切换选中
+ * data-variant  soft（默认）| outline | solid
+ * data-color    neutral（默认）| primary | success | warning | danger | info
+ * data-size     sm | md（默认）| lg
+ * <div class="nv-tag-group" data-single>…</div>   可选标签组，data-single 为单选
+ */
+.nv-tag {
+  --_c: var(--nv-fg-3);
+  --_text: var(--nv-fg);
+  --_soft: var(--nv-surface-2);
+  --_on: var(--nv-fg-inverse);
+  --_bg: var(--_soft);
+  --_fg: var(--_text);
+  --_bd: var(--nv-border);
+  --_h: 26px;
+  --_px: 9px;
+  --_fs: var(--nv-text-sm);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: var(--_h);
+  padding: 0 var(--_px);
+  margin: 0;
+  border: 1px solid var(--_bd);
+  border-radius: var(--nv-tag-radius, var(--nv-radius-md));
+  background: var(--_bg);
+  color: var(--_fg);
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  white-space: nowrap;
+  vertical-align: middle;
+  text-decoration: none;
+  transition: background-color var(--nv-dur-2) var(--nv-ease), border-color var(--nv-dur-2) var(--nv-ease), color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease);
+}
+.nv-tag > svg { width: 14px; height: 14px; flex: none; color: var(--_c); }
+.nv-tag > .nv-avatar { --_s: calc(var(--_h) - 8px); margin-inline-start: calc(var(--_px) * -0.55); font-size: calc(var(--_s) * 0.45); }
+.nv-tag-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nv-tag[hidden] { display: none; }
+
+.nv-tag[data-size="sm"] { --_h: 22px; --_px: 7px; --_fs: var(--nv-text-xs); gap: 4px; }
+.nv-tag[data-size="lg"] { --_h: 32px; --_px: 12px; --_fs: var(--nv-text-md); gap: 6px; }
+.nv-tag[data-shape="pill"] { border-radius: var(--nv-radius-full); }
+
+.nv-tag[data-color="primary"] { --_c: var(--nv-primary); --_text: var(--nv-primary-text); --_soft: var(--nv-primary-soft); --_on: var(--nv-primary-fg); }
+.nv-tag[data-color="success"] { --_c: var(--nv-success); --_text: var(--nv-success-text); --_soft: var(--nv-success-soft); --_on: light-dark(#fff, oklch(0.22 0.05 155)); }
+.nv-tag[data-color="warning"] { --_c: var(--nv-warning); --_text: var(--nv-warning-text); --_soft: var(--nv-warning-soft); --_on: oklch(0.25 0.06 60); }
+.nv-tag[data-color="danger"] { --_c: var(--nv-danger); --_text: var(--nv-danger-text); --_soft: var(--nv-danger-soft); --_on: #fff; }
+.nv-tag[data-color="info"] { --_c: var(--nv-info); --_text: var(--nv-info-text); --_soft: var(--nv-info-soft); --_on: light-dark(#fff, oklch(0.22 0.05 245)); }
+.nv-tag[data-color]:not([data-color="neutral"]) { --_bd: color-mix(in oklab, var(--_c) 22%, transparent); }
+
+.nv-tag[data-variant="outline"] { --_bg: transparent; --_bd: color-mix(in oklab, var(--_c) 45%, transparent); }
+.nv-tag[data-variant="outline"]:is(:not([data-color]), [data-color="neutral"]) { --_bd: var(--nv-border-input); }
+.nv-tag[data-variant="solid"] { --_bg: var(--_c); --_fg: var(--_on); --_bd: transparent; }
+.nv-tag[data-variant="solid"]:is(:not([data-color]), [data-color="neutral"]) { --_c: var(--nv-fg); }
+.nv-tag[data-variant="solid"] > svg { color: currentColor; }
+
+/* 状态点 */
+.nv-tag[data-dot]::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--_c); flex: none; }
+.nv-tag[data-variant="solid"][data-dot]::before { background: currentColor; }
+
+/* 关闭按钮 */
+.nv-tag-close {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--_h) - 10px);
+  height: calc(var(--_h) - 10px);
+  margin-inline: -2px calc(var(--_px) * -0.45);
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity var(--nv-dur-1), background-color var(--nv-dur-1);
+}
+.nv-tag-close > svg { width: 12px; height: 12px; }
+.nv-tag-close:hover { opacity: 1; background: color-mix(in oklab, currentColor 14%, transparent); }
+.nv-tag-close:focus-visible { opacity: 1; outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-tag[data-state="closed"] { animation: nv-tag-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+@keyframes nv-tag-out { to { opacity: 0; transform: scale(0.85); } }
+
+/* 链接 / 可选标签 */
+:is(a, button).nv-tag { cursor: pointer; }
+:is(a, button).nv-tag:not([data-checkable]):hover { --_bd: var(--nv-border-strong); }
+:is(a, button).nv-tag:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--nv-ring); border-color: var(--nv-primary); }
+.nv-tag[data-checkable] { --_bg: transparent; --_bd: var(--nv-border-input); --_fg: var(--nv-fg-2); }
+.nv-tag[data-checkable]:hover { --_bg: var(--nv-surface-2); --_fg: var(--nv-fg); }
+.nv-tag[data-checkable][aria-pressed="true"] {
+  --_bg: var(--nv-primary-soft);
+  --_fg: var(--nv-primary-text);
+  --_bd: color-mix(in oklab, var(--nv-primary) 45%, transparent);
+}
+.nv-tag[data-checkable][aria-pressed="true"]:is([data-variant="solid"]) { --_bg: var(--nv-primary); --_fg: var(--nv-primary-fg); --_bd: transparent; }
+.nv-tag[data-checkable]:active { transform: scale(0.97); }
+:is(button, a).nv-tag:is(:disabled, [aria-disabled="true"]) { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.nv-tag-group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }

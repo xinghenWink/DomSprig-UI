@@ -1,0 +1,17 @@
+{
+  "name": "nova-ui",
+  "version": "1.0.0",
+  "description": "零依赖、源码分发的现代 UI 组件库（原生 JS + CSS）",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "shot": "node scripts/shot.mjs",
+    "test": "node scripts/test.mjs",
+    "add": "node scripts/add.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "25.17.0"
+  }
+}

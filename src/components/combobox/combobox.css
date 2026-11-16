@@ -1,0 +1,60 @@
+/* Nova UI · Combobox 自动补全
+ * <input class="nv-combobox" list="cities" aria-label="城市">   需 combobox.js
+ * 关联一个 <datalist id="cities">，输入时弹出过滤后的建议；也可以不关联，纯当普通输入框。
+ * 浮层复用 .nv-panel / .nv-item，定位走 Nova.floating。
+ * data-size     sm | md（默认）| lg
+ * data-clearable 有值时显示清除按钮
+ * data-empty    无匹配时的提示文字，默认「无匹配项」；写 "none" 则不提示
+ */
+.nv-combobox-box { cursor: text; }
+.nv-combobox-box > input { cursor: text; }
+
+/* 右侧的清除按钮与下拉箭头 */
+.nv-combobox-clear,
+.nv-combobox-arrow {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-right: -4px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+}
+.nv-combobox-clear:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-combobox-clear:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-combobox-clear > svg,
+.nv-combobox-arrow > svg { width: 15px; height: 15px; }
+.nv-combobox-clear[hidden] { display: none; }
+.nv-combobox-arrow { pointer-events: none; transition: transform var(--nv-dur-2) var(--nv-ease); }
+.nv-combobox-box[data-open] .nv-combobox-arrow { transform: rotate(180deg); color: var(--nv-fg-2); }
+.nv-combobox-box[data-size="sm"] :is(.nv-combobox-clear, .nv-combobox-arrow) { width: 20px; height: 20px; }
+.nv-combobox-box[data-size="sm"] :is(.nv-combobox-clear, .nv-combobox-arrow) > svg { width: 13px; height: 13px; }
+
+/* 建议面板：至少和输入框一样宽，不超过视口 */
+.nv-combobox-panel {
+  min-width: var(--nv-anchor-width, 8rem);
+  max-width: min(calc(100vw - 16px), max(var(--nv-anchor-width, 0px), 420px));
+}
+.nv-combobox-list { max-height: min(280px, calc(var(--nv-available-height, 100vh) - 2px)); overflow: auto; padding: 4px; }
+.nv-combobox-list[hidden],
+.nv-combobox-empty[hidden] { display: none; }
+.nv-combobox-option { cursor: pointer; }
+.nv-combobox-option[data-active] { background: var(--nv-surface-3); }
+.nv-combobox-option[aria-selected="true"] { color: var(--nv-primary-text); }
+.nv-combobox-option .nv-item-check { margin-inline-start: auto; color: var(--nv-primary); opacity: 0; }
+.nv-combobox-option[aria-selected="true"] .nv-item-check { opacity: 1; }
+
+/* 匹配的那段文字加粗 */
+.nv-combobox-mark { font-weight: 600; color: var(--nv-fg); background: transparent; }
+
+.nv-combobox-empty {
+  padding: 16px 12px;
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-sm);
+  text-align: center;
+}

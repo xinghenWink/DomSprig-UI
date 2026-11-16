@@ -1,0 +1,147 @@
+/* Nova UI · Empty 空状态
+ * <div class="nv-empty" data-image="search">
+ *   <div class="nv-empty-title">…</div> <div class="nv-empty-desc">…</div> <div class="nv-empty-actions">…</div>
+ * </div>
+ * data-image   default | search | inbox | error | network | none | 自定义注册名（需 empty.js 注入插画）
+ * data-size    sm | md | lg        data-bordered  虚线外框
+ * 自定义图形：.nv-empty-image（任意 img/svg）或 .nv-empty-icon（图标方块）
+ */
+.nv-empty {
+  /* 插画配色：只用 tokens 推导，亮暗自适应 */
+  --_paper: var(--nv-empty-paper, var(--nv-surface));
+  --_line: var(--nv-empty-line, light-dark(color-mix(in oklab, var(--nv-fg) 30%, var(--nv-surface)), color-mix(in oklab, var(--nv-fg) 40%, var(--nv-surface))));
+  --_faint: color-mix(in oklab, var(--nv-fg) 13%, var(--nv-surface));
+  --_shade: color-mix(in oklab, var(--nv-fg) 6%, var(--nv-surface));
+  --_ground: color-mix(in oklab, var(--nv-fg) 6%, transparent);
+  --_accent: var(--nv-empty-accent, var(--nv-primary));
+  --_accent-soft: color-mix(in oklab, var(--_accent) 14%, var(--_paper));
+  --_halo: color-mix(in oklab, var(--_accent) 7%, transparent);
+  /* 尺寸通道 */
+  --_img: var(--nv-empty-image-size, 136px);
+  --_icon: 48px;
+  --_title: var(--nv-text-lg);
+  --_desc: var(--nv-text-md);
+  --_pad: 32px 24px;
+  --_gap-title: 14px;
+  --_gap-actions: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: var(--_pad);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  text-align: center;
+  white-space: normal;
+}
+.nv-empty[hidden] { display: none; }
+
+.nv-empty[data-size="sm"] {
+  --_img: var(--nv-empty-image-size, 96px);
+  --_icon: 40px;
+  --_title: var(--nv-text-md);
+  --_desc: var(--nv-text-sm);
+  --_pad: 20px 16px;
+  --_gap-title: 10px;
+  --_gap-actions: 14px;
+}
+.nv-empty[data-size="lg"] {
+  --_img: var(--nv-empty-image-size, 184px);
+  --_icon: 56px;
+  --_title: var(--nv-text-xl);
+  --_desc: var(--nv-text-md);
+  --_pad: 48px 24px;
+  --_gap-title: 18px;
+  --_gap-actions: 24px;
+}
+.nv-empty[data-bordered] {
+  border: 1px dashed var(--nv-border-strong);
+  border-radius: var(--nv-radius-xl);
+  background: var(--nv-surface);
+}
+
+/* 颜色：error / network 使用语义色 */
+.nv-empty[data-image="error"] { --_accent: var(--nv-empty-accent, var(--nv-danger)); }
+.nv-empty[data-image="network"] { --_accent: var(--nv-empty-accent, var(--nv-warning)); }
+
+/* —— 插画 —— */
+.nv-empty-image {
+  flex: none;
+  width: var(--_img);
+  max-width: 100%;
+  margin-bottom: var(--_gap-title);
+  color: var(--_line);
+  animation: nv-empty-in var(--nv-dur-4) var(--nv-ease-out) both;
+}
+.nv-empty-image > :is(svg, img) { display: block; width: 100%; height: auto; }
+.nv-empty-image svg { overflow: visible; }
+@keyframes nv-empty-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } }
+
+/* 内置插画的绘制类（自定义插画也可复用，保证配色一致） */
+.nv-empty-halo { fill: var(--_halo); }
+.nv-empty-ground { fill: var(--_ground); }
+.nv-empty-paper { fill: var(--_paper); stroke: var(--_line); stroke-width: 2; }
+.nv-empty-shade { fill: var(--_shade); }
+.nv-empty-stroke { fill: none; stroke: var(--_line); stroke-width: 2; }
+.nv-empty-faint { fill: none; stroke: var(--_faint); stroke-width: 3; }
+.nv-empty-dot { fill: var(--_line); }
+.nv-empty-accent { fill: none; stroke: var(--_accent); stroke-width: 2; }
+.nv-empty-accent-soft { fill: var(--_accent-soft); stroke: var(--_accent); stroke-width: 2; }
+.nv-empty-accent-dot { fill: var(--_accent); }
+.nv-empty-lens { fill: var(--_paper); stroke: var(--_accent); stroke-width: 3; }
+
+/* —— 图标方块（紧凑场景：表格、侧栏、小卡片） —— */
+.nv-empty-icon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--_icon);
+  height: var(--_icon);
+  margin-bottom: var(--_gap-title);
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  box-shadow: var(--nv-shadow-xs), inset 0 1px 0 color-mix(in oklab, white 40%, transparent);
+  animation: nv-empty-in var(--nv-dur-4) var(--nv-ease-out) both;
+}
+.nv-empty-icon > :is(svg, .nv-icon) { width: 45%; height: 45%; }
+
+/* —— 文本与操作 —— */
+.nv-empty-title {
+  margin: 0;
+  font-size: var(--_title);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--nv-fg);
+}
+.nv-empty-desc {
+  max-width: 380px;
+  margin: 6px 0 0;
+  font-size: var(--_desc);
+  line-height: 1.6;
+  color: var(--nv-fg-2);
+  text-wrap: pretty;
+}
+.nv-empty[data-size="sm"] .nv-empty-desc { margin-top: 4px; max-width: 300px; }
+.nv-empty-title:first-child, .nv-empty-desc:first-child { margin-top: 0; }
+.nv-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: var(--_gap-actions);
+}
+.nv-empty-actions:first-child { margin-top: 0; }
+/* 页脚补充说明（如「了解更多」链接） */
+.nv-empty-extra {
+  margin-top: 14px;
+  font-size: var(--nv-text-sm);
+  color: var(--nv-fg-3);
+}
+.nv-empty-extra a { color: var(--nv-primary-text); text-underline-offset: 3px; }
+.nv-empty-extra a:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 2px; }

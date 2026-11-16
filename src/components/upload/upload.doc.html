@@ -1,0 +1,133 @@
+<!--
+@name upload
+@title Upload 上传
+@category form
+@order 40
+@deps button
+@desc 文件上传：点击选择、拖拽、粘贴截图。内部保留原生 input[type=file] 并同步已选文件，表单提交照常带上文件；类型、大小、数量校验和进度展示由组件完成，上传逻辑可以交给 data-action 或自己写。
+-->
+
+<!-- @demo 拖拽区 | 空容器自动生成拖拽区，提示文案按 `data-accept`、`data-max-size` 生成。拖拽区获得焦点后可以 Ctrl+V 粘贴截图。 | col -->
+<div class="doc-mid">
+  <div class="nv-upload" id="up-basic" data-multiple data-max-size="10MB" data-name="files"></div>
+  <div class="doc-log" id="up-basic-log">files = 0</div>
+</div>
+<script>
+  document.getElementById('up-basic').addEventListener('nv:change', (e) => {
+    document.getElementById('up-basic-log').textContent = `files = ${e.detail.files.length}`;
+  });
+</script>
+
+<!-- @demo 按钮触发 | 容器里放一个按钮就不再生成拖拽区；拖拽文件到整个容器上仍然有效。不加 `data-multiple` 时是单选，新文件替换旧文件。 | col -->
+<div class="doc-mid">
+  <div class="nv-upload" data-accept=".pdf,.doc,.docx" data-max-size="5MB">
+    <button type="button" class="nv-btn" data-variant="outline"><span data-nv-icon="upload"></span>上传简历</button>
+    <div class="doc-hint">PDF / Word，不超过 5 MB</div>
+  </div>
+</div>
+
+<!-- @demo 图片墙 | `data-list="picture"` 把列表变成缩略图网格，图片用本地预览（object URL，移除时释放）。 | col -->
+<div class="doc-mid">
+  <div class="nv-upload" data-multiple data-accept="image/*" data-max-count="6" data-list="picture"
+       data-title="添加图片" data-hint="最多 6 张，支持粘贴截图"></div>
+</div>
+
+<!-- @demo 校验 | 只收图片、单张不超过 200 KB、最多 2 个。不符合的文件不会进列表，容器派发 `nv:reject { file, reason }`。 | col -->
+<div class="doc-mid">
+  <div class="nv-upload" id="up-valid" data-multiple data-accept="image/*" data-max-size="200KB" data-max-count="2"></div>
+  <div class="doc-log" id="up-valid-log">选几个文件试试</div>
+</div>
+<script>
+  {
+    const reasons = { type: '类型不符', size: '超过 200 KB', count: '超过数量上限' };
+    document.getElementById('up-valid').addEventListener('nv:reject', (e) => {
+      document.getElementById('up-valid-log').textContent = `已拒绝 ${e.detail.file.name}：${reasons[e.detail.reason]}`;
+    });
+  }
+</script>
+
+<!-- @demo 上传进度 | 监听 `nv:change` 自己上传，用实例的 `setProgress(file, percent)` 和 `setStatus(file, status, message)` 更新列表。这里用定时器模拟，文件名含 fail 的会失败。 | col -->
+<div class="doc-mid">
+  <div class="nv-upload" id="up-progress" data-multiple data-title="拖入文件开始模拟上传"></div>
+</div>
+<script>
+  Nova.ready(() => {
+    const el = document.getElementById('up-progress');
+    const up = Nova.get(el, 'upload');
+    const started = new WeakSet();
+    el.addEventListener('nv:change', (e) => {
+      e.detail.files.filter((f) => !started.has(f)).forEach((file) => {
+        started.add(file);
+        let pct = 0;
+        const timer = setInterval(() => {
+          if (!up.files.includes(file)) { clearInterval(timer); return; }
+          pct = Math.min(100, pct + 8 + Math.random() * 18);
+          if (/fail/i.test(file.name) && pct > 60) {
+            clearInterval(timer);
+            up.setStatus(file, 'error', '服务器拒绝了这个文件');
+            return;
+          }
+          up.setProgress(file, pct);
+          if (pct >= 100) clearInterval(timer);
+        }, 260);
+      });
+    });
+  });
+</script>
+
+<!-- @demo 拖拽区加按钮、禁用 | 拖拽区内容可以自己写；`data-disabled` 禁用所有入口。 | col -->
+<div class="doc-stack doc-mid">
+  <div class="nv-upload" data-multiple>
+    <div class="nv-upload-dragger">
+      <div class="nv-upload-icon"><span data-nv-icon="folder" data-size="22"></span></div>
+      <div class="nv-upload-title">把项目文件夹里的文件拖进来</div>
+      <div class="nv-upload-hint">或者点击这块区域选择</div>
+    </div>
+  </div>
+  <div class="nv-upload" data-disabled data-title="已禁用"></div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-name` | 原生 input 的 name，随表单提交 | — |
+| `data-multiple` | 多选；不加时新文件替换旧文件 | — |
+| `data-accept` | 允许的类型，同 `input[accept]`：`.pdf`、`image/*`、`application/zip` | 不限 |
+| `data-max-size` | 单文件上限，字节数或 `800KB` `5MB` `1GB` | 不限 |
+| `data-max-count` | 数量上限（仅多选） | 不限 |
+| `data-list` | `text` `picture` `none`（不渲染列表） | `text` |
+| `data-title` / `data-hint` | 自动生成的拖拽区文案 | 按限制生成 |
+| `data-action` | 设置后自动 XHR POST 到该地址并显示真实进度 | — |
+| `data-field` | 配合 `data-action` 的表单字段名 | `file` |
+| `data-disabled` | 禁用 | — |
+
+容器里有 `<button>`、`.nv-btn` 或 `[data-upload-trigger]` 时用它们触发选择；有 `.nv-upload-dragger` 时用它；都没有就自动生成拖拽区。
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `nv:add` | 即将加入，`detail: { file }`，可 `preventDefault` 取消 |
+| `nv:remove` | 即将移除，`detail: { file }`，可取消 |
+| `nv:change` | 列表变化，`detail: { files }` |
+| `nv:reject` | 校验未通过，`detail: { file, reason }`，reason 为 `type` `size` `count` |
+| `nv:success` | 有 `data-action` 时上传成功，`detail: { file, response }` |
+| `nv:error` | 有 `data-action` 时上传失败，`detail: { file, status }` |
+
+### 实例
+`Nova.get(el, 'upload')`：
+
+| 成员 | 说明 |
+|---|---|
+| `files` | 当前 File 数组 |
+| `add(files)` | 加入 File 或 FileList，走同样的校验，返回实际加入的文件 |
+| `remove(file)` / `clear()` | 移除 |
+| `open()` | 打开系统文件选择框 |
+| `setProgress(file, percent)` | 设置进度，100 视为完成 |
+| `setStatus(file, status, message?)` | `ready` `uploading` `done` `error`，message 显示在文件名下方 |
+
+### 无障碍
+- 拖拽区是 `role="button"`，可 Tab 聚焦，Enter / 空格打开选择框。
+- 每个文件的移除按钮有「移除 文件名」的 `aria-label`；列表是 `aria-live="polite"`，状态变化会被读屏播报。
+- 拖拽和粘贴只是额外入口，键盘用户始终可以通过选择框完成上传。
+-->

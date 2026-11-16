@@ -1,0 +1,139 @@
+/* Nova UI · Dropdown 下拉菜单 / 右键菜单
+ * <div class="nv-menu" id hidden>   JS 会补上 .nv-panel（共享外观与从锚点方向弹出的动画）与 role="menu"
+ *   .nv-item[role=menuitem|menuitemcheckbox|menuitemradio]   菜单项（button 或 a）
+ *   .nv-item-kbd           快捷键提示（右对齐）
+ *   .nv-item-desc          右侧次要文字
+ *   .nv-panel-label / .nv-panel-sep   分组标题 / 分隔线
+ *   .nv-menu-header        菜单顶部的用户信息区（.nv-menu-avatar .nv-menu-title .nv-menu-desc）
+ *   data-color="danger"    危险项
+ * --nv-menu-min-width      最小宽度（默认 12rem，且不小于触发器宽度）
+ */
+.nv-menu {
+  min-width: max(var(--nv-menu-min-width, 12rem), var(--nv-anchor-width, 0px));
+  max-width: min(320px, 100vw - 16px);
+  max-height: min(var(--nv-available-height, 70vh), 480px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+}
+.nv-menu[hidden] { display: none; }
+.nv-menu.nv-panel:focus-visible { outline: 0; }
+/* 子菜单：与父菜单项顶端对齐（抵消面板内边距与边框） */
+.nv-menu[data-sub]:is([data-side="right"], [data-side="left"]) { margin-top: -6px; }
+
+/* 菜单项：重置 button / a 的默认样式 */
+.nv-menu .nv-item {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  text-align: start;
+  text-decoration: none;
+}
+.nv-menu .nv-item[data-active],
+.nv-menu .nv-item[aria-expanded="true"] { background: var(--nv-surface-2); }
+.nv-menu .nv-item[data-color="danger"][data-active] { background: var(--nv-danger-soft); }
+.nv-menu .nv-item:focus-visible { outline: 0; }
+.nv-menu .nv-item[aria-disabled="true"] { background: transparent; }
+.nv-menu .nv-item > .nv-item-label { flex: 1; }
+/* 没有包 .nv-item-label 时，让文字撑开，快捷键 / 箭头自然靠右 */
+.nv-item-kbd,
+.nv-menu .nv-item > .nv-item-desc,
+.nv-menu-sub-icon { margin-left: auto; }
+.nv-item-label + .nv-item-kbd,
+.nv-item-label + .nv-item-desc { margin-left: 0; }
+
+.nv-item-kbd {
+  flex: none;
+  padding-left: 16px;
+  color: var(--nv-fg-3);
+  font: 500 var(--nv-text-xs) / 1 var(--nv-font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.nv-item[data-color="danger"] .nv-item-kbd { color: color-mix(in oklab, var(--nv-danger-text) 70%, transparent); }
+
+/* 勾选指示器（JS 自动插入） */
+.nv-menu-indicator {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--nv-primary);
+}
+.nv-menu-indicator > svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.6); transition: opacity var(--nv-dur-1) var(--nv-ease), transform var(--nv-dur-2) var(--nv-ease-spring); }
+.nv-item[aria-checked="true"] > .nv-menu-indicator > svg { opacity: 1; transform: none; }
+.nv-menu-indicator[data-type="radio"]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity var(--nv-dur-1) var(--nv-ease), transform var(--nv-dur-2) var(--nv-ease-spring);
+}
+.nv-item[aria-checked="true"] > .nv-menu-indicator[data-type="radio"]::before { opacity: 1; transform: none; }
+/* 菜单里有勾选项时，普通项与标题也左缩进，文字对齐 */
+.nv-menu:has(.nv-menu-indicator) :is(.nv-item:not(:has(> .nv-menu-indicator)):not(:has(> svg)), .nv-panel-label) { padding-left: 32px; }
+
+/* 子菜单箭头 */
+.nv-menu-sub-icon { flex: none; display: inline-grid; color: var(--nv-fg-3); }
+.nv-menu-sub-icon > svg { width: 16px; height: 16px; }
+
+/* 顶部用户信息 */
+.nv-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 10px;
+  min-width: 0;
+}
+.nv-menu-avatar {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--nv-gradient);
+  color: #fff;
+  font-size: var(--nv-text-sm);
+  font-weight: 600;
+}
+.nv-menu-header > div { min-width: 0; }
+.nv-menu-title { color: var(--nv-fg); font-size: var(--nv-text-md); font-weight: 600; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nv-menu-desc { color: var(--nv-fg-3); font-size: var(--nv-text-xs); line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 右键区域 */
+[data-nv-context-menu] { -webkit-touch-callout: none; }
+
+/* 触摸设备：菜单项更高，便于点按 */
+@media (pointer: coarse) {
+  .nv-menu .nv-item { min-height: 40px; }
+}
+
+/* 可选：右键区域的示意样式 <div class="nv-menu-zone" data-nv-context-menu> */
+.nv-menu-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(100%, 420px);
+  min-height: 160px;
+  padding: 24px;
+  border: 1.5px dashed var(--nv-border-strong);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-sm);
+  user-select: none;
+  cursor: context-menu;
+  transition: border-color var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-menu-zone:hover { border-color: var(--nv-primary); }
+.nv-menu-zone:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }

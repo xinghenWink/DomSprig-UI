@@ -1,0 +1,209 @@
+/* Nova UI · Button
+ * <button class="nv-btn">           实心主色（默认）
+ * data-variant  solid | soft | outline | ghost | link | gradient
+ * data-color    primary | neutral | danger | success | warning
+ * data-size     sm | md | lg        data-icon  方形图标按钮        data-block  撑满宽度
+ * data-loading  加载中（显示旋转圈并禁止点击）    data-ripple  按压水波纹（需 button.js）
+ * <div class="nv-btn-group">        按钮组（相邻按钮合并圆角）
+ */
+.nv-btn {
+  /* 颜色通道：由 data-color 切换 */
+  --_c: var(--nv-primary);
+  --_c-hover: var(--nv-primary-hover);
+  --_on: var(--nv-primary-fg);
+  --_text: var(--nv-primary-text);
+  --_soft: var(--nv-primary-soft);
+  --_soft-hover: var(--nv-primary-soft-hover);
+  /* 尺寸通道：由 data-size 切换 */
+  --_h: var(--nv-h-md);
+  --_px: 14px;
+  --_fs: var(--nv-text-md);
+  --_gap: 7px;
+  --_icon: 16px;
+  --_radius: var(--nv-radius-md);
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_gap);
+  height: var(--_h);
+  padding: 0 var(--_px);
+  border: 1px solid transparent;
+  border-radius: var(--_radius);
+  background: var(--_c);
+  color: var(--_on);
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  /* 实心按钮的立体感：顶部高光 + 轻投影 */
+  background-image: linear-gradient(to bottom, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 1px 2px color-mix(in oklab, var(--_c) 28%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--_c) 82%, black);
+  transition:
+    background-color var(--nv-dur-2) var(--nv-ease),
+    color var(--nv-dur-2) var(--nv-ease),
+    border-color var(--nv-dur-2) var(--nv-ease),
+    box-shadow var(--nv-dur-2) var(--nv-ease),
+    transform var(--nv-dur-1) var(--nv-ease),
+    opacity var(--nv-dur-2);
+}
+.nv-btn:hover { background-color: var(--_c-hover); }
+.nv-btn:active:not(:disabled, [aria-disabled="true"], [data-loading]) { transform: scale(0.97); }
+.nv-btn:focus-visible { outline: 2px solid var(--_c); outline-offset: 2px; }
+.nv-btn > svg, .nv-btn > .nv-icon { width: var(--_icon); height: var(--_icon); flex: none; }
+
+/* —— 颜色 —— */
+.nv-btn[data-color="neutral"] {
+  --_c: var(--nv-fg);
+  --_c-hover: color-mix(in oklab, var(--nv-fg) 86%, var(--nv-bg));
+  --_on: var(--nv-fg-inverse);
+  --_text: var(--nv-fg);
+  --_soft: var(--nv-surface-2);
+  --_soft-hover: var(--nv-surface-3);
+}
+.nv-btn[data-color="danger"] {
+  --_c: var(--nv-danger);
+  --_c-hover: color-mix(in oklab, var(--nv-danger) 88%, black);
+  --_on: #fff;
+  --_text: var(--nv-danger-text);
+  --_soft: var(--nv-danger-soft);
+  --_soft-hover: color-mix(in oklab, var(--nv-danger) 19%, transparent);
+}
+.nv-btn[data-color="success"] {
+  --_c: var(--nv-success);
+  --_c-hover: color-mix(in oklab, var(--nv-success) 88%, black);
+  --_on: #fff;
+  --_text: var(--nv-success-text);
+  --_soft: var(--nv-success-soft);
+  --_soft-hover: color-mix(in oklab, var(--nv-success) 20%, transparent);
+}
+.nv-btn[data-color="warning"] {
+  --_c: var(--nv-warning);
+  --_c-hover: color-mix(in oklab, var(--nv-warning) 90%, black);
+  --_on: oklch(0.25 0.06 60);
+  --_text: var(--nv-warning-text);
+  --_soft: var(--nv-warning-soft);
+  --_soft-hover: color-mix(in oklab, var(--nv-warning) 24%, transparent);
+}
+
+/* —— 变体 —— */
+.nv-btn:is([data-variant="soft"], [data-variant="outline"], [data-variant="ghost"], [data-variant="link"]) {
+  background-image: none;
+  box-shadow: none;
+  color: var(--_text);
+}
+.nv-btn[data-variant="soft"] { background-color: var(--_soft); }
+.nv-btn[data-variant="soft"]:hover { background-color: var(--_soft-hover); }
+
+.nv-btn[data-variant="outline"] {
+  background-color: var(--nv-surface);
+  border-color: var(--nv-border-input);
+  box-shadow: var(--nv-shadow-xs);
+}
+.nv-btn[data-variant="outline"]:not([data-color]),
+.nv-btn[data-variant="outline"][data-color="neutral"] { color: var(--nv-fg); }
+.nv-btn[data-variant="outline"]:hover { background-color: var(--nv-surface-2); border-color: var(--nv-border-strong); }
+.nv-btn[data-variant="outline"]:is([data-color="primary"], [data-color="danger"], [data-color="success"], [data-color="warning"]) {
+  border-color: color-mix(in oklab, var(--_c) 45%, var(--nv-border));
+}
+.nv-btn[data-variant="outline"]:is([data-color="primary"], [data-color="danger"], [data-color="success"], [data-color="warning"]):hover {
+  background-color: var(--_soft);
+  border-color: color-mix(in oklab, var(--_c) 65%, var(--nv-border));
+}
+
+.nv-btn[data-variant="ghost"] { background-color: transparent; }
+.nv-btn[data-variant="ghost"]:not([data-color]) { color: var(--nv-fg-2); }
+.nv-btn[data-variant="ghost"]:hover { background-color: var(--_soft); color: var(--_text); }
+.nv-btn[data-variant="ghost"]:not([data-color]):hover { background-color: var(--nv-surface-2); color: var(--nv-fg); }
+
+.nv-btn[data-variant="link"] {
+  height: auto;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-underline-offset: 3px;
+}
+.nv-btn[data-variant="link"]:hover { background: none; text-decoration: underline; }
+.nv-btn[data-variant="link"]:active { transform: none; }
+
+.nv-btn[data-variant="gradient"] {
+  background: var(--nv-gradient);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.25),
+    0 6px 18px -6px color-mix(in oklab, var(--nv-primary) 70%, transparent);
+}
+.nv-btn[data-variant="gradient"]:hover { filter: brightness(1.06) saturate(1.05); }
+
+/* —— 尺寸 —— */
+.nv-btn[data-size="xs"] { --_h: 26px; --_px: 9px; --_fs: var(--nv-text-xs); --_gap: 5px; --_icon: 13px; --_radius: calc(var(--nv-radius-md) * 0.7); }
+.nv-btn[data-size="sm"] { --_h: var(--nv-h-sm); --_px: 11px; --_fs: var(--nv-text-sm); --_gap: 6px; --_icon: 14px; --_radius: calc(var(--nv-radius-md) * 0.85); }
+.nv-btn[data-size="lg"] { --_h: var(--nv-h-lg); --_px: 20px; --_fs: var(--nv-text-lg); --_gap: 8px; --_icon: 18px; --_radius: var(--nv-radius-lg); }
+.nv-btn[data-icon] { width: var(--_h); padding: 0; }
+.nv-btn[data-shape="pill"] { border-radius: var(--nv-radius-full); }
+.nv-btn[data-shape="pill"][data-icon], .nv-btn[data-shape="circle"] { border-radius: 50%; }
+.nv-btn[data-block] { display: flex; width: 100%; }
+
+/* —— 状态 —— */
+.nv-btn:disabled,
+.nv-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.nv-btn[data-loading] { cursor: progress; pointer-events: none; }
+.nv-btn[data-loading]::before {
+  content: "";
+  width: calc(var(--_icon) - 2px);
+  height: calc(var(--_icon) - 2px);
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: nv-spin 0.7s linear infinite;
+}
+/* 加载时隐藏前置图标，避免与旋转圈重复 */
+.nv-btn[data-loading] > svg:first-child,
+.nv-btn[data-loading] > .nv-icon:first-child { display: none; }
+.nv-btn[data-icon][data-loading] > :is(svg, .nv-icon) { display: none; }
+
+/* 按钮内的快捷键提示：<kbd class="nv-btn-kbd">⌘K</kbd> */
+.nv-btn-kbd {
+  margin-left: 2px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: color-mix(in oklab, currentColor 14%, transparent);
+  font: 500 0.8em/1 var(--nv-font-mono);
+}
+
+/* —— 按钮组 —— */
+.nv-btn-group { display: inline-flex; isolation: isolate; }
+.nv-btn-group > .nv-btn { border-radius: 0; }
+.nv-btn-group > .nv-btn:first-child { border-start-start-radius: var(--_radius); border-end-start-radius: var(--_radius); }
+.nv-btn-group > .nv-btn:last-child { border-start-end-radius: var(--_radius); border-end-end-radius: var(--_radius); }
+.nv-btn-group > .nv-btn + .nv-btn { margin-left: -1px; }
+.nv-btn-group > .nv-btn:hover, .nv-btn-group > .nv-btn:focus-visible { z-index: 1; }
+.nv-btn-group > .nv-btn:not([data-variant]) + .nv-btn:not([data-variant]) { border-left: 1px solid color-mix(in oklab, var(--_c) 70%, black); margin-left: 0; }
+
+/* —— 水波纹 —— */
+.nv-ripple {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.22;
+  transform: scale(0);
+  pointer-events: none;
+  animation: nv-ripple 560ms var(--nv-ease-out) forwards;
+}
+@keyframes nv-ripple { to { transform: scale(1); opacity: 0; } }

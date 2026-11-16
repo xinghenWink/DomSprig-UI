@@ -1,0 +1,237 @@
+<!--
+@name alert
+@title Alert 警告提示
+@category feedback
+@order 10
+@deps button
+@desc 页面内的重要提示。5 种语义色 × 4 种变体（柔和 / 描边 / 实心 / 顶部横幅），自动配图标与 ARIA 角色，支持标题、描述、操作区与带收起动画的关闭。
+-->
+
+<!-- @demo 语义颜色 | `data-color` 决定颜色与默认图标；标题用 `nv-alert-title`，正文用 `nv-alert-desc`。 | block -->
+<div class="doc-stack">
+  <div class="nv-alert" data-color="info">
+    <div class="nv-alert-title">新功能上线</div>
+    <div class="nv-alert-desc">工作区现在支持按标签筛选文档，可在左侧栏底部打开「标签视图」。</div>
+  </div>
+  <div class="nv-alert" data-color="success">
+    <div class="nv-alert-title">付款成功</div>
+    <div class="nv-alert-desc">订单 NV-20261115-0832 已支付 ¥ 299.00，发票将在 24 小时内发送到你的邮箱。</div>
+  </div>
+  <div class="nv-alert" data-color="warning">
+    <div class="nv-alert-title">API 密钥将于 3 天后过期</div>
+    <div class="nv-alert-desc">过期后调用会返回 401，请在到期前轮换密钥并更新部署环境变量。</div>
+  </div>
+  <div class="nv-alert" data-color="danger">
+    <div class="nv-alert-title">部署失败</div>
+    <div class="nv-alert-desc">构建步骤 <code>npm run build</code> 以退出码 1 结束，<a href="#">查看完整日志</a>。</div>
+  </div>
+  <div class="nv-alert" data-color="neutral">
+    <div class="nv-alert-title">草稿已自动保存</div>
+    <div class="nv-alert-desc">最后保存于 14:32，离开页面不会丢失内容。</div>
+  </div>
+</div>
+
+<!-- @demo 变体 | 默认 `soft` 柔和底色；`outline` 白底描边带左侧色条，适合卡片内；`solid` 实心，强调程度最高。 | block -->
+<div class="doc-stack">
+  <div class="nv-alert" data-variant="outline" data-color="info">
+    <div class="nv-alert-title">版本说明</div>
+    <div class="nv-alert-desc">v2.4 起默认开启 HTTP/3，旧版客户端会自动回退到 HTTP/2。</div>
+  </div>
+  <div class="nv-alert" data-variant="outline" data-color="warning">
+    <div class="nv-alert-desc">该项目仍在使用 Node 16，部分依赖将停止支持。</div>
+  </div>
+  <div class="nv-alert" data-variant="solid" data-color="primary">
+    <div class="nv-alert-title">专业版试用剩余 5 天</div>
+    <div class="nv-alert-desc">升级后可保留全部历史版本与团队协作功能。</div>
+  </div>
+  <div class="nv-alert" data-variant="solid" data-color="success">
+    <div class="nv-alert-desc">已成功导入 1,248 条联系人。</div>
+  </div>
+  <div class="nv-alert" data-variant="solid" data-color="warning">
+    <div class="nv-alert-desc">当前网络较慢，视频已切换为标清画质。</div>
+  </div>
+  <div class="nv-alert" data-variant="solid" data-color="danger">
+    <div class="nv-alert-desc">账号在异地登录，如非本人操作请立即修改密码。</div>
+  </div>
+</div>
+
+<!-- @demo 图标与简洁写法 | 只写一行描述即可；`data-icon="none"` 去掉图标，`data-icon="图标名"` 换成任意内置图标。 | block -->
+<div class="doc-stack">
+  <div class="nv-alert" data-color="info">
+    <div class="nv-alert-desc">你正在以只读模式查看此文档。</div>
+  </div>
+  <div class="nv-alert" data-color="primary" data-icon="sparkles">
+    <div class="nv-alert-desc">AI 摘要已生成，内容可能不准确，请结合原文核对。</div>
+  </div>
+  <div class="nv-alert" data-color="neutral" data-icon="lock">
+    <div class="nv-alert-desc">此频道仅管理员可发言。</div>
+  </div>
+  <div class="nv-alert" data-color="success" data-icon="none">
+    <div class="nv-alert-desc">无图标的紧凑提示，适合表格或卡片底部。</div>
+  </div>
+</div>
+
+<!-- @demo 操作按钮 | 在 `nv-alert-actions` 中放置按钮，引导用户处理问题。 | block -->
+<div class="doc-stack">
+  <div class="nv-alert" data-color="warning">
+    <div class="nv-alert-title">存储空间即将用尽</div>
+    <div class="nv-alert-desc">已使用 9.4 GB / 10 GB。空间用尽后将无法上传新文件，也无法接收共享。</div>
+    <div class="nv-alert-actions">
+      <button class="nv-btn" data-size="sm" data-color="warning">升级存储</button>
+      <button class="nv-btn" data-size="sm" data-variant="ghost">清理大文件</button>
+    </div>
+  </div>
+  <div class="nv-alert" data-variant="outline" data-color="primary" data-icon="mail">
+    <div class="nv-alert-title">请验证你的邮箱</div>
+    <div class="nv-alert-desc">我们已向 lin@nova.dev 发送验证邮件，验证后才能邀请团队成员。</div>
+    <div class="nv-alert-actions">
+      <button class="nv-btn" data-size="sm">重新发送</button>
+      <button class="nv-btn" data-size="sm" data-variant="outline">更换邮箱</button>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 可关闭 | `data-closable` 显示关闭按钮，关闭时淡出并收起高度；`nv:close` 可取消，结束后元素设为 `hidden` 并派发 `nv:closed`。 | block -->
+<div class="doc-stack" id="alert-closable">
+  <div class="nv-alert" data-color="info" data-closable>
+    <div class="nv-alert-title">欢迎使用 Nova 控制台</div>
+    <div class="nv-alert-desc">从左侧导航创建第一个项目，或导入已有的 Git 仓库。</div>
+  </div>
+  <div class="nv-alert" data-color="success" data-closable data-close-label="关闭成功提示">
+    <div class="nv-alert-desc">域名 nova.dev 的 SSL 证书已自动续期。</div>
+  </div>
+  <div class="nv-alert" data-color="danger" data-closable id="alert-confirm">
+    <div class="nv-alert-title">2 个服务健康检查失败</div>
+    <div class="nv-alert-desc">第一次点击关闭会被拦截并要求确认（在 <code>nv:close</code> 中调用 <code>preventDefault()</code>）。</div>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-size="sm" id="alert-reset"><i data-nv-icon="refresh"></i>全部重新显示</button>
+  </div>
+  <div class="doc-log" id="alert-log"></div>
+</div>
+<script>
+  {
+    const box = document.getElementById('alert-closable');
+    const log = document.getElementById('alert-log');
+    const guarded = document.getElementById('alert-confirm');
+    const guardedDesc = guarded.querySelector('.nv-alert-desc');
+    const guardedText = guardedDesc.innerHTML;
+    box.addEventListener('nv:close', (e) => {
+      if (e.target === guarded && !guarded.dataset.confirmed) {
+        e.preventDefault();
+        guarded.dataset.confirmed = '1';
+        guardedDesc.textContent = '服务仍未恢复，再次点击关闭按钮确认隐藏。';
+        log.textContent = 'nv:close → 已拦截，等待确认';
+        return;
+      }
+      log.textContent = `nv:close → ${e.target.querySelector('.nv-alert-title, .nv-alert-desc').textContent}`;
+    });
+    document.getElementById('alert-reset').addEventListener('click', () => {
+      delete guarded.dataset.confirmed;
+      guardedDesc.innerHTML = guardedText;
+      box.querySelectorAll('.nv-alert').forEach((el) => Nova.alert.show(el));
+      log.textContent = '';
+    });
+  }
+</script>
+
+<!-- @demo 顶部横幅 | `data-variant="banner"` 去掉圆角与左右边框，内容居中排成一行，放在页面或卡片最顶部。窄屏自动左对齐换行。 | full col plain -->
+<div class="nv-alert" data-variant="banner" data-color="primary" data-icon="sparkles" data-closable>
+  <span class="nv-alert-title">Nova 2.0 正式发布</span>
+  <span class="nv-alert-desc">全新的命令面板与主题编辑器。</span>
+  <a class="nv-alert-link" href="#">查看更新日志</a>
+</div>
+<div class="nv-alert" data-variant="banner" data-color="warning">
+  <span class="nv-alert-desc">系统将于今晚 23:00–23:30 进行维护，期间无法提交订单。</span>
+</div>
+<div class="nv-alert" data-variant="banner" data-color="neutral" data-icon="globe" data-closable data-close-label="不再提示">
+  <span class="nv-alert-desc">检测到你的浏览器语言为英文，是否切换到 English？</span>
+  <span class="nv-alert-actions"><button class="nv-btn" data-size="xs" data-color="neutral">切换</button></span>
+</div>
+
+<!-- @demo 表单错误汇总 | 真实场景：提交失败时在表单顶部列出所有问题。动态插入的提示会被自动增强；`danger`/`warning` 的 `role="alert"` 会被读屏软件立即播报。 | block -->
+<div class="doc-stack doc-mid" id="alert-form">
+  <div id="alert-form-slot"></div>
+  <div>
+    <label class="doc-label" for="alert-form-name">项目名称</label>
+    <input class="nv-control" id="alert-form-name" placeholder="例如 nova-web">
+  </div>
+  <div>
+    <label class="doc-label" for="alert-form-repo">Git 仓库地址</label>
+    <input class="nv-control" id="alert-form-repo" placeholder="https://github.com/…">
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" id="alert-form-submit">创建项目</button>
+  </div>
+</div>
+<script>
+  {
+    const slot = document.getElementById('alert-form-slot');
+    const name = document.getElementById('alert-form-name');
+    const repo = document.getElementById('alert-form-repo');
+    document.getElementById('alert-form-submit').addEventListener('click', () => {
+      const problems = [];
+      if (!name.value.trim()) problems.push('项目名称不能为空');
+      else if (!/^[a-z0-9-]+$/.test(name.value)) problems.push('项目名称只能包含小写字母、数字和短横线');
+      if (!/^https:\/\/\S+$/.test(repo.value)) problems.push('Git 仓库地址需以 https:// 开头');
+      name.setAttribute('aria-invalid', String(problems.some((p) => p.startsWith('项目'))));
+      repo.setAttribute('aria-invalid', String(problems.some((p) => p.startsWith('Git'))));
+      const ok = !problems.length;
+      const alert = Nova.h('div', { class: 'nv-alert', 'data-color': ok ? 'success' : 'danger', 'data-closable': '' },
+        Nova.h('div', { class: 'nv-alert-title', text: ok ? `项目 ${name.value} 创建成功` : `提交失败，请修正以下 ${problems.length} 个问题` }),
+        ok ? Nova.h('div', { class: 'nv-alert-desc', text: '正在拉取仓库并执行首次构建。' })
+           : Nova.h('div', { class: 'nv-alert-desc' }, Nova.h('ul', null, problems.map((p) => Nova.h('li', { text: p })))));
+      slot.replaceChildren(alert);
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `nv-alert` | 根元素 |
+| `nv-alert-title` | 标题（加粗、语义色） |
+| `nv-alert-desc` | 描述；内部可放链接、`ul` 列表、`code` |
+| `nv-alert-actions` | 操作区，放按钮 |
+| `nv-alert-link` | 横幅或描述中的强调链接 |
+| `nv-alert-icon` | 图标；手写此类名的元素会替代自动图标（纯 CSS 用法） |
+
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-color` | 语义颜色，同时决定默认图标与 role | `info` `primary` `success` `warning` `danger` `neutral` | `info` |
+| `data-variant` | 视觉变体 | `soft` `outline` `solid` `banner` | `soft` |
+| `data-icon` | `none` 关闭图标；填图标名替换默认图标 | `none` / 图标名 | 按颜色 |
+| `data-closable` | 显示关闭按钮 | 布尔 | — |
+| `data-close-label` | 关闭按钮的 `aria-label` | 字符串 | `关闭` |
+| `role` | 未写时自动补：`danger`/`warning` 为 `alert`（打断式播报），其它为 `status`（礼貌播报） | — | 自动 |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:close` | 点击关闭或调用 `close()` 时，动画开始前触发；`preventDefault()` 阻止关闭 | `{ reason }` |
+| `nv:closed` | 收起动画结束、元素已设为 `hidden` | — |
+| `nv:show` | 调用 `show()` 重新显示时 | — |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.alert.close(el)` | 关闭（同点击关闭按钮，会派发 `nv:close`），返回是否执行 |
+| `Nova.alert.show(el)` | 重新显示已关闭的提示，带展开动画 |
+| `Nova.get(el, 'alert')` | 实例：`close()` `show()` `destroy()` |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-alert-bg` | 背景 |
+| `--nv-alert-border` | 边框颜色 |
+| `--nv-alert-color` | 标题与图标颜色 |
+| `--nv-alert-radius` | 圆角，默认 `--nv-radius-lg` |
+| `--nv-alert-padding` | 内边距，默认 `12px 14px` |
+
+### 无障碍
+- 页面加载时就存在的提示不会被播报；需要播报的提示请动态插入（如表单提交后）。
+- 关闭后焦点移到文档顺序中的下一个可聚焦元素，不会丢失。
+- 减少动态（`prefers-reduced-motion`）时关闭与显示不做动画。
+-->

@@ -1,0 +1,33 @@
+/* Nova UI · Kbd 键盘按键
+ * <kbd class="nv-kbd">Ctrl</kbd> + <kbd class="nv-kbd">K</kbd>
+ * <span class="nv-kbd-group"><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">K</kbd></span>  紧凑组合
+ * <kbd class="nv-kbd" data-keys="mod+shift+p"></kbd>   需 kbd.js：按平台渲染（Mac 显示 ⌘ ⇧，其他显示 Ctrl Shift）
+ * data-size sm | md（默认）| lg      data-variant="ghost" 无边框（放在菜单、按钮里）
+ */
+.nv-kbd {
+  --_h: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-sizing: border-box;
+  height: var(--_h);
+  min-width: var(--_h);
+  padding: 0 6px;
+  border: 1px solid var(--nv-border-input);
+  border-bottom-width: 2px;
+  border-radius: calc(var(--nv-radius-sm) + 1px);
+  background: var(--nv-surface);
+  color: var(--nv-fg-2);
+  font: 500 var(--nv-text-xs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  vertical-align: middle;
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--nv-fg) 6%, transparent);
+}
+.nv-kbd > svg { width: 12px; height: 12px; }
+.nv-kbd[data-size="sm"] { --_h: 18px; padding: 0 4px; font-size: 11px; border-bottom-width: 1px; }
+.nv-kbd[data-size="lg"] { --_h: 28px; padding: 0 8px; font-size: var(--nv-text-sm); border-radius: var(--nv-radius-sm); }
+.nv-kbd[data-variant="ghost"] { border: 0; background: color-mix(in oklab, currentColor 8%, transparent); box-shadow: none; color: inherit; opacity: 0.75; }
+.nv-kbd-sep { margin: 0 3px; color: var(--nv-fg-3); font-size: var(--nv-text-xs); }
+.nv-kbd-group { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }

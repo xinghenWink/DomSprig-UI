@@ -1,0 +1,174 @@
+<!--
+@name popover
+@title Popover 弹出层
+@category overlay
+@order 30
+@deps button
+@desc 锚定在触发器旁的非模态浮层，可放表单、设置等任意可交互内容。点击或悬停触发，自动翻转与夹紧，可选箭头；打开后焦点进入面板，Esc / 点击外部关闭并还焦。
+-->
+
+<!-- @demo 基础用法 | 触发器写 `data-nv-popover="#面板id"`，面板是带 `hidden` 的 `.nv-popover`；面板内的 `[data-nv-popover-close]` 关闭并把焦点还给触发器。 -->
+<button class="nv-btn" data-variant="outline" data-nv-popover="#popover-basic"><i data-nv-icon="sparkles"></i>本周更新</button>
+<div class="nv-popover" id="popover-basic" hidden>
+  <h3 class="nv-popover-title">Nova UI 1.0 已发布</h3>
+  <p class="nv-popover-desc">新增 Command 命令面板、Drawer 抽屉与 6 套主色，所有浮层统一使用弹性动效。</p>
+  <div class="nv-popover-footer">
+    <button class="nv-btn" data-size="sm" data-variant="ghost" data-nv-popover-close>稍后再看</button>
+    <button class="nv-btn" data-size="sm" data-nv-popover-close>查看更新日志</button>
+  </div>
+</div>
+
+<!-- @demo 位置与箭头 | `data-placement` 取 `top|bottom|left|right`，可加 `-start|-end` 对齐；空间不足时自动翻转。`data-arrow` 显示指向触发器中心的箭头。 -->
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-top" data-placement="top" data-arrow>上方</button>
+  <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-bottom" data-placement="bottom" data-arrow>下方</button>
+  <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-left" data-placement="left" data-arrow>左侧</button>
+  <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-right" data-placement="right" data-arrow>右侧</button>
+  <button class="nv-btn" data-variant="outline" data-nv-popover="#popover-start" data-placement="bottom-start">底部左对齐</button>
+</div>
+<div class="nv-popover" id="popover-top" hidden><p class="nv-popover-desc">出现在上方，箭头朝下。</p></div>
+<div class="nv-popover" id="popover-bottom" hidden><p class="nv-popover-desc">出现在下方，箭头朝上。</p></div>
+<div class="nv-popover" id="popover-left" hidden><p class="nv-popover-desc">出现在左侧。</p></div>
+<div class="nv-popover" id="popover-right" hidden><p class="nv-popover-desc">出现在右侧。</p></div>
+<div class="nv-popover" id="popover-start" hidden><p class="nv-popover-desc">与触发器左边缘对齐，适合下拉式面板。</p></div>
+
+<!-- @demo 通知设置 | 真实场景：图标按钮打开设置面板，打开后焦点落在第一个开关上，Tab 在面板内循环，保存后关闭。 -->
+<button class="nv-btn" data-icon data-variant="outline" aria-label="通知设置" data-nv-popover="#popover-notify" data-placement="bottom-end"><i data-nv-icon="bell"></i></button>
+<div class="nv-popover" id="popover-notify" hidden>
+  <h3 class="nv-popover-title">通知设置</h3>
+  <p class="nv-popover-desc">选择你希望收到提醒的事件。</p>
+  <hr class="nv-panel-sep">
+  <label class="nv-item"><span class="nv-item-label">评论与回复</span><input type="checkbox" checked></label>
+  <label class="nv-item"><span class="nv-item-label">被提及（@我）</span><input type="checkbox" checked></label>
+  <label class="nv-item"><span class="nv-item-label">部署状态变化</span><input type="checkbox"></label>
+  <label class="nv-item"><span class="nv-item-label">每周用量报告</span><input type="checkbox"></label>
+  <div class="nv-popover-footer">
+    <button class="nv-btn" data-size="sm" data-variant="ghost" data-nv-popover-close>取消</button>
+    <button class="nv-btn" data-size="sm" id="popover-notify-save">保存</button>
+  </div>
+</div>
+<div class="doc-log" id="popover-notify-log"></div>
+<script>
+  {
+    const panel = document.getElementById('popover-notify');
+    document.getElementById('popover-notify-save').addEventListener('click', () => {
+      const count = panel.querySelectorAll('input:checked').length;
+      document.getElementById('popover-notify-log').textContent = `已保存：开启 ${count} 项通知`;
+      Nova.popover.close('[data-nv-popover="#popover-notify"]');
+    });
+  }
+</script>
+
+<!-- @demo 行内表单 | 在面板里直接编辑：回车保存，Esc 放弃并回到触发器。 -->
+<div class="doc-row">
+  <span id="popover-rename-label">设计系统 2026</span>
+  <button class="nv-btn" data-size="sm" data-variant="ghost" id="popover-rename-btn" data-nv-popover="#popover-rename" data-placement="bottom-start"><i data-nv-icon="pencil"></i>重命名</button>
+</div>
+<div class="nv-popover" id="popover-rename" hidden>
+  <form class="doc-stack" id="popover-rename-form">
+    <div>
+      <label class="doc-label" for="popover-rename-input">看板名称</label>
+      <input class="nv-control" id="popover-rename-input" value="设计系统 2026" required maxlength="30">
+    </div>
+    <div class="nv-popover-footer">
+      <button class="nv-btn" type="button" data-size="sm" data-variant="ghost" data-nv-popover-close>取消</button>
+      <button class="nv-btn" type="submit" data-size="sm">保存</button>
+    </div>
+  </form>
+</div>
+<script>
+  {
+    const input = document.getElementById('popover-rename-input');
+    document.getElementById('popover-rename-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('popover-rename-label').textContent = input.value.trim() || '未命名看板';
+      Nova.popover.close('#popover-rename-btn');
+    });
+  }
+</script>
+
+<!-- @demo 悬停卡片 | `data-trigger="hover"`：悬停 120ms 后打开，鼠标可以移入面板；离开 180ms 后关闭（`data-open-delay` / `data-close-delay` 可调）。触屏点击、键盘聚焦与回车同样可用。 -->
+<p>由 <a href="#/popover" class="nv-btn" data-variant="link" data-nv-popover="#popover-card" data-trigger="hover" data-placement="top" data-arrow>@nova-team</a> 维护，欢迎参与贡献。</p>
+<div class="nv-popover" id="popover-card" hidden>
+  <h3 class="nv-popover-title">Nova Team</h3>
+  <p class="nv-popover-desc">专注零依赖、源码分发的 Web 组件。负责 Nova UI、Nova Icons 与设计变量规范。</p>
+  <hr class="nv-panel-sep">
+  <div class="doc-row">
+    <span class="doc-hint">32 个仓库 · 1.2 万关注者</span>
+    <button class="nv-btn" data-size="xs" data-variant="soft" data-nv-popover-close><i data-nv-icon="plus"></i>关注</button>
+  </div>
+</div>
+
+<!-- @demo 命令式与事件 | `Nova.popover.open(trigger)` / `.close(trigger)`；在触发器上监听 `nv:open` / `nv:close`（`detail.reason` 说明关闭来源）。 -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" id="popover-api-trigger" data-nv-popover="#popover-api" data-placement="right" data-arrow>目标</button>
+    <button class="nv-btn" data-variant="soft" id="popover-api-open">Nova.popover.open()</button>
+  </div>
+  <div class="doc-log" id="popover-api-log">等待操作…</div>
+</div>
+<div class="nv-popover" id="popover-api" hidden>
+  <p class="nv-popover-desc">由脚本打开。按 Esc 或点外部关闭。</p>
+</div>
+<script>
+  {
+    const trigger = document.getElementById('popover-api-trigger');
+    const log = document.getElementById('popover-api-log');
+    document.getElementById('popover-api-open').addEventListener('click', () => Nova.popover.open(trigger));
+    trigger.addEventListener('nv:open', () => { log.textContent = 'nv:open'; });
+    trigger.addEventListener('nv:close', (e) => { log.textContent = `nv:close · reason = ${e.detail.reason}`; });
+  }
+</script>
+
+<!-- @api
+### 触发器属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-nv-popover` | 面板选择器 | `#id` | — |
+| `data-trigger` | 触发方式 | `click` `hover` | `click` |
+| `data-placement` | 位置，空间不足自动翻转 | `top` `bottom` `left` `right`，可加 `-start` `-end` | `bottom` |
+| `data-arrow` | 显示箭头 | 布尔 | — |
+| `data-offset` | 与触发器的距离（px） | 数字 | `8`（有箭头 `11`） |
+| `data-open-delay` / `data-close-delay` | hover 模式的打开 / 关闭延迟（ms） | 数字 | `120` / `180` |
+
+以上属性也可以写在面板上（触发器上的优先）。触发器自动获得 `aria-haspopup="dialog"`、`aria-expanded`、`aria-controls`；禁用（`disabled` / `aria-disabled="true"`）时不打开。
+
+### 面板
+| 类名 / 属性 | 说明 |
+|---|---|
+| `.nv-popover` | 面板，必须带 `hidden` 与 `id`；自动获得 `role="dialog"`，并用 `.nv-popover-title`（或触发器）作为可访问名称 |
+| `.nv-popover-title` / `.nv-popover-desc` | 标题 / 说明 |
+| `.nv-popover-footer` | 右对齐的操作区 |
+| `.nv-panel-sep` | 分隔线（贴满面板宽度） |
+| `label.nv-item` | 设置项行：标签 + 复选框 |
+| `[data-nv-popover-close]` | 点击关闭所在面板并还焦 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.popover.open(trigger)` | 打开（焦点进入面板）。`trigger` 为元素或选择器 |
+| `Nova.popover.close(trigger)` | 关闭并还焦给触发器 |
+| `Nova.popover.toggle(trigger)` / `.isOpen(trigger)` | 切换 / 是否打开 |
+| `Nova.popover.update(trigger)` | 内容尺寸变化后重新定位 |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:open` | 打开后在触发器上触发 | `{ panel }` |
+| `nv:close` | 关闭时在触发器上触发 | `{ panel, reason }`：`escape` `outside` `trigger` `close-button` `hover` `blur` `api` |
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Enter` / `空格` | 在触发器上切换面板；打开后焦点进入面板第一个可聚焦元素 |
+| `Tab` / `Shift + Tab` | 点击打开时在面板内循环 |
+| `Esc` | 关闭并把焦点还给触发器 |
+
+hover 模式下键盘聚焦触发器只显示面板、不抢焦点；按回车把焦点移入面板。
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-popover-width` | 固定面板宽度（默认随内容） |
+| `--nv-popover-max-width` | 最大宽度，默认 `360px` |
+-->

@@ -1,0 +1,161 @@
+/* Nova UI · Skeleton 骨架屏
+ * <span class="nv-skeleton"></span>                     一行文本占位
+ * <div class="nv-skeleton" data-lines="3"></div>        多行段落，末行变短（需 skeleton.js；纯 CSS 可手写 .nv-skeleton-line）
+ * data-shape    text（默认）| circle | rect | button | input
+ * data-size     sm | md | lg；circle 也可写数字（像素）
+ * data-width / data-height / data-ratio   尺寸（需 JS；纯 CSS 用 --nv-skeleton-w / --nv-skeleton-h / --nv-skeleton-ratio）
+ * data-animate  wave（默认）| pulse | none，可写在 .nv-skeleton-group 上统一设置
+ * 包裹模式：<span class="nv-skeleton">真实内容</span> —— 内容不可见、骨架贴合内容尺寸；加 data-loaded 后内容淡入
+ * .nv-skeleton-group  组合布局：data-direction="row"  data-gap="xs|sm|md|lg"  data-align="start"  data-card  data-divided
+ */
+.nv-skeleton {
+  --_bg: var(--nv-skeleton-bg, color-mix(in oklab, var(--nv-fg) 8%, transparent));
+  /* 高光：亮色下提亮，暗色下只微微泛白 */
+  --_shine: var(--nv-skeleton-shine, light-dark(color-mix(in oklab, white 72%, transparent), color-mix(in oklab, white 7%, transparent)));
+  --_dur: var(--nv-skeleton-duration, 1.6s);
+  --_h: 12px;
+  --_r: var(--nv-radius-sm);
+
+  display: block;
+  width: var(--nv-skeleton-w, 100%);
+  max-width: 100%;
+  height: var(--nv-skeleton-h, var(--_h));
+  border-radius: var(--nv-skeleton-radius, var(--_r));
+  user-select: none;
+  pointer-events: none;
+}
+
+/* —— 填充与动画（单个骨架 / 多行里的每一行） —— */
+.nv-skeleton:not([data-lines], [data-loaded]),
+.nv-skeleton-line {
+  background-color: var(--_bg);
+  background-image: linear-gradient(90deg, transparent 25%, var(--_shine) 50%, transparent 75%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: nv-shimmer var(--_dur) var(--nv-ease-in-out) infinite;
+}
+.nv-skeleton[data-animate="pulse"]:not([data-lines], [data-loaded]),
+:is(.nv-skeleton[data-lines], .nv-skeleton-group)[data-animate="pulse"] :is(.nv-skeleton:not([data-lines], [data-loaded]), .nv-skeleton-line) {
+  background-image: none;
+  animation: nv-skeleton-pulse var(--_dur) var(--nv-ease-in-out) infinite;
+}
+.nv-skeleton[data-animate="none"]:not([data-lines]),
+:is(.nv-skeleton[data-lines], .nv-skeleton-group)[data-animate="none"] :is(.nv-skeleton, .nv-skeleton-line) {
+  background-image: none;
+  animation: none;
+}
+@keyframes nv-skeleton-pulse { 50% { opacity: 0.45; } }
+
+/* —— 文本尺寸 —— */
+.nv-skeleton[data-size="sm"] { --_h: 10px; }
+.nv-skeleton[data-size="lg"] { --_h: 18px; }
+
+/* —— 多行段落 —— */
+.nv-skeleton[data-lines] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nv-skeleton-gap, 10px);
+  height: auto;
+}
+.nv-skeleton-line {
+  display: block;
+  flex: none;
+  width: 100%;
+  height: var(--nv-skeleton-h, var(--_h));
+  border-radius: var(--nv-skeleton-radius, var(--_r));
+}
+.nv-skeleton-line:last-child:not(:first-child) { width: var(--nv-skeleton-last, 60%); }
+
+/* —— 形状 —— */
+.nv-skeleton[data-shape="circle"] {
+  --_size: 40px;
+  flex: none;
+  width: var(--nv-skeleton-size, var(--_size));
+  height: var(--nv-skeleton-size, var(--_size));
+  border-radius: 50%;
+}
+.nv-skeleton[data-shape="circle"][data-size="sm"] { --_size: 32px; }
+.nv-skeleton[data-shape="circle"][data-size="lg"] { --_size: 56px; }
+
+.nv-skeleton[data-shape="rect"] {
+  --_r: var(--nv-radius-md);
+  height: var(--nv-skeleton-h, 120px);
+}
+.nv-skeleton[data-ratio] { height: auto; aspect-ratio: var(--nv-skeleton-ratio, 16 / 9); }
+
+.nv-skeleton:is([data-shape="button"], [data-shape="input"]) {
+  --_r: var(--nv-radius-md);
+  height: var(--nv-skeleton-h, var(--nv-h-md));
+}
+.nv-skeleton[data-shape="button"] { flex: none; width: var(--nv-skeleton-w, 88px); }
+.nv-skeleton:is([data-shape="button"], [data-shape="input"])[data-size="sm"] {
+  --_r: calc(var(--nv-radius-md) * 0.85);
+  height: var(--nv-skeleton-h, var(--nv-h-sm));
+}
+.nv-skeleton[data-shape="button"][data-size="sm"] { width: var(--nv-skeleton-w, 72px); }
+.nv-skeleton:is([data-shape="button"], [data-shape="input"])[data-size="lg"] {
+  --_r: var(--nv-radius-lg);
+  height: var(--nv-skeleton-h, var(--nv-h-lg));
+}
+.nv-skeleton[data-shape="button"][data-size="lg"] { width: var(--nv-skeleton-w, 112px); }
+
+/* —— 包裹模式：骨架贴合真实内容尺寸，内容在加载完成前不可见 —— */
+.nv-skeleton:not(:empty, [data-lines]) {
+  width: var(--nv-skeleton-w, fit-content);
+  height: auto;
+  color: transparent;
+  transition: color var(--nv-dur-3) var(--nv-ease-out), background-color var(--nv-dur-3) var(--nv-ease-out);
+}
+span.nv-skeleton:not(:empty, [data-lines]) { display: inline-block; vertical-align: bottom; }
+.nv-skeleton:not(:empty, [data-lines]) > * { visibility: hidden; }
+.nv-skeleton[data-loaded] {
+  background-color: transparent;
+  color: inherit;
+  user-select: auto;
+  pointer-events: auto;
+}
+.nv-skeleton[data-loaded] > * {
+  visibility: visible;
+  animation: nv-fade-in var(--nv-dur-3) var(--nv-ease-out);
+}
+
+/* ———————————————— 组合布局 .nv-skeleton-group ———————————————— */
+.nv-skeleton-group {
+  --_gap: var(--nv-skeleton-gap, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--_gap);
+  min-width: 0;
+}
+.nv-skeleton-group[data-gap="xs"] { --_gap: 4px; }
+.nv-skeleton-group[data-gap="sm"] { --_gap: 8px; }
+.nv-skeleton-group[data-gap="lg"] { --_gap: 18px; }
+.nv-skeleton-group[data-direction="row"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.nv-skeleton-group[data-direction="row"][data-align="start"] { align-items: flex-start; }
+.nv-skeleton-group[data-direction="row"] > .nv-skeleton-group { flex: 1 1 0; }
+.nv-skeleton-group[data-direction="row"] > .nv-skeleton:not([data-shape="circle"], [data-shape="button"]) { flex: 0 1 auto; }
+.nv-skeleton-group[data-direction="row"] > .nv-skeleton-group[data-card] { flex: 1 1 220px; }
+
+/* 卡片外框：加载中的卡片占位，或作为加载完成后的内容容器 */
+.nv-skeleton-group[data-card] {
+  padding: 16px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+}
+/* 分隔线：列表 / 表格行 */
+.nv-skeleton-group[data-divided] > * + * {
+  padding-top: var(--_gap);
+  border-top: 1px solid var(--nv-border);
+}
+.nv-skeleton-group[data-card][data-divided] { padding-block: 4px; }
+.nv-skeleton-group[data-card][data-divided] > * { padding-block: 12px; }
+.nv-skeleton-group[data-card][data-divided] { gap: 0; }
+
+/* display 规则会覆盖 hidden 属性，这里补回 */
+:is(.nv-skeleton, .nv-skeleton-group)[hidden] { display: none; }

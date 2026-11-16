@@ -1,0 +1,190 @@
+/* Nova UI · Spinner / Loader
+ * .nv-spinner（base.css）  经典旋转圈，尺寸跟随 font-size、颜色跟随 currentColor
+ * .nv-loader               更多加载动画：data-variant="dots|bars|ring|pulse"（默认 dots）
+ *   data-size sm | md | lg    data-color primary | neutral | success | warning | danger | info | current
+ *   结构：<span class="nv-loader" data-variant="dots" role="status" aria-label="加载中"></span>
+ *        dots 与 bars 需要子元素 <i></i>（dots 3 个、bars 4 个），loader 可用 spinner.js 自动补齐。
+ * .nv-loading-overlay      盖在 position:relative 的容器上：模糊背景 + 加载动画 + 文字
+ */
+
+/* —— 基础旋转圈的尺寸 / 颜色修饰（不改 base.css 的默认表现） —— */
+.nv-spinner[data-size="sm"] { font-size: 14px; }
+.nv-spinner[data-size="md"] { font-size: 20px; }
+.nv-spinner[data-size="lg"] { font-size: 32px; border-width: 3px; }
+.nv-spinner[data-color="primary"] { color: var(--nv-primary); }
+.nv-spinner[data-color="neutral"] { color: var(--nv-fg-3); }
+.nv-spinner[data-color="success"] { color: var(--nv-success); }
+.nv-spinner[data-color="warning"] { color: var(--nv-warning); }
+.nv-spinner[data-color="danger"] { color: var(--nv-danger); }
+.nv-spinner[data-color="info"] { color: var(--nv-info); }
+/* 轨道款：浅色整圈 + 主色弧线 */
+.nv-spinner[data-track] {
+  border-color: color-mix(in oklab, currentColor 18%, transparent);
+  border-top-color: currentColor;
+}
+
+/* ———————————————————— Loader ———————————————————— */
+.nv-loader {
+  --_c: var(--nv-primary);
+  --_s: 24px;
+  --_dur: var(--nv-loader-duration, 1s);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--nv-loader-size, var(--_s));
+  height: var(--nv-loader-size, var(--_s));
+  color: var(--nv-loader-color, var(--_c));
+  vertical-align: middle;
+}
+.nv-loader[data-size="sm"] { --_s: 16px; }
+.nv-loader[data-size="lg"] { --_s: 40px; }
+.nv-loader[data-color="neutral"] { --_c: var(--nv-fg-3); }
+.nv-loader[data-color="success"] { --_c: var(--nv-success); }
+.nv-loader[data-color="warning"] { --_c: var(--nv-warning); }
+.nv-loader[data-color="danger"] { --_c: var(--nv-danger); }
+.nv-loader[data-color="info"] { --_c: var(--nv-info); }
+.nv-loader[data-color="current"] { --_c: currentColor; }
+.nv-loader > i { display: block; flex: none; font-style: normal; }
+
+/* —— dots：三点依次跳动 —— */
+.nv-loader:is(:not([data-variant]), [data-variant="dots"]) { gap: calc(var(--nv-loader-size, var(--_s)) * 0.12); }
+.nv-loader:is(:not([data-variant]), [data-variant="dots"]) > i {
+  width: calc(var(--nv-loader-size, var(--_s)) * 0.22);
+  height: calc(var(--nv-loader-size, var(--_s)) * 0.22);
+  border-radius: 50%;
+  background: currentColor;
+  animation: nv-loader-dot var(--_dur) var(--nv-ease-in-out) infinite both;
+}
+.nv-loader > i:nth-child(2) { animation-delay: calc(var(--_dur) * 0.16); }
+.nv-loader > i:nth-child(3) { animation-delay: calc(var(--_dur) * 0.32); }
+.nv-loader > i:nth-child(4) { animation-delay: calc(var(--_dur) * 0.48); }
+@keyframes nv-loader-dot {
+  0%, 70%, 100% { transform: translateY(0) scale(0.75); opacity: 0.45; }
+  35% { transform: translateY(-40%) scale(1); opacity: 1; }
+}
+
+/* —— bars：音频条 —— */
+.nv-loader[data-variant="bars"] { gap: calc(var(--nv-loader-size, var(--_s)) * 0.1); }
+.nv-loader[data-variant="bars"] > i {
+  width: calc(var(--nv-loader-size, var(--_s)) * 0.14);
+  height: 100%;
+  border-radius: 99px;
+  background: currentColor;
+  transform-origin: center;
+  animation: nv-loader-bar var(--_dur) var(--nv-ease-in-out) infinite both;
+}
+.nv-loader[data-variant="bars"] > i:nth-child(1) { animation-delay: calc(var(--_dur) * -0.45); }
+.nv-loader[data-variant="bars"] > i:nth-child(2) { animation-delay: calc(var(--_dur) * -0.15); }
+.nv-loader[data-variant="bars"] > i:nth-child(3) { animation-delay: calc(var(--_dur) * -0.6); }
+.nv-loader[data-variant="bars"] > i:nth-child(4) { animation-delay: calc(var(--_dur) * -0.3); }
+@keyframes nv-loader-bar {
+  0%, 100% { transform: scaleY(0.32); opacity: 0.55; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* —— ring：渐变圆环（锥形渐变 + 遮罩挖空），带一个亮头 —— */
+.nv-loader[data-variant="ring"] {
+  --_t: max(2px, calc(var(--nv-loader-size, var(--_s)) * 0.11));
+  --_dur: var(--nv-loader-duration, 0.9s);
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 8%, color-mix(in oklab, currentColor 12%, transparent) 20%, currentColor 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_t)), #000 calc(100% - var(--_t) + 0.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--_t)), #000 calc(100% - var(--_t) + 0.5px));
+  animation: nv-spin var(--_dur) linear infinite;
+}
+.nv-loader[data-variant="ring"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--_t);
+  height: var(--_t);
+  margin-left: calc(var(--_t) / -2);
+  border-radius: 50%;
+  background: currentColor;
+}
+.nv-loader[data-variant="ring"][data-gradient] {
+  background: conic-gradient(from 0deg, transparent 0 8%, oklch(0.6 0.22 var(--nv-hue) / 0.2) 20%, oklch(0.6 0.22 var(--nv-hue)) 60%, oklch(0.66 0.2 calc(var(--nv-hue) + 60)) 100%);
+}
+.nv-loader[data-variant="ring"][data-gradient]::after { background: oklch(0.66 0.2 calc(var(--nv-hue) + 60)); }
+.nv-loader[data-variant="ring"] > i { display: none; }
+
+/* —— pulse：中心圆点 + 向外扩散的波纹 —— */
+.nv-loader[data-variant="pulse"] { --_dur: var(--nv-loader-duration, 1.6s); }
+.nv-loader[data-variant="pulse"]::before,
+.nv-loader[data-variant="pulse"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  animation: nv-loader-pulse var(--_dur) var(--nv-ease-out) infinite;
+}
+.nv-loader[data-variant="pulse"]::after { animation-delay: calc(var(--_dur) * -0.5); }
+.nv-loader[data-variant="pulse"] > i {
+  position: relative;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  background: currentColor;
+}
+.nv-loader[data-variant="pulse"] > i ~ i { display: none; }
+@keyframes nv-loader-pulse {
+  from { transform: scale(0.3); opacity: 0.55; }
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* 加载动画 + 文字的行内组合 */
+.nv-loader-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--nv-fg-2);
+  font: var(--nv-text-sm) / 1.4 var(--nv-font);
+}
+
+/* ———————————————————— 加载遮罩 ———————————————————— */
+.nv-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: inherit;
+  background: var(--nv-loading-overlay-bg, color-mix(in oklab, var(--nv-surface) 62%, transparent));
+  -webkit-backdrop-filter: blur(var(--nv-loading-overlay-blur, 3px)) saturate(1.2);
+  backdrop-filter: blur(var(--nv-loading-overlay-blur, 3px)) saturate(1.2);
+  color: var(--nv-fg-2);
+  font: 500 var(--nv-text-sm) / 1.4 var(--nv-font);
+  text-align: center;
+  animation: nv-fade-in var(--nv-dur-3) var(--nv-ease-out);
+}
+.nv-loading-overlay[hidden] { display: none; }
+.nv-loading-overlay[data-state="closed"] { animation: nv-fade-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+/* 全屏：盖住整个视口 */
+.nv-loading-overlay[data-fullscreen] { position: fixed; z-index: var(--nv-z-modal); border-radius: 0; }
+.nv-loading-overlay-text { max-width: 28em; color: var(--nv-fg); }
+.nv-loading-overlay-desc { margin-top: -6px; max-width: 32em; color: var(--nv-fg-3); font-size: var(--nv-text-xs); font-weight: 400; }
+/* 加遮罩的容器：防止内容在遮罩下被操作 */
+[aria-busy="true"] > :not(.nv-loading-overlay) { user-select: none; }
+
+/* —— 减少动态：保持缓慢的、不位移的提示，仍能看出“正在加载” —— */
+@media (prefers-reduced-motion: reduce) {
+  .nv-loader:is(:not([data-variant]), [data-variant="dots"], [data-variant="bars"]) > i {
+    animation: nv-loader-fade 1.6s ease-in-out infinite both !important;
+  }
+  .nv-loader > i:nth-child(2) { animation-delay: 0.3s !important; }
+  .nv-loader > i:nth-child(3) { animation-delay: 0.6s !important; }
+  .nv-loader > i:nth-child(4) { animation-delay: 0.9s !important; }
+  .nv-loader[data-variant="bars"] > i { transform: scaleY(0.7); }
+  .nv-loader[data-variant="ring"] { animation: nv-spin 2.4s linear infinite !important; }
+  .nv-loader[data-variant="pulse"]::before { animation: nv-loader-fade 1.8s ease-in-out infinite !important; transform: scale(0.8); }
+  .nv-loader[data-variant="pulse"]::after { animation: none !important; opacity: 0; }
+}
+@keyframes nv-loader-fade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }

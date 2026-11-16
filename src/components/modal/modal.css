@@ -1,0 +1,184 @@
+/* Nova UI · Modal 对话框
+ * <div class="nv-modal" id hidden aria-labelledby>      根节点 = 遮罩（打开时移到 body）
+ *   <div class="nv-modal-panel">                          面板
+ *     <div class="nv-modal-header">  .nv-modal-icon? .nv-modal-title .nv-modal-desc .nv-modal-close
+ *     <div class="nv-modal-body">    内容过长时内部滚动
+ *     <div class="nv-modal-footer">  操作按钮
+ * data-size       sm | md | lg | xl | full（默认 md）
+ * data-placement  center | top（默认 center）
+ * data-static     点击遮罩不关闭（面板轻微缩放反馈）
+ * 窄屏（< 640px）自动变为底部弹出（full 除外）。
+ */
+.nv-modal {
+  --_w: var(--nv-modal-width, 520px);
+  --_pad: 24px;
+  position: fixed;
+  inset: 0;
+  z-index: var(--nv-z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: var(--nv-overlay);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+.nv-modal[hidden] { display: none; }
+.nv-modal[data-placement="top"] { align-items: flex-start; padding-top: max(32px, 10vh); }
+.nv-modal[data-state="open"] { animation: nv-fade-in var(--nv-dur-3) var(--nv-ease-out); }
+.nv-modal[data-state="closed"] { animation: nv-fade-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+
+.nv-modal[data-size="sm"] { --_w: 400px; }
+.nv-modal[data-size="lg"] { --_w: 720px; }
+.nv-modal[data-size="xl"] { --_w: 960px; }
+.nv-modal[data-size="full"] { --_w: 100%; padding: 16px; }
+
+/* —— 面板 —— */
+.nv-modal-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--_w));
+  max-height: 100%;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-xl);
+  background: var(--nv-surface-raised);
+  box-shadow: var(--nv-shadow-xl);
+  outline: 0;
+  transition: transform var(--nv-dur-3) var(--nv-ease-out);
+}
+.nv-modal[data-size="full"] > .nv-modal-panel { height: 100%; }
+.nv-modal[data-state="open"] > .nv-modal-panel {
+  animation: nv-modal-in var(--nv-dur-4) var(--nv-ease-spring) backwards, nv-fade-in var(--nv-dur-2) var(--nv-ease-out) backwards;
+}
+.nv-modal[data-state="closed"] > .nv-modal-panel { animation: nv-modal-out var(--nv-dur-2) var(--nv-ease) forwards; }
+/* 静态遮罩被点击：轻微放大再回弹，提示「需要在对话框内操作」 */
+.nv-modal[data-state="open"] > .nv-modal-panel[data-bounce] { animation: nv-modal-bounce 340ms var(--nv-ease-out); }
+/* 嵌套：下层对话框后退一点，突出层次 */
+.nv-modal[data-behind] > .nv-modal-panel { transform: translateY(-8px) scale(0.96); }
+
+@keyframes nv-modal-in { from { transform: translateY(14px) scale(0.94); } }
+@keyframes nv-modal-out { to { opacity: 0; transform: translateY(6px) scale(0.97); } }
+@keyframes nv-modal-bounce { 40% { transform: scale(1.025); } }
+
+/* —— 头部 —— */
+.nv-modal-header {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 22px var(--_pad) 0;
+}
+.nv-modal-header:has(> .nv-modal-close) { padding-right: 60px; }
+.nv-modal-title {
+  margin: 0;
+  font-size: var(--nv-text-xl);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.nv-modal-desc {
+  margin: 0;
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-md);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+/* 带状态图标（确认框）：图标在左，标题与描述在右 */
+.nv-modal-header:has(> .nv-modal-icon) { grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; }
+.nv-modal-header:has(> .nv-modal-icon) > :not(.nv-modal-icon, .nv-modal-close) { grid-column: 2; }
+.nv-modal-header:has(> .nv-modal-icon) > .nv-modal-title { align-self: center; min-height: 40px; display: flex; align-items: center; }
+.nv-modal-header:has(> .nv-modal-icon):has(> .nv-modal-desc) > .nv-modal-title { min-height: 0; margin-top: 8px; }
+.nv-modal-icon {
+  --_c: var(--nv-primary-text);
+  --_bg: var(--nv-primary-soft);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--_bg);
+  color: var(--_c);
+}
+.nv-modal-icon > svg { width: 20px; height: 20px; }
+.nv-modal-icon[data-color="danger"] { --_c: var(--nv-danger-text); --_bg: var(--nv-danger-soft); }
+.nv-modal-icon[data-color="warning"] { --_c: var(--nv-warning-text); --_bg: var(--nv-warning-soft); }
+.nv-modal-icon[data-color="success"] { --_c: var(--nv-success-text); --_bg: var(--nv-success-soft); }
+.nv-modal-icon[data-color="info"] { --_c: var(--nv-info-text); --_bg: var(--nv-info-soft); }
+
+.nv-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-md);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-modal-close:hover { background: var(--nv-surface-2); color: var(--nv-fg); }
+.nv-modal-close:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-modal-close > svg { width: 18px; height: 18px; }
+
+/* —— 正文：内容过长时内部滚动，滚动时出现上下分隔线 —— */
+.nv-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 14px var(--_pad);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-block: 1px solid transparent;
+  color: var(--nv-fg-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+  transition: border-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-modal-body > :first-child { margin-top: 0; }
+.nv-modal-body > :last-child { margin-bottom: 0; }
+.nv-modal-body :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--nv-primary); }
+.nv-modal-panel[data-scroll-top] > .nv-modal-body { border-top-color: var(--nv-border); }
+.nv-modal-panel[data-scroll-bottom] > .nv-modal-body { border-bottom-color: var(--nv-border); }
+
+/* —— 底部 —— */
+.nv-modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px var(--_pad) 20px;
+}
+.nv-modal-header + .nv-modal-footer { padding-top: 24px; }
+/* 底部左侧的附加内容（如「不再提示」）：<span class="nv-modal-extra"> */
+.nv-modal-extra { margin-right: auto; color: var(--nv-fg-3); font-size: var(--nv-text-sm); }
+
+/* —— 窄屏：底部弹出 —— */
+@media (max-width: 639px) {
+  .nv-modal { --_pad: 20px; }
+  .nv-modal:not([data-size="full"]) { align-items: flex-end; padding: 48px 0 0; }
+  .nv-modal:not([data-size="full"]) > .nv-modal-panel {
+    width: 100%;
+    border-bottom: 0;
+    border-radius: var(--nv-radius-xl) var(--nv-radius-xl) 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nv-modal:not([data-size="full"])[data-state="open"] > .nv-modal-panel { animation: nv-modal-sheet-in var(--nv-dur-4) var(--nv-ease-out) backwards; }
+  .nv-modal:not([data-size="full"])[data-state="closed"] > .nv-modal-panel { animation: nv-modal-sheet-out var(--nv-dur-2) var(--nv-ease) forwards; }
+  .nv-modal[data-behind]:not([data-size="full"]) > .nv-modal-panel { transform: scale(0.95); transform-origin: top center; }
+  .nv-modal-footer > .nv-btn { flex: 1 1 0; }
+  .nv-modal-footer > .nv-modal-extra { flex-basis: 100%; }
+  .nv-modal-header:has(> .nv-modal-close) { padding-right: 56px; }
+}
+@keyframes nv-modal-sheet-in { from { transform: translateY(100%); } }
+@keyframes nv-modal-sheet-out { to { transform: translateY(100%); } }

@@ -1,0 +1,131 @@
+/* Nova UI · Accordion
+ * <div class="nv-accordion">
+ *   <details class="nv-accordion-item" open><summary>标题</summary><div class="nv-accordion-content">内容</div></details>
+ * </div>
+ * data-variant  默认（分隔线）| bordered | separated | ghost
+ * data-multiple 允许同时展开多项（默认只开一项）     data-size  sm | md | lg
+ * 项：data-disabled 禁用；summary 内可放图标、.nv-accordion-desc 副标题、.nv-accordion-extra 右侧附加信息
+ * 不加载 accordion.js 时仍是可用的原生 <details>（无高度动画、不限制单开）。
+ */
+.nv-accordion {
+  --_px: 4px;
+  --_py: 14px;
+  --_fs: var(--nv-text-md);
+  --_gap: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_gap);
+  min-width: 0;
+  color: var(--nv-fg);
+  font: var(--_fs) / var(--nv-leading) var(--nv-font);
+}
+.nv-accordion[data-size="sm"] { --_py: 10px; --_fs: var(--nv-text-sm); }
+.nv-accordion[data-size="lg"] { --_py: 18px; --_fs: var(--nv-text-lg); }
+
+.nv-accordion-item {
+  border-bottom: 1px solid var(--nv-border);
+  /* 高度动画期间由 JS 设 overflow:hidden；平时不裁切，内容里的焦点环才完整 */
+}
+
+/* —— 标题行 —— */
+.nv-accordion-item > summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--_py) var(--_px);
+  border-radius: var(--nv-radius-sm);
+  font-weight: 500;
+  line-height: 1.45;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0;
+  transition: color var(--nv-dur-1) var(--nv-ease), background-color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-accordion-item > summary::-webkit-details-marker { display: none; }
+.nv-accordion-item > summary::marker { content: ""; }
+.nv-accordion-item > summary:hover { color: var(--nv-fg); }
+.nv-accordion-item > summary:hover .nv-accordion-label { text-decoration: underline; text-decoration-color: var(--nv-border-strong); text-underline-offset: 4px; }
+.nv-accordion-item > summary:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: -2px; }
+.nv-accordion-item > summary > svg,
+.nv-accordion-item > summary > .nv-icon:not(.nv-accordion-chevron) { width: 18px; height: 18px; flex: none; color: var(--nv-fg-2); }
+
+/* 标题文字与副标题：JS 会把 summary 里的文字包进 .nv-accordion-label */
+.nv-accordion-label { flex: 1; min-width: 0; }
+.nv-accordion-desc { display: block; margin-top: 2px; font-size: var(--nv-text-sm); font-weight: 400; color: var(--nv-fg-2); }
+.nv-accordion-extra { flex: none; font-size: var(--nv-text-sm); font-weight: 400; color: var(--nv-fg-2); }
+
+/* 箭头：展开时旋转（data-state 由 JS 在动画开始时写入，收起时箭头与高度同步回转） */
+.nv-accordion-chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--nv-fg-3);
+  transition: transform var(--nv-dur-3) var(--nv-ease-out), color var(--nv-dur-1);
+}
+.nv-accordion-item > summary:hover .nv-accordion-chevron { color: var(--nv-fg-2); }
+.nv-accordion-item:is([data-state="open"], [open]:not([data-state])) .nv-accordion-chevron { transform: rotate(180deg); }
+
+/* —— 内容 —— */
+.nv-accordion-content {
+  padding: 0 var(--_px) calc(var(--_py) + 2px);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-md);
+}
+.nv-accordion[data-size="sm"] .nv-accordion-content { font-size: var(--nv-text-sm); }
+.nv-accordion-content > :first-child { margin-top: 0; }
+.nv-accordion-content > :last-child { margin-bottom: 0; }
+.nv-accordion-content a { color: var(--nv-primary-text); text-underline-offset: 3px; }
+
+/* —— 禁用 —— */
+.nv-accordion-item[data-disabled] > summary { opacity: 0.5; cursor: not-allowed; }
+.nv-accordion-item[data-disabled] > summary:hover .nv-accordion-label { text-decoration: none; }
+
+/* —— 变体：bordered（整体描边，项之间分隔线） —— */
+.nv-accordion[data-variant="bordered"] {
+  --_px: 16px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface);
+  overflow: hidden;
+}
+.nv-accordion[data-variant="bordered"] > .nv-accordion-item:last-child { border-bottom: 0; }
+.nv-accordion[data-variant="bordered"] > .nv-accordion-item > summary { border-radius: 0; }
+.nv-accordion[data-variant="bordered"] > .nv-accordion-item > summary:hover { background: var(--nv-surface-2); }
+.nv-accordion[data-variant="bordered"] .nv-accordion-label { text-decoration: none !important; }
+.nv-accordion[data-variant="bordered"] .nv-accordion-content { padding-top: 2px; }
+
+/* —— 变体：separated（每项一张卡片） —— */
+.nv-accordion[data-variant="separated"] { --_px: 16px; --_gap: 10px; }
+.nv-accordion[data-variant="separated"] > .nv-accordion-item {
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+  transition: box-shadow var(--nv-dur-2) var(--nv-ease), border-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-accordion[data-variant="separated"] > .nv-accordion-item:hover { border-color: var(--nv-border-strong); }
+.nv-accordion[data-variant="separated"] > .nv-accordion-item:is([data-state="open"], [open]:not([data-state])) { box-shadow: var(--nv-shadow-md); }
+.nv-accordion[data-variant="separated"] > .nv-accordion-item > summary { border-radius: calc(var(--nv-radius-lg) - 1px); }
+.nv-accordion[data-variant="separated"] .nv-accordion-label { text-decoration: none !important; }
+.nv-accordion[data-variant="separated"] .nv-accordion-content { padding-top: 2px; }
+
+/* —— 变体：ghost（无边框，悬停出底色） —— */
+.nv-accordion[data-variant="ghost"] { --_px: 12px; --_py: 11px; --_gap: 2px; }
+.nv-accordion[data-variant="ghost"] > .nv-accordion-item { border: 0; }
+.nv-accordion[data-variant="ghost"] > .nv-accordion-item > summary { border-radius: var(--nv-radius-md); }
+.nv-accordion[data-variant="ghost"] > .nv-accordion-item > summary:hover,
+.nv-accordion[data-variant="ghost"] > .nv-accordion-item:is([data-state="open"], [open]:not([data-state])) > summary { background: var(--nv-surface-2); }
+.nv-accordion[data-variant="ghost"] .nv-accordion-label { text-decoration: none !important; }
+.nv-accordion[data-variant="ghost"] .nv-accordion-content { padding-top: 10px; padding-bottom: 12px; }
+
+/* 箭头放在左侧：data-chevron="start" */
+.nv-accordion[data-chevron="start"] .nv-accordion-chevron { order: -1; margin-left: 0; transform: rotate(-90deg); }
+.nv-accordion[data-chevron="start"] .nv-accordion-item:is([data-state="open"], [open]:not([data-state])) .nv-accordion-chevron { transform: none; }
+.nv-accordion[data-chevron="start"] .nv-accordion-content { padding-left: calc(var(--_px) + 26px); }
+
+/* 标题带前置图标时，内容与标题文字对齐（图标 18 + 间距 10） */
+.nv-accordion-item:has(> summary > .nv-icon:first-child:not(.nv-accordion-chevron)) > .nv-accordion-content { padding-left: calc(var(--_px) + 28px); }

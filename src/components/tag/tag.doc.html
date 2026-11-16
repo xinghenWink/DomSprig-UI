@@ -1,0 +1,135 @@
+<!--
+@name tag
+@title Tag 标签
+@category data
+@order 50
+@deps avatar
+@desc 用于分类、筛选和关键词的内容标签。可以带图标、头像或状态点，可以关闭，也可以作为筛选项点击选中。只做状态标记时用 Badge。
+-->
+
+<!-- @demo 外观与颜色 | `data-variant` 取 soft（默认）、outline、solid；`data-color` 取 neutral、primary、success、warning、danger、info。 | col left -->
+<div class="doc-row" style="gap:8px">
+  <span class="nv-tag">默认</span>
+  <span class="nv-tag" data-color="primary">主色</span>
+  <span class="nv-tag" data-color="success">成功</span>
+  <span class="nv-tag" data-color="warning">警告</span>
+  <span class="nv-tag" data-color="danger">危险</span>
+  <span class="nv-tag" data-color="info">信息</span>
+</div>
+<div class="doc-row" style="gap:8px">
+  <span class="nv-tag" data-variant="outline">默认</span>
+  <span class="nv-tag" data-variant="outline" data-color="primary">主色</span>
+  <span class="nv-tag" data-variant="outline" data-color="success">成功</span>
+  <span class="nv-tag" data-variant="outline" data-color="warning">警告</span>
+  <span class="nv-tag" data-variant="outline" data-color="danger">危险</span>
+  <span class="nv-tag" data-variant="outline" data-color="info">信息</span>
+</div>
+<div class="doc-row" style="gap:8px">
+  <span class="nv-tag" data-variant="solid">默认</span>
+  <span class="nv-tag" data-variant="solid" data-color="primary">主色</span>
+  <span class="nv-tag" data-variant="solid" data-color="success">成功</span>
+  <span class="nv-tag" data-variant="solid" data-color="warning">警告</span>
+  <span class="nv-tag" data-variant="solid" data-color="danger">危险</span>
+  <span class="nv-tag" data-variant="solid" data-color="info">信息</span>
+</div>
+
+<!-- @demo 图标、头像与状态点 | 直接放图标或小号头像；`data-dot` 在文字前加状态点。`data-shape="pill"` 为胶囊形。`data-size` 取 sm / md / lg。 -->
+<span class="nv-tag"><i data-nv-icon="code"></i>前端</span>
+<span class="nv-tag" data-color="primary"><i data-nv-icon="sparkles"></i>AI</span>
+<span class="nv-tag" data-shape="pill"><span class="nv-avatar" data-name="林夏"></span>林夏</span>
+<span class="nv-tag" data-dot data-color="success">运行中</span>
+<span class="nv-tag" data-dot data-color="warning" data-shape="pill">排队中</span>
+<span class="nv-tag" data-size="sm">小号</span>
+<span class="nv-tag" data-size="lg">大号</span>
+
+<!-- @demo 可关闭 | `data-closable` 追加关闭按钮。关闭前派发可取消的 `nv:close`；下面最后一个标签取消了关闭。`data-closable="hide"` 只隐藏不移除。 | col left -->
+<div class="nv-tag-group" id="tag-close-demo">
+  <span class="nv-tag" data-closable>设计系统</span>
+  <span class="nv-tag" data-closable data-color="primary">组件库</span>
+  <span class="nv-tag" data-closable data-color="success"><i data-nv-icon="globe"></i>国际化</span>
+  <span class="nv-tag" data-closable data-shape="pill"><span class="nv-avatar" data-name="周屿"></span>周屿</span>
+  <span class="nv-tag" data-closable data-color="danger" data-locked>不可删除</span>
+</div>
+<div class="doc-log" id="tag-close-log">关闭标签试试</div>
+<script>
+  {
+    const box = document.getElementById('tag-close-demo');
+    const log = document.getElementById('tag-close-log');
+    box.addEventListener('nv:close', (e) => {
+      if (e.target.hasAttribute('data-locked')) {
+        e.preventDefault();
+        log.textContent = `已阻止关闭：${e.detail.value}`;
+        Nova.toast && Nova.toast('这个标签不能删除');
+        return;
+      }
+      log.textContent = `nv:close → ${e.detail.value}`;
+    });
+  }
+</script>
+
+<!-- @demo 筛选标签组 | `.nv-tag-group` 内的 `button.nv-tag[data-checkable]` 点击切换选中；组派发 `nv:change { value }`。`data-single` 单选，加 `data-required` 至少保留一个。 | col left -->
+<div class="doc-label">多选</div>
+<div class="nv-tag-group" id="tag-filter">
+  <button class="nv-tag" data-checkable data-shape="pill" aria-pressed="true" data-value="react">React</button>
+  <button class="nv-tag" data-checkable data-shape="pill" data-value="vue">Vue</button>
+  <button class="nv-tag" data-checkable data-shape="pill" data-value="svelte">Svelte</button>
+  <button class="nv-tag" data-checkable data-shape="pill" data-value="solid">Solid</button>
+  <button class="nv-tag" data-checkable data-shape="pill" data-value="angular" disabled>Angular</button>
+</div>
+<div class="doc-log" id="tag-filter-log">value: ["react"]</div>
+<div class="doc-label">单选（必选）</div>
+<div class="nv-tag-group" data-single data-required id="tag-single">
+  <button class="nv-tag" data-checkable aria-pressed="true" data-value="week">本周</button>
+  <button class="nv-tag" data-checkable data-value="month">本月</button>
+  <button class="nv-tag" data-checkable data-value="quarter">本季度</button>
+  <button class="nv-tag" data-checkable data-value="year">今年</button>
+</div>
+<div class="doc-log" id="tag-single-log">value: ["week"]</div>
+<script>
+  {
+    const bind = (id) => document.getElementById(id).addEventListener('nv:change', (e) => {
+      if (e.target.id !== id) return;
+      document.getElementById(`${id}-log`).textContent = `value: ${JSON.stringify(e.detail.value)}`;
+    });
+    bind('tag-filter');
+    bind('tag-single');
+  }
+</script>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-variant` | `soft` `outline` `solid` | `soft` |
+| `data-color` | `neutral` `primary` `success` `warning` `danger` `info` | `neutral` |
+| `data-size` | `sm` `md` `lg`（22 / 26 / 32px） | `md` |
+| `data-shape` | `pill` 胶囊形 | 圆角矩形 |
+| `data-dot` | 文字前加状态点 | — |
+| `data-closable` | 追加关闭按钮；值为 `hide` 时只隐藏 | — |
+| `data-checkable` | 可选标签，状态写在 `aria-pressed` | — |
+| `data-value` | 标签的值，没有时取文字 | — |
+
+### 标签组 `.nv-tag-group`
+| 属性 | 说明 |
+|---|---|
+| `data-single` | 单选 |
+| `data-required` | 单选时不能取消到一个都不选 |
+
+### 事件
+| 事件 | 目标 | detail | 说明 |
+|---|---|---|---|
+| `nv:close` | 标签 | `{ value }` | 点击关闭按钮时派发，`preventDefault()` 阻止关闭 |
+| `nv:change` | 可选标签 | `{ checked, value }` | 不在标签组里时派发 |
+| `nv:change` | 标签组 | `{ value: [] }` | 组内选中项变化 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.tag.close(el)` | 关闭标签（同样派发 `nv:close`） |
+| `Nova.tag.toggle(el, force?)` | 切换可选标签 |
+| `Nova.get(group, 'tag-group').value` | 读写组内选中的值，写入不派发事件 |
+
+### 无障碍
+- 关闭按钮有 `aria-label="移除 xxx"`；关闭后焦点移到相邻标签的关闭按钮。
+- 可选标签用 `<button aria-pressed>`，读屏会读出「已按下」。
+-->

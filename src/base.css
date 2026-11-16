@@ -1,0 +1,260 @@
+/*!
+ * Nova UI · Base
+ * 只作用于 nv- 组件，不重置宿主页面。包含：盒模型、焦点环、共享的「控件框」「浮层面板」「列表项」样式与动画。
+ */
+
+:where([class*="nv-"]),
+:where([class*="nv-"])::before,
+:where([class*="nv-"])::after,
+:where([class*="nv-"] *),
+:where([class*="nv-"] *)::before,
+:where([class*="nv-"] *)::after {
+  box-sizing: border-box;
+}
+
+/* 可选：给 <body class="nv-app"> 得到推荐的页面底色与字体 */
+.nv-app {
+  margin: 0;
+  background: var(--nv-bg);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ———————————————————— 工具类 ———————————————————— */
+.nv-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+.nv-icon { flex: none; display: inline-block; vertical-align: -0.125em; }
+.nv-muted { color: var(--nv-fg-2); }
+.nv-subtle { color: var(--nv-fg-3); }
+.nv-mono { font-family: var(--nv-font-mono); }
+
+/* 统一焦点环：键盘聚焦才显示 */
+.nv-focus-ring:focus-visible,
+:where(.nv-focusable):focus-visible {
+  outline: 2px solid var(--nv-primary);
+  outline-offset: 2px;
+}
+
+/* 细滚动条 */
+.nv-scroll {
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+}
+.nv-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.nv-scroll::-webkit-scrollbar-thumb {
+  background: var(--nv-border-strong);
+  border: 3px solid transparent;
+  border-radius: 99px;
+  background-clip: padding-box;
+}
+
+/* ———————————————————— 控件框 .nv-control ————————————————————
+ * Input / Select 触发器 / DatePicker / NumberInput / TagInput 共用，保证所有表单控件同高同质感。
+ * 尺寸：data-size="sm|md|lg"；状态：[aria-invalid=true] / .is-invalid、:disabled / .is-disabled、.is-focused / :focus-within
+ */
+.nv-control {
+  --_h: var(--nv-h-md);
+  --_px: 12px;
+  --_fs: var(--nv-text-md);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--_h);
+  padding: 0 var(--_px);
+  border: 1px solid var(--nv-border-input);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface);
+  color: var(--nv-fg);
+  font: var(--_fs) / 1.4 var(--nv-font);
+  box-shadow: var(--nv-shadow-xs);
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-control[data-size="sm"] { --_h: var(--nv-h-sm); --_px: 10px; --_fs: var(--nv-text-sm); border-radius: calc(var(--nv-radius-md) * 0.85); }
+.nv-control[data-size="lg"] { --_h: var(--nv-h-lg); --_px: 14px; --_fs: var(--nv-text-lg); border-radius: var(--nv-radius-lg); }
+.nv-control:hover { border-color: var(--nv-border-strong); }
+.nv-control:focus-within,
+.nv-control.is-focused,
+.nv-control:is(input, textarea, button):focus-visible {
+  outline: 0;
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+.nv-control:is([aria-invalid="true"], .is-invalid),
+.nv-control:has(> [aria-invalid="true"]) { border-color: var(--nv-danger); }
+.nv-control:is([aria-invalid="true"], .is-invalid):is(:focus-within, .is-focused),
+.nv-control:has(> [aria-invalid="true"]):focus-within { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-control:is(:disabled, .is-disabled),
+.nv-control:has(> :disabled) {
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-3);
+  box-shadow: none;
+  cursor: not-allowed;
+  border-color: var(--nv-border);
+}
+/* 控件框内的原生输入元素：去掉自身样式，撑满 */
+.nv-control > :is(input, textarea),
+.nv-control .nv-control-input {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--_h) - 2px);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+/* 焦点环由外框绘制；内部输入元素不再叠加 outline（防止被页面级 :focus-visible 样式覆盖） */
+.nv-control > :is(input, textarea):focus-visible,
+.nv-control .nv-control-input:focus-visible { outline: 0; }
+.nv-control > :is(input, textarea)::placeholder,
+.nv-control .nv-control-input::placeholder { color: var(--nv-fg-3); opacity: 1; }
+.nv-control > :disabled { cursor: not-allowed; }
+/* 前后缀图标/文字 */
+.nv-control-affix {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--nv-fg-3);
+  font-size: 0.95em;
+}
+.nv-control-affix > svg { width: 16px; height: 16px; }
+/* 控件内的小图标按钮（清除、密码可见、日历…） */
+.nv-control-btn {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  margin-right: -4px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-control-btn:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-control-btn:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-control-btn > svg { width: 16px; height: 16px; }
+
+/* ———————————————————— 浮层面板 .nv-panel ————————————————————
+ * Select 菜单 / DatePicker 面板 / Dropdown / Popover / Command 共用外观与进出场动画。
+ * Nova.position() 会写入 data-side 与 --nv-origin，动画据此从锚点方向弹出。
+ */
+.nv-panel {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: var(--nv-z-pop);
+  min-width: 8rem;
+  max-width: calc(100vw - 16px);
+  padding: 5px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface-raised);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  box-shadow: var(--nv-shadow-lg);
+  transform-origin: var(--nv-origin, top center);
+  outline: 0;
+}
+.nv-panel[data-state="open"] { animation: nv-pop-in var(--nv-dur-2) var(--nv-ease-out); }
+.nv-panel[data-state="closed"] { animation: nv-pop-out var(--nv-dur-1) var(--nv-ease) forwards; pointer-events: none; }
+
+/* 面板内分组标题 / 分隔线 / 空状态 */
+.nv-panel-label {
+  padding: 8px 8px 4px;
+  font-size: var(--nv-text-xs);
+  font-weight: 600;
+  color: var(--nv-fg-3);
+  letter-spacing: 0.02em;
+}
+.nv-panel-sep { height: 1px; margin: 5px -5px; background: var(--nv-border); border: 0; }
+.nv-panel-empty { padding: 20px 8px; text-align: center; color: var(--nv-fg-3); font-size: var(--nv-text-sm); }
+
+/* ———————————————————— 列表项 .nv-item ————————————————————
+ * 选项 / 菜单项 / 命令项共用。高亮：[data-active]；选中：[aria-selected=true] / [aria-checked=true]；禁用：[aria-disabled=true]
+ */
+.nv-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 6px 8px;
+  border-radius: calc(var(--nv-radius-lg) - 5px);
+  color: var(--nv-fg);
+  font-size: var(--nv-text-md);
+  line-height: 1.4;
+  cursor: pointer;
+  user-select: none;
+  outline: 0;
+  transition: background-color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-item[data-active] { background: var(--nv-surface-2); }
+.nv-item[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+.nv-item > svg, .nv-item-icon { width: 16px; height: 16px; flex: none; color: var(--nv-fg-2); }
+.nv-item-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nv-item-desc { flex: none; font-size: var(--nv-text-xs); color: var(--nv-fg-3); }
+.nv-item-check { width: 16px; height: 16px; flex: none; color: var(--nv-primary); visibility: hidden; }
+.nv-item:is([aria-selected="true"], [aria-checked="true"]) .nv-item-check { visibility: visible; }
+.nv-item:is([aria-selected="true"]) { font-weight: 500; }
+.nv-item[data-color="danger"] { color: var(--nv-danger-text); }
+.nv-item[data-color="danger"] > svg { color: currentColor; }
+.nv-item[data-color="danger"][data-active] { background: var(--nv-danger-soft); }
+
+/* ———————————————————— 共享动画 ———————————————————— */
+@keyframes nv-pop-in {
+  from { opacity: 0; transform: scale(0.96) translate(var(--nv-enter-x, 0), var(--nv-enter-y, -4px)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes nv-pop-out {
+  to { opacity: 0; transform: scale(0.97); }
+}
+@keyframes nv-fade-in { from { opacity: 0; } }
+@keyframes nv-fade-out { to { opacity: 0; } }
+@keyframes nv-spin { to { transform: rotate(360deg); } }
+@keyframes nv-shimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+.nv-panel[data-side="top"] { --nv-enter-y: 4px; }
+.nv-panel[data-side="left"] { --nv-enter-x: 4px; --nv-enter-y: 0; }
+.nv-panel[data-side="right"] { --nv-enter-x: -4px; --nv-enter-y: 0; }
+
+/* 加载圈：<span class="nv-spinner"></span>，尺寸跟随 font-size */
+.nv-spinner {
+  display: inline-block;
+  width: 1em; height: 1em;
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: nv-spin 0.7s linear infinite;
+  vertical-align: -0.125em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([class*="nv-"]),
+  :where([class*="nv-"])::before,
+  :where([class*="nv-"])::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+  .nv-spinner { animation: nv-spin 1.4s linear infinite !important; }
+}
+
+/* 主题切换的 View Transition（Nova.theme.toggle(event) 从点击处圆形展开） */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }

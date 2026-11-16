@@ -1,0 +1,132 @@
+/* Nova UI · Text FX 文字特效
+ * .nv-text-gradient                 流动渐变文字（--nv-text-gradient 自定义渐变，需首尾同色才能无缝）
+ * .nv-text-shine                    文字扫光（--nv-text-shine-base 底色 / --nv-text-shine-color 高光）
+ * [data-nv-text="blur-in"]          逐词（data-split="char" 逐字）模糊淡入，进入视口触发
+ * [data-nv-text="type"]             打字机：data-words="设计|开发|上线" 循环删除重打，带光标
+ * [data-nv-text="scramble"]         乱码解码出原文，悬停 / 聚焦可重播
+ * [data-nv-text="rotate"]           词语上下轮换：data-words="更快|更稳|更好看"
+ * 读屏：拆分出的动画片段一律 aria-hidden，原文放在 .nv-sr-only 中，读出来始终是完整原文。
+ * 只动画 transform / opacity 与 @property 注册的自定义属性（渐变位置、模糊半径）。
+ */
+@property --_tg-x { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+@property --_ts-x { syntax: '<percentage>'; inherits: true; initial-value: 100%; }
+@property --_blur { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+/* ———————————————— 渐变文字 / 扫光文字 ———————————————— */
+.nv-text-gradient {
+  --_c1: var(--nv-primary-text);
+  --_c2: color-mix(in oklab, var(--nv-primary-text) 55%, var(--nv-info-text));
+  --_c3: color-mix(in oklab, var(--nv-primary-text) 60%, var(--nv-danger-text));
+  --_tfx-img: var(--nv-text-gradient, linear-gradient(90deg, var(--_c1), var(--_c2), var(--_c3), var(--_c1), var(--_c2), var(--_c3), var(--_c1)));
+  --_tfx-size: 200% 100%;
+  --_tfx-pos: var(--_tg-x) 50%;
+  animation: nv-text-flow var(--nv-text-gradient-duration, 8s) linear infinite;
+}
+@supports (color: oklch(from red l c h)) {
+  .nv-text-gradient {
+    --_c2: oklch(from var(--nv-primary-text) l c calc(h + 60));
+    --_c3: oklch(from var(--nv-primary-text) l c calc(h - 45));
+  }
+}
+.nv-text-shine {
+  --_base: var(--nv-text-shine-base, var(--nv-fg-2));
+  --_hl: var(--nv-text-shine-color, color-mix(in oklab, var(--nv-primary-text) 55%, var(--nv-fg)));
+  --_tfx-img: linear-gradient(110deg, var(--_base) 0 38%, var(--_hl) 50%, var(--_base) 62% 100%);
+  --_tfx-size: 250% 100%;
+  --_tfx-pos: var(--_ts-x) 50%;
+  animation: nv-text-sweep var(--nv-text-shine-duration, 3.2s) var(--nv-ease-in-out) infinite;
+}
+.nv-text-gradient,
+.nv-text-shine,
+:is(.nv-text-gradient, .nv-text-shine) :is(.nv-text-unit, .nv-rotate-word) {
+  background-image: var(--_tfx-img);
+  background-size: var(--_tfx-size);
+  background-position: var(--_tfx-pos);
+  background-repeat: repeat-x;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@keyframes nv-text-flow { to { --_tg-x: 100%; } }
+@keyframes nv-text-sweep {
+  0% { --_ts-x: 100%; }
+  70%, 100% { --_ts-x: 0%; }
+}
+
+/* ———————————————— 逐词模糊淡入 ———————————————— */
+.nv-text-unit { display: inline-block; white-space: pre; }
+[data-nv-text="blur-in"] .nv-text-unit {
+  --_blur: var(--nv-text-blur, 10px);
+  opacity: 0;
+  filter: blur(var(--_blur));
+  transform: translateY(0.3em);
+  transition:
+    opacity var(--_d, 700ms) var(--nv-ease-out),
+    transform var(--_d, 700ms) var(--nv-ease-out),
+    --_blur var(--_d, 700ms) var(--nv-ease-out);
+  transition-delay: calc(var(--_i, 0) * var(--_stagger, 60ms));
+}
+[data-nv-text="blur-in"][data-state="reset"] .nv-text-unit { transition: none; }
+[data-nv-text="blur-in"][data-state="in"] .nv-text-unit { opacity: 1; --_blur: 0px; transform: none; }
+/* 动画结束后 JS 会把原文节点放回，拆分层随之移除 */
+
+/* ———————————————— 打字机 ———————————————— */
+.nv-type-line { white-space: pre-wrap; }
+.nv-type-caret {
+  display: inline-block;
+  width: max(2px, 0.07em);
+  height: 1em;
+  margin-left: 0.06em;
+  vertical-align: -0.12em;
+  border-radius: 1px;
+  background: var(--nv-type-caret, var(--nv-primary));
+  animation: nv-type-blink 1.05s steps(1) infinite;
+}
+[data-nv-text="type"][data-state="typing"] .nv-type-caret { animation: none; }
+[data-nv-text="type"][data-state="done"] .nv-type-caret { animation-iteration-count: 3; animation-fill-mode: forwards; }
+@keyframes nv-type-blink { 50% { opacity: 0; } }
+/* data-reserve：按最长的词预留宽度，切换时周围文字不跳动 */
+[data-nv-text="type"][data-reserve] { position: relative; display: inline-grid; justify-items: start; }
+[data-nv-text="type"][data-reserve] > :not(.nv-sr-only) { grid-area: 1 / 1; }
+.nv-type-ghost { visibility: hidden; white-space: pre; padding-right: 0.15em; }
+
+/* ———————————————— 乱码解码 ———————————————— */
+/* 每个字符格的宽度由隐藏的原字符撑开，乱码字形绝对定位居中，乱码再宽也不会挤动周围文字 */
+.nv-scramble-word { white-space: nowrap; }
+.nv-scramble-ch { position: relative; display: inline-block; }
+.nv-scramble-ghost { visibility: hidden; }
+.nv-scramble-glyph { position: absolute; left: 50%; top: 0; transform: translateX(-50%); }
+.nv-scramble-ch:not([data-busy]) .nv-scramble-ghost { visibility: visible; }
+.nv-scramble-ch:not([data-busy]) .nv-scramble-glyph { visibility: hidden; }
+.nv-scramble-ch[data-busy] .nv-scramble-glyph { color: var(--nv-scramble-color, var(--nv-primary-text)); -webkit-text-fill-color: currentColor; opacity: 0.85; }
+
+/* ———————————————— 词语轮换 ———————————————— */
+[data-nv-text="rotate"] { position: relative; display: inline-grid; justify-items: start; vertical-align: bottom; }
+[data-nv-text="rotate"][data-align="center"] { justify-items: center; }
+[data-nv-text="rotate"][data-align="end"] { justify-items: end; }
+.nv-rotate-word {
+  --_blur: 6px;
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  opacity: 0;
+  filter: blur(var(--_blur));
+  transform: translateY(0.7em);
+  transition:
+    transform 640ms var(--nv-ease-spring),
+    opacity var(--nv-dur-4) var(--nv-ease-out),
+    --_blur var(--nv-dur-4) var(--nv-ease-out);
+}
+.nv-rotate-word[data-state="active"] { --_blur: 0px; opacity: 1; transform: none; }
+.nv-rotate-word[data-state="out"] { opacity: 0; transform: translateY(-0.7em); transition-timing-function: var(--nv-ease-out); }
+
+/* ———————————————— 减少动态：静态最终状态 ———————————————— */
+@media (prefers-reduced-motion: reduce) {
+  .nv-text-gradient, .nv-text-shine,
+  :is(.nv-text-gradient, .nv-text-shine) :is(.nv-text-unit, .nv-rotate-word) { animation: none; }
+  .nv-type-caret { animation: none; }
+  [data-nv-text="blur-in"] .nv-text-unit { opacity: 1; filter: none; transform: none; transition: none; }
+  .nv-rotate-word { transition: none; filter: none; }
+}

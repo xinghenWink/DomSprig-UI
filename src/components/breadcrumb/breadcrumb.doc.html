@@ -1,0 +1,76 @@
+<!--
+@name breadcrumb
+@title Breadcrumb 面包屑
+@category navigation
+@order 5
+@deps dropdown
+@desc 显示当前页面在层级中的位置，并能快速回到上级。基于 `nav > ol` 语义结构，四种分隔符；层级过深时把中间项折叠进下拉菜单。
+-->
+
+<!-- @demo 基础 | 最后一项是当前页，写 `aria-current="page"`（不写时 JS 自动补上）。链接里可以放图标。 | col left -->
+<nav class="nv-breadcrumb">
+  <ol>
+    <li><a href="#/breadcrumb"><i data-nv-icon="home"></i>首页</a></li>
+    <li><a href="#/breadcrumb">组件</a></li>
+    <li><a href="#/breadcrumb">导航</a></li>
+    <li><span aria-current="page">Breadcrumb 面包屑</span></li>
+  </ol>
+</nav>
+<nav class="nv-breadcrumb" data-size="md">
+  <ol>
+    <li><a href="#/breadcrumb">控制台</a></li>
+    <li><a href="#/breadcrumb">项目</a></li>
+    <li>nova-ui</li>
+  </ol>
+</nav>
+
+<!-- @demo 分隔符 | `data-separator` 取 chevron（默认）、slash、dot、arrow。 | col left -->
+<nav class="nv-breadcrumb" data-separator="slash"><ol><li><a href="#/breadcrumb">acme</a></li><li><a href="#/breadcrumb">web</a></li><li><span aria-current="page">settings</span></li></ol></nav>
+<nav class="nv-breadcrumb" data-separator="dot"><ol><li><a href="#/breadcrumb">文档</a></li><li><a href="#/breadcrumb">指南</a></li><li><span aria-current="page">主题定制</span></li></ol></nav>
+<nav class="nv-breadcrumb" data-separator="arrow"><ol><li><a href="#/breadcrumb">选择套餐</a></li><li><a href="#/breadcrumb">填写信息</a></li><li><span aria-current="page">确认支付</span></li></ol></nav>
+
+<!-- @demo 折叠中间层级 | `data-max="4"` 时最多显示 4 项：保留第一项和最后两项，中间折叠成「…」，点开是下拉菜单。 | col left -->
+<nav class="nv-breadcrumb" data-max="4">
+  <ol>
+    <li><a href="#/breadcrumb"><i data-nv-icon="home"></i>首页</a></li>
+    <li><a href="#/breadcrumb">团队空间</a></li>
+    <li><a href="#/breadcrumb">设计组</a></li>
+    <li><a href="#/breadcrumb">2026 规划</a></li>
+    <li><a href="#/breadcrumb">组件库</a></li>
+    <li><a href="#/breadcrumb">评审记录</a></li>
+    <li><span aria-current="page">第 3 次评审</span></li>
+  </ol>
+</nav>
+
+<!-- @demo 胶囊样式 | `data-variant="pill"` 带边框和底色，适合放在页面头部或浮在图片上。长文字超出 `--nv-breadcrumb-item-max` 时省略。 | left -->
+<nav class="nv-breadcrumb" data-variant="pill" style="--nv-breadcrumb-item-max: 160px">
+  <ol>
+    <li><a href="#/breadcrumb"><i data-nv-icon="folder"></i>素材库</a></li>
+    <li><a href="#/breadcrumb">品牌视觉</a></li>
+    <li><span aria-current="page">2026 秋季发布会主视觉与延展物料终稿</span></li>
+  </ol>
+</nav>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-separator` | `chevron` `slash` `dot` `arrow` | `chevron` |
+| `data-max` | 最多显示几项（至少 3），超出时折叠中间项 | 不折叠 |
+| `data-size` | `md` 放大到正文字号 | 小号 |
+| `data-variant` | `pill` 胶囊背景 | — |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-breadcrumb-item-max` | 单项最大宽度，超出省略 | `220px` |
+
+### 实例
+`Nova.get(nav, 'breadcrumb').refresh()`：增删项目后重新计算折叠。
+
+### 无障碍
+- 结构为 `nav[aria-label] > ol > li`，没写 `aria-label` 时自动补「面包屑」。
+- 当前页用 `aria-current="page"`。
+- 分隔符是 CSS 画的，读屏不会念出。
+- 折叠按钮有 `aria-label`；没有加载 Dropdown 时，点击直接展开全部层级。
+-->

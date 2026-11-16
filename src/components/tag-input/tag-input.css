@@ -1,0 +1,57 @@
+/* Nova UI · Tag Input 标签输入
+ * <div class="nv-tag-input" data-name="tags" data-value="设计,前端" data-placeholder="输入后回车"></div>
+ * 需 tag-input.js 与 tag.css：增强成 .nv-control，回车 / 逗号把输入变成标签，退格删除最后一个。
+ * data-name         隐藏 input 的 name，随表单提交（多个同名 input）
+ * data-value        初始标签，按 data-separator 拆分
+ * data-separator    分隔符，默认逗号；" " 表示空格也算分隔符
+ * data-max          最多几个标签；data-max-length 单个标签最长几个字符
+ * data-duplicates   允许重复；data-case-sensitive 区分大小写地判重
+ * data-pattern      正则，不匹配的输入被拒绝（派发 nv:invalid）
+ * data-variant      标签样式 soft（默认）| outline | solid；data-color 标签颜色
+ * data-size         sm | md（默认）| lg，作用在外框
+ * 事件：nv:add { value, values }（可取消）、nv:remove { value, values }、nv:change { values }、nv:invalid { value, reason }
+ * 实例：Nova.get(el, 'tag-input') → { value, add(v), remove(v), clear(), focus(), destroy() }
+ */
+.nv-tag-input {
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 6px;
+  height: auto;
+  min-height: var(--_h);
+  padding-block: calc((var(--_h) - 26px) / 2);
+  cursor: text;
+}
+.nv-tag-input[data-size="sm"] { padding-block: calc((var(--_h) - 22px) / 2); }
+.nv-tag-input[data-size="lg"] { padding-block: calc((var(--_h) - 26px) / 2); }
+.nv-tag-input:has(> :disabled) { cursor: not-allowed; }
+
+/* 框里的标签比独立标签矮一号，避免撑高外框 */
+.nv-tag-input > .nv-tag { --_h: 22px; --_px: 7px; --_fs: var(--nv-text-xs); gap: 4px; }
+.nv-tag-input > .nv-tag .nv-tag-close > svg { width: 11px; height: 11px; }
+.nv-tag-input[data-size="sm"] > .nv-tag { --_h: 20px; --_px: 6px; }
+.nv-tag-input[data-size="lg"] > .nv-tag { --_h: 24px; --_px: 8px; --_fs: var(--nv-text-sm); }
+
+/* 内嵌输入框：宽度跟着内容走 */
+.nv-tag-input > input {
+  flex: 1 0 4ch;
+  width: auto;
+  min-width: 4ch;
+  height: 22px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.nv-tag-input > input:focus-visible { outline: 0; }
+.nv-tag-input > input::placeholder { color: var(--nv-fg-3); opacity: 1; }
+.nv-tag-input > input:disabled { cursor: not-allowed; }
+
+/* 达到上限时输入框收起，但保留在 DOM 里维持可访问性 */
+.nv-tag-input.is-full > input { width: 0; min-width: 0; flex-basis: 0; margin: 0; padding: 0; }
+.nv-tag-input.is-full > input::placeholder { color: transparent; }
+
+/* 拖拽文件或文字悬停时高亮 */
+.nv-tag-input.is-dragover { border-color: var(--nv-primary); box-shadow: 0 0 0 3px var(--nv-ring); }

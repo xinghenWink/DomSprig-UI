@@ -1,0 +1,113 @@
+/*!
+ * Nova UI · Design Tokens
+ * 所有组件只读这里的变量：改主题 = 改变量，不改组件源码。
+ *
+ * 明暗主题：<html data-theme="light|dark">；不设置时跟随系统。
+ *          任意容器加 data-theme="dark" 也能局部切换（依赖 CSS light-dark()）。
+ * 主色：  --nv-hue（OKLCH 色相 0–360），整套主色/柔和色/焦点环自动推导。
+ * 圆角：  --nv-radius（基准），sm/lg/xl 按比例缩放；设为 0 即全直角。
+ */
+:root {
+  color-scheme: light dark;
+
+  /* —— 可调基准 —— */
+  --nv-hue: 278;
+  --nv-radius: 10px;
+
+  /* —— 字体 —— */
+  --nv-font: "Inter", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --nv-font-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, "SF Mono", Consolas, monospace;
+  --nv-text-xs: 12px;
+  --nv-text-sm: 13px;
+  --nv-text-md: 14px;
+  --nv-text-lg: 16px;
+  --nv-text-xl: 18px;
+  --nv-text-2xl: 22px;
+  --nv-leading: 1.5;
+
+  /* —— 中性色（带一丝主色相，保持整体协调） —— */
+  --nv-bg: light-dark(oklch(0.985 0.002 var(--nv-hue)), oklch(0.145 0.005 var(--nv-hue)));
+  --nv-surface: light-dark(oklch(1 0 0), oklch(0.185 0.006 var(--nv-hue)));
+  --nv-surface-2: light-dark(oklch(0.967 0.003 var(--nv-hue)), oklch(0.228 0.007 var(--nv-hue)));
+  --nv-surface-3: light-dark(oklch(0.938 0.005 var(--nv-hue)), oklch(0.275 0.009 var(--nv-hue)));
+  /* 浮层（菜单/弹出面板/对话框）：暗色下比页面卡片更亮一级，形成层次 */
+  --nv-surface-raised: light-dark(oklch(1 0 0), oklch(0.215 0.008 var(--nv-hue)));
+  --nv-overlay: light-dark(oklch(0.2 0.02 var(--nv-hue) / 0.42), oklch(0 0 0 / 0.62));
+  --nv-border: light-dark(oklch(0.918 0.005 var(--nv-hue)), oklch(1 0 0 / 0.085));
+  --nv-border-input: light-dark(oklch(0.885 0.007 var(--nv-hue)), oklch(1 0 0 / 0.12));
+  --nv-border-strong: light-dark(oklch(0.8 0.01 var(--nv-hue)), oklch(1 0 0 / 0.2));
+  --nv-fg: light-dark(oklch(0.21 0.015 var(--nv-hue)), oklch(0.97 0.004 var(--nv-hue)));
+  --nv-fg-2: light-dark(oklch(0.45 0.015 var(--nv-hue)), oklch(0.76 0.01 var(--nv-hue)));
+  --nv-fg-3: light-dark(oklch(0.6 0.012 var(--nv-hue)), oklch(0.6 0.012 var(--nv-hue)));
+  --nv-fg-inverse: light-dark(oklch(0.99 0 0), oklch(0.17 0.01 var(--nv-hue)));
+
+  /* —— 主色 —— */
+  --nv-primary: light-dark(oklch(0.55 0.215 var(--nv-hue)), oklch(0.62 0.2 var(--nv-hue)));
+  --nv-primary-hover: light-dark(oklch(0.5 0.215 var(--nv-hue)), oklch(0.67 0.19 var(--nv-hue)));
+  --nv-primary-fg: oklch(0.99 0 0);
+  --nv-primary-text: light-dark(oklch(0.5 0.2 var(--nv-hue)), oklch(0.8 0.12 var(--nv-hue)));
+  --nv-primary-soft: color-mix(in oklab, var(--nv-primary) 11%, transparent);
+  --nv-primary-soft-hover: color-mix(in oklab, var(--nv-primary) 18%, transparent);
+  --nv-ring: color-mix(in oklab, var(--nv-primary) 30%, transparent);
+  /* 品牌渐变：主色相 → 偏移 60° */
+  --nv-gradient: linear-gradient(120deg, oklch(0.6 0.22 var(--nv-hue)), oklch(0.66 0.2 calc(var(--nv-hue) + 60)));
+
+  /* —— 语义色 —— */
+  --nv-success: light-dark(oklch(0.6 0.15 155), oklch(0.7 0.16 155));
+  --nv-success-text: light-dark(oklch(0.47 0.12 155), oklch(0.82 0.13 155));
+  --nv-warning: light-dark(oklch(0.76 0.16 70), oklch(0.8 0.15 75));
+  --nv-warning-text: light-dark(oklch(0.5 0.12 60), oklch(0.86 0.13 80));
+  --nv-danger: light-dark(oklch(0.58 0.215 25), oklch(0.65 0.2 22));
+  --nv-danger-text: light-dark(oklch(0.52 0.2 25), oklch(0.8 0.13 22));
+  --nv-info: light-dark(oklch(0.6 0.15 245), oklch(0.7 0.14 245));
+  --nv-info-text: light-dark(oklch(0.48 0.14 245), oklch(0.82 0.1 245));
+  --nv-success-soft: color-mix(in oklab, var(--nv-success) 13%, transparent);
+  --nv-warning-soft: color-mix(in oklab, var(--nv-warning) 16%, transparent);
+  --nv-danger-soft: color-mix(in oklab, var(--nv-danger) 12%, transparent);
+  --nv-info-soft: color-mix(in oklab, var(--nv-info) 13%, transparent);
+  --nv-danger-ring: color-mix(in oklab, var(--nv-danger) 28%, transparent);
+
+  /* —— 圆角（按 --nv-radius 等比） —— */
+  --nv-radius-sm: calc(var(--nv-radius) * 0.6);
+  --nv-radius-md: var(--nv-radius);
+  --nv-radius-lg: calc(var(--nv-radius) * 1.4);
+  --nv-radius-xl: calc(var(--nv-radius) * 1.8);
+  --nv-radius-full: 9999px;
+
+  /* —— 阴影（分层、低饱和，暗色下更深） —— */
+  --nv-shadow-c: light-dark(oklch(0.25 0.04 var(--nv-hue)), oklch(0 0 0));
+  --nv-shadow-xs: 0 1px 2px color-mix(in oklab, var(--nv-shadow-c) 6%, transparent);
+  --nv-shadow-sm: 0 1px 2px color-mix(in oklab, var(--nv-shadow-c) 6%, transparent),
+    0 1px 3px color-mix(in oklab, var(--nv-shadow-c) 8%, transparent);
+  --nv-shadow-md: 0 2px 4px -1px color-mix(in oklab, var(--nv-shadow-c) 6%, transparent),
+    0 6px 16px -4px color-mix(in oklab, var(--nv-shadow-c) 13%, transparent);
+  --nv-shadow-lg: 0 4px 8px -4px color-mix(in oklab, var(--nv-shadow-c) 9%, transparent),
+    0 16px 36px -8px color-mix(in oklab, var(--nv-shadow-c) 20%, transparent);
+  --nv-shadow-xl: 0 8px 16px -8px color-mix(in oklab, var(--nv-shadow-c) 12%, transparent),
+    0 28px 64px -12px color-mix(in oklab, var(--nv-shadow-c) 30%, transparent);
+
+  /* —— 尺寸 —— */
+  --nv-h-sm: 32px;
+  --nv-h-md: 38px;
+  --nv-h-lg: 44px;
+
+  /* —— 动效 —— */
+  --nv-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nv-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --nv-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --nv-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nv-dur-1: 120ms;
+  --nv-dur-2: 180ms;
+  --nv-dur-3: 260ms;
+  --nv-dur-4: 420ms;
+
+  /* —— 层级 —— */
+  --nv-z-sticky: 100;
+  --nv-z-modal: 1000;   /* Modal / Drawer */
+  --nv-z-pop: 1100;     /* 菜单/弹出面板：高于 Modal，弹窗内的下拉才能显示 */
+  --nv-z-toast: 1200;
+  --nv-z-tooltip: 1300;
+}
+
+:root[data-theme="light"], [data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"], [data-theme="dark"] { color-scheme: dark; }

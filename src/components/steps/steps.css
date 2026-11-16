@@ -1,0 +1,209 @@
+/* Nova UI · Steps
+ * <ol class="nv-steps" data-current="1" aria-label="下单流程">
+ *   <li class="nv-step"><span class="nv-step-title">标题</span><span class="nv-step-desc">说明</span></li>…
+ * </ol>
+ * 脚本把每步整理为：li.nv-step > .nv-step-main（div；可点击时为 button）> .nv-step-icon + .nv-step-body
+ * data-orientation  horizontal（默认）| vertical      data-label  right（默认）| bottom 标题在图标下方
+ * data-variant      dot 点状                           data-size   sm | md
+ * 每步 data-status  finish | process | wait | error（不写时由 data-current 推导）
+ * 连接线 li::after：横向标题在右时是弹性子项，其余情况绝对定位；已完成的步骤后面的线用主色填充（带填充动画）。
+ */
+.nv-steps {
+  --_icon: 32px;
+  --_icon-fs: var(--nv-text-md);
+  --_gap: 10px;
+  --_line: 2px;
+  --_line-gap: 10px;
+  --_done: var(--nv-primary);
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+}
+.nv-steps[data-size="sm"] { --_icon: 24px; --_icon-fs: var(--nv-text-xs); --_gap: 8px; --_line-gap: 8px; }
+
+/* —— 步骤 —— */
+.nv-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.nv-step:last-child { flex: none; }
+.nv-step-main {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_gap);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+
+/* —— 连接线（默认：横向，标题在右，线占满剩余空间） —— */
+.nv-step:not(:last-child)::after {
+  content: "";
+  flex: 1 1 24px;
+  min-width: 24px;
+  height: var(--_line);
+  margin: calc(var(--_icon) / 2 - var(--_line) / 2) var(--_line-gap) 0;
+  border-radius: var(--_line);
+  background: linear-gradient(var(--_done), var(--_done)) 0 0 / var(--_fill, 0%) 100% no-repeat, var(--nv-border-strong);
+  transition: background-size var(--nv-dur-4) var(--nv-ease-out);
+}
+.nv-step[data-status="finish"]:not(:last-child)::after { --_fill: 100%; }
+
+/* —— 图标 —— */
+.nv-step-icon {
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--_icon);
+  height: var(--_icon);
+  border: 1.5px solid var(--nv-border-input);
+  border-radius: 50%;
+  background: var(--nv-surface);
+  color: var(--nv-fg-2);
+  font: 600 var(--_icon-fs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--nv-dur-3) var(--nv-ease),
+    border-color var(--nv-dur-3) var(--nv-ease),
+    color var(--nv-dur-3) var(--nv-ease),
+    box-shadow var(--nv-dur-3) var(--nv-ease);
+}
+.nv-step-icon > * { grid-area: 1 / 1; }
+.nv-step-icon > svg { width: calc(var(--_icon) * 0.5); height: calc(var(--_icon) * 0.5); }
+/* 内置三种内容：序号 / 对勾 / 叉，按状态显示一个 */
+.nv-step-icon > :is(.nv-step-check, .nv-step-x) { display: none; }
+.nv-step[data-status="finish"] .nv-step-icon:not([data-custom]) > .nv-step-num,
+.nv-step[data-status="error"] .nv-step-icon:not([data-custom]) > .nv-step-num { display: none; }
+.nv-step[data-status="finish"] .nv-step-icon:not([data-custom]) > .nv-step-check,
+.nv-step[data-status="error"] .nv-step-icon:not([data-custom]) > .nv-step-x {
+  display: block;
+  animation: nv-step-pop var(--nv-dur-3) var(--nv-ease-spring);
+}
+@keyframes nv-step-pop { from { transform: scale(0.4); opacity: 0; } }
+
+.nv-step[data-status="process"] .nv-step-icon {
+  border-color: var(--_done);
+  background: var(--_done);
+  color: var(--nv-primary-fg);
+  box-shadow: 0 0 0 4px var(--nv-ring);
+}
+.nv-step[data-status="finish"] .nv-step-icon {
+  border-color: transparent;
+  background: var(--nv-primary-soft-hover);
+  color: var(--nv-primary-text);
+}
+.nv-step[data-status="error"] .nv-step-icon {
+  border-color: var(--nv-danger);
+  background: var(--nv-danger);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--nv-danger-ring);
+}
+
+/* —— 文字 —— */
+.nv-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  /* 标题与图标中线对齐 */
+  padding-top: calc((var(--_icon) - 1.5em) / 2);
+}
+.nv-step-title {
+  color: var(--nv-fg-2);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-step-desc {
+  max-width: var(--nv-steps-desc-width, 200px);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-sm);
+  line-height: 1.5;
+}
+.nv-step:is([data-status="finish"], [data-status="process"]) .nv-step-title { color: var(--nv-fg); }
+.nv-step[data-status="process"] .nv-step-title { font-weight: 600; }
+.nv-step[data-status="error"] .nv-step-title { color: var(--nv-danger-text); font-weight: 600; }
+.nv-step[data-status="error"] .nv-step-desc { color: var(--nv-danger-text); }
+.nv-steps[data-size="sm"] .nv-step-title { font-size: var(--nv-text-sm); }
+.nv-steps[data-size="sm"] .nv-step-desc { font-size: var(--nv-text-xs); }
+/* 竖排时步骤下方的自定义内容（表单、按钮…） */
+.nv-step-content { margin-top: 10px; color: var(--nv-fg-2); font-size: var(--nv-text-sm); }
+
+/* —— 可点击 —— */
+button.nv-step-main { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+button.nv-step-main:disabled { cursor: default; }
+button.nv-step-main:not(:disabled):hover .nv-step-title { color: var(--nv-primary-text); }
+button.nv-step-main:not(:disabled):hover .nv-step-icon { border-color: var(--_done); }
+.nv-step[data-status="wait"] button.nv-step-main:not(:disabled):hover .nv-step-icon { color: var(--nv-primary-text); }
+button.nv-step-main:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 4px; }
+
+/* —— 标题在图标下方（data-label="bottom"，点状默认如此） —— */
+.nv-steps:is([data-label="bottom"], [data-variant="dot"]):not([data-orientation="vertical"], [data-collapsed]) > .nv-step { flex: 1 1 0; justify-content: center; }
+.nv-steps:is([data-label="bottom"], [data-variant="dot"]):not([data-orientation="vertical"], [data-collapsed]) .nv-step-main {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+  text-align: center;
+}
+.nv-steps:is([data-label="bottom"], [data-variant="dot"]):not([data-orientation="vertical"], [data-collapsed]) .nv-step-body { align-items: center; padding-top: 0; }
+.nv-steps:is([data-label="bottom"], [data-variant="dot"]):not([data-orientation="vertical"], [data-collapsed]) > .nv-step:not(:last-child)::after {
+  position: absolute;
+  top: calc(var(--_icon) / 2 - var(--_line) / 2);
+  left: calc(50% + var(--_icon) / 2 + var(--_line-gap));
+  right: calc(-50% + var(--_icon) / 2 + var(--_line-gap));
+  min-width: 0;
+  margin: 0;
+}
+
+/* —— 纵向（以及窄屏自动转纵向 data-collapsed） —— */
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) { flex-direction: column; align-items: stretch; }
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) > .nv-step { flex: none; flex-direction: column; padding-bottom: 22px; }
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) > .nv-step:last-child { padding-bottom: 0; }
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) > .nv-step:not(:last-child)::after {
+  position: absolute;
+  left: calc(var(--_icon) / 2 - var(--_line) / 2);
+  top: calc(var(--_icon) + 6px);
+  bottom: 6px;
+  width: var(--_line);
+  height: auto;
+  min-width: 0;
+  margin: 0;
+  background-size: 100% var(--_fill, 0%);
+}
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) .nv-step-desc { max-width: none; }
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) .nv-step-title { white-space: normal; }
+.nv-steps:is([data-orientation="vertical"], [data-collapsed]) .nv-step-content { margin-left: calc(var(--_icon) + var(--_gap)); }
+
+/* —— 点状 —— */
+.nv-steps[data-variant="dot"] { --_icon: 10px; --_line-gap: 8px; }
+.nv-steps[data-variant="dot"] .nv-step-icon { border-width: 0; background: var(--nv-border-strong); }
+.nv-steps[data-variant="dot"] .nv-step-icon > * { display: none !important; }
+.nv-steps[data-variant="dot"] .nv-step[data-status="finish"] .nv-step-icon { background: var(--_done); }
+.nv-steps[data-variant="dot"] .nv-step[data-status="process"] .nv-step-icon { background: var(--_done); box-shadow: 0 0 0 4px var(--nv-ring); transform: scale(1.2); }
+.nv-steps[data-variant="dot"] .nv-step[data-status="error"] .nv-step-icon { background: var(--nv-danger); box-shadow: 0 0 0 4px var(--nv-danger-ring); }
+.nv-steps[data-variant="dot"]:not([data-orientation="vertical"], [data-collapsed]) .nv-step-main { gap: 12px; }
+/* 点状纵向：标题行与点对齐 */
+.nv-steps[data-variant="dot"]:is([data-orientation="vertical"], [data-collapsed]) .nv-step-icon { margin-top: calc(0.75em - 5px); }
+.nv-steps[data-variant="dot"]:is([data-orientation="vertical"], [data-collapsed]) .nv-step-body { padding-top: 0; }
+.nv-steps[data-variant="dot"]:is([data-orientation="vertical"], [data-collapsed]) > .nv-step:not(:last-child)::after { top: calc(0.75em + 12px); bottom: -2px; }
+.nv-steps[data-variant="dot"]:is([data-orientation="vertical"], [data-collapsed]) .nv-step-content { margin-left: calc(var(--_icon) + 12px); }
+.nv-steps[data-variant="dot"] .nv-step-icon { transition: background-color var(--nv-dur-3) var(--nv-ease), box-shadow var(--nv-dur-3) var(--nv-ease), transform var(--nv-dur-3) var(--nv-ease-spring); }

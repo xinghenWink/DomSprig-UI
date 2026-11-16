@@ -1,0 +1,91 @@
+/* Nova UI · Descriptions 描述列表（纯 CSS）
+ * <dl class="nv-desc" data-cols="3">
+ *   <div class="nv-desc-item"><dt>姓名</dt><dd>林夏</dd></div>
+ *   <div class="nv-desc-item" data-span="2"><dt>地址</dt><dd>…</dd></div>     data-span 2 | 3 | full
+ * </dl>
+ * data-cols      列数 1–4（默认 3）。描述列表本身是尺寸容器，变窄时自动减列：≤ 720px 最多 2 列，≤ 460px 单列
+ * data-layout    horizontal（默认，标签在左）| vertical（标签在上）
+ * data-variant   plain（默认）| bordered（表格样式）
+ * data-size      sm | md（默认）
+ * 可选标题栏：<div class="nv-desc-header"><h3 class="nv-desc-title">…</h3>操作</div> 放在 dl 前
+ * 实现：固定 12 栏网格，每项横跨 12 / 列数 栏；子项用容器查询改跨度，因此不需要包裹元素。
+ */
+.nv-desc {
+  --_w: 4;   /* 一项占几栏（12 栏中） */
+  --_w2: 8;  /* data-span="2" */
+  --_w3: 12; /* data-span="3" */
+  --_label: var(--nv-desc-label-width, 96px);
+  --_py: 8px;
+  --_px: 0px;
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 4px 24px;
+  margin: 0;
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  color: var(--nv-fg);
+}
+.nv-desc[data-cols="1"] { --_w: 12; --_w2: 12; --_w3: 12; }
+.nv-desc[data-cols="2"] { --_w: 6; --_w2: 12; --_w3: 12; }
+.nv-desc[data-cols="4"] { --_w: 3; --_w2: 6; --_w3: 9; }
+.nv-desc[data-size="sm"] { --_py: 5px; font-size: var(--nv-text-sm); }
+
+.nv-desc-item {
+  grid-column: span var(--_w);
+  display: flex;
+  gap: 12px;
+  min-width: 0;
+  padding: var(--_py) var(--_px);
+}
+.nv-desc-item[data-span="2"] { grid-column: span var(--_w2); }
+.nv-desc-item[data-span="3"] { grid-column: span var(--_w3); }
+.nv-desc-item[data-span="full"] { grid-column: 1 / -1; }
+
+.nv-desc dt { flex: none; width: var(--_label); color: var(--nv-fg-3); font-weight: 400; }
+.nv-desc dd { flex: 1; min-width: 0; margin: 0; color: var(--nv-fg); overflow-wrap: anywhere; }
+.nv-desc dd[data-mono] { font-family: var(--nv-font-mono); font-size: 0.92em; }
+
+/* 标签在上 */
+.nv-desc[data-layout="vertical"] .nv-desc-item { flex-direction: column; gap: 2px; }
+.nv-desc[data-layout="vertical"] dt { width: auto; font-size: var(--nv-text-sm); }
+
+/* 带边框：1px 间隙 + 每项向右、向下投 1px 阴影画出内线，外圈由容器边框绘制、溢出部分裁掉 */
+.nv-desc[data-variant="bordered"] {
+  --_py: 11px;
+  --_px: 14px;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface);
+}
+.nv-desc[data-variant="bordered"][data-size="sm"] { --_py: 7px; --_px: 10px; }
+.nv-desc[data-variant="bordered"] .nv-desc-item {
+  gap: 0;
+  padding: 0;
+  box-shadow: 1px 0 0 var(--nv-border), 0 1px 0 var(--nv-border), 1px 1px 0 var(--nv-border);
+}
+.nv-desc[data-variant="bordered"] dt {
+  display: flex;
+  align-items: center;
+  padding: var(--_py) var(--_px);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  border-right: 1px solid var(--nv-border);
+}
+.nv-desc[data-variant="bordered"] dd { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: var(--_py) var(--_px); }
+.nv-desc[data-variant="bordered"][data-layout="vertical"] dt { border-right: 0; border-bottom: 1px solid var(--nv-border); padding-block: calc(var(--_py) * 0.7); }
+
+/* 标题栏 */
+.nv-desc-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.nv-desc-title { margin: 0; font-size: var(--nv-text-lg); font-weight: 600; color: var(--nv-fg); }
+
+/* 自适应：子项查询所在的描述列表宽度 */
+@container (max-width: 720px) {
+  /* :where 不加优先级，下面 ≤460px 的规则才能按顺序覆盖它 */
+  .nv-desc:where(:not([data-cols]), [data-cols="3"], [data-cols="4"]) > .nv-desc-item { --_w: 6; --_w2: 12; --_w3: 12; }
+}
+@container (max-width: 460px) {
+  .nv-desc > .nv-desc-item { --_w: 12; --_w2: 12; --_w3: 12; }
+  .nv-desc:not([data-layout="vertical"]) dt { width: min(var(--_label), 38%); }
+}

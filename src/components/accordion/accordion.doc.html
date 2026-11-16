@@ -1,0 +1,243 @@
+<!--
+@name accordion
+@title Accordion 折叠面板
+@category data
+@order 30
+@deps button
+@desc 把长内容分组收起，按需展开。基于原生 `<details>`，无脚本也可用；脚本增加平滑高度动画、单开/多开、禁用项与方向键导航。
+-->
+
+<!-- @demo 基础用法 | 每项是一个 `<details class="nv-accordion-item">`；默认同一时间只展开一项，展开新项时自动收起旧项。 | block -->
+<div class="nv-accordion doc-mid">
+  <details class="nv-accordion-item" open>
+    <summary>Nova UI 需要构建工具吗？</summary>
+    <div class="nv-accordion-content">不需要。引入 CSS 与 JS 文件即可使用，组件以源码分发，可直接复制到项目里修改。</div>
+  </details>
+  <details class="nv-accordion-item">
+    <summary>支持哪些浏览器？</summary>
+    <div class="nv-accordion-content">Chrome / Edge 120+、Safari 17+、Firefox 120+。依赖 <code>light-dark()</code> 与 <code>color-mix()</code> 等现代 CSS。</div>
+  </details>
+  <details class="nv-accordion-item">
+    <summary>如何切换暗色主题？</summary>
+    <div class="nv-accordion-content">在 <code>&lt;html&gt;</code> 上设置 <code>data-theme="dark"</code>，或调用 <code>Nova.theme.toggle()</code>；不设置时跟随系统。</div>
+  </details>
+</div>
+
+<!-- @demo 变体 | `data-variant`：默认分隔线、`bordered` 整体描边、`separated` 每项一张卡片、`ghost` 无边框。 | block -->
+<div class="doc-stack">
+  <div class="nv-accordion" data-variant="bordered">
+    <details class="nv-accordion-item" open>
+      <summary>配送范围</summary>
+      <div class="nv-accordion-content">中国大陆全境包邮，港澳台及海外地区按重量计费。</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>发货时间</summary>
+      <div class="nv-accordion-content">工作日 16:00 前付款当天发货，其余次日发货。</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>退换货政策</summary>
+      <div class="nv-accordion-content">签收后 7 天内无理由退货，15 天内质量问题换货。</div>
+    </details>
+  </div>
+  <div class="nv-accordion" data-variant="separated">
+    <details class="nv-accordion-item">
+      <summary>基础版</summary>
+      <div class="nv-accordion-content">最多 3 名成员、5 GB 存储空间，适合个人项目。</div>
+    </details>
+    <details class="nv-accordion-item" open>
+      <summary>团队版</summary>
+      <div class="nv-accordion-content">不限成员、100 GB 存储空间、权限管理与审计日志。</div>
+    </details>
+  </div>
+  <div class="nv-accordion" data-variant="ghost">
+    <details class="nv-accordion-item">
+      <summary>最近打开</summary>
+      <div class="nv-accordion-content">季度复盘.pdf、设计规范 v3.fig、用户访谈纪要.docx</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>已收藏</summary>
+      <div class="nv-accordion-content">品牌素材库、周报模板</div>
+    </details>
+  </div>
+</div>
+
+<!-- @demo 多开、图标与副标题 | `data-multiple` 允许同时展开多项。标题内可放图标、`.nv-accordion-desc` 副标题与 `.nv-accordion-extra` 右侧信息；`data-chevron="start"` 把箭头放到左侧。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="nv-accordion" data-variant="bordered" data-multiple>
+    <details class="nv-accordion-item" open>
+      <summary><i data-nv-icon="user"></i>个人信息<span class="nv-accordion-desc">姓名、头像与联系方式</span><span class="nv-accordion-extra">已完善</span></summary>
+      <div class="nv-accordion-content">林小雨 · xiaoyu@example.com · 138 0000 0000</div>
+    </details>
+    <details class="nv-accordion-item" open>
+      <summary><i data-nv-icon="credit-card"></i>支付方式<span class="nv-accordion-desc">银行卡与第三方支付</span><span class="nv-accordion-extra">2 张卡</span></summary>
+      <div class="nv-accordion-content">招商银行储蓄卡（尾号 6688）为默认支付方式。</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary><i data-nv-icon="globe"></i>收货地址<span class="nv-accordion-desc">常用地址与发票抬头</span><span class="nv-accordion-extra">未设置</span></summary>
+      <div class="nv-accordion-content">还没有收货地址，下单时可以新建。</div>
+    </details>
+  </div>
+  <div class="nv-accordion" data-chevron="start" data-size="sm">
+    <details class="nv-accordion-item">
+      <summary>src</summary>
+      <div class="nv-accordion-content">components/ · core.js · tokens.css · base.css</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>scripts</summary>
+      <div class="nv-accordion-content">build.mjs · shot.mjs · test.mjs</div>
+    </details>
+  </div>
+</div>
+
+<!-- @demo 禁用项 | 在项上加 `data-disabled`：标题不可点击、不可聚焦，键盘导航跳过。 | block -->
+<div class="nv-accordion doc-mid" data-variant="separated">
+  <details class="nv-accordion-item">
+    <summary>第一章 · 快速开始</summary>
+    <div class="nv-accordion-content">安装、引入与第一个组件，约 5 分钟。</div>
+  </details>
+  <details class="nv-accordion-item">
+    <summary>第二章 · 主题定制</summary>
+    <div class="nv-accordion-content">修改 <code>--nv-hue</code> 与 <code>--nv-radius</code> 即可整体换肤。</div>
+  </details>
+  <details class="nv-accordion-item" data-disabled>
+    <summary><i data-nv-icon="lock"></i>第三章 · 高级用法（升级后解锁）</summary>
+    <div class="nv-accordion-content">自定义组件与运行时扩展。</div>
+  </details>
+</div>
+
+<!-- @demo 帮助中心 FAQ | 真实场景：搜索框过滤问题、展开后可放链接与按钮；`nv:toggle` 事件可用来做埋点。 | block -->
+<div class="doc-stack doc-mid">
+  <input class="nv-control" type="search" id="accordion-faq-search" placeholder="搜索问题，例如：发票" aria-label="搜索常见问题">
+  <div class="nv-accordion" id="accordion-faq" data-variant="separated">
+    <details class="nv-accordion-item" data-value="invoice">
+      <summary>如何开具发票？</summary>
+      <div class="nv-accordion-content">
+        <p>订单完成后，在「我的订单 → 订单详情」点击「申请发票」，电子发票会在 1 个工作日内发送到你的邮箱。</p>
+        <div class="doc-row"><button class="nv-btn" data-size="sm">去申请</button><button class="nv-btn" data-size="sm" data-variant="ghost">查看示例</button></div>
+      </div>
+    </details>
+    <details class="nv-accordion-item" data-value="refund">
+      <summary>退款多久到账？</summary>
+      <div class="nv-accordion-content">原路退回：微信、支付宝即时到账，银行卡 1–3 个工作日。</div>
+    </details>
+    <details class="nv-accordion-item" data-value="account">
+      <summary>可以修改绑定的手机号吗？</summary>
+      <div class="nv-accordion-content">可以。在「账号安全 → 手机号」中验证原手机号后更换；原号码停用时请 <a href="#">联系客服</a>。</div>
+    </details>
+    <details class="nv-accordion-item" data-value="team">
+      <summary>团队版可以随时降级吗？</summary>
+      <div class="nv-accordion-content">可以，降级在当前计费周期结束后生效，期间功能不受影响。</div>
+    </details>
+  </div>
+  <div class="doc-log" id="accordion-faq-log">展开任意问题查看事件</div>
+</div>
+<script>
+  {
+    const faq = document.getElementById('accordion-faq');
+    const log = document.getElementById('accordion-faq-log');
+    faq.addEventListener('nv:toggle', (e) => {
+      log.textContent = `nv:toggle → ${e.detail.value} ${e.detail.open ? '展开' : '收起'}`;
+    });
+    document.getElementById('accordion-faq-search').addEventListener('input', (e) => {
+      const q = e.target.value.trim();
+      for (const item of faq.querySelectorAll('.nv-accordion-item')) {
+        item.hidden = !!q && !item.textContent.includes(q);
+      }
+    });
+  }
+</script>
+
+<!-- @demo 脚本控制与键盘 | `Nova.accordion.open(el, 序号或值)`、`openAll` / `closeAll`。键盘：Tab 聚焦标题，Enter 或空格展开，↑ ↓ Home End 在标题间移动。 | block -->
+<div class="doc-stack doc-mid">
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-size="sm" id="accordion-api-open">全部展开</button>
+    <button class="nv-btn" data-variant="outline" data-size="sm" id="accordion-api-close">全部收起</button>
+    <button class="nv-btn" data-variant="ghost" data-size="sm" id="accordion-api-second">只看第 2 项</button>
+  </div>
+  <div class="nv-accordion" id="accordion-api" data-multiple data-variant="bordered">
+    <details class="nv-accordion-item">
+      <summary>周一 · 需求评审</summary>
+      <div class="nv-accordion-content">10:00 – 11:30，会议室 A，产品与设计全员参加。</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>周三 · 技术方案</summary>
+      <div class="nv-accordion-content">14:00 – 15:00，线上会议，需提前阅读设计文档。</div>
+    </details>
+    <details class="nv-accordion-item">
+      <summary>周五 · 迭代复盘</summary>
+      <div class="nv-accordion-content">16:00 – 17:00，回顾本周进度与风险。</div>
+    </details>
+  </div>
+</div>
+<script>
+  {
+    const acc = document.getElementById('accordion-api');
+    document.getElementById('accordion-api-open').addEventListener('click', () => Nova.accordion.openAll(acc));
+    document.getElementById('accordion-api-close').addEventListener('click', () => Nova.accordion.closeAll(acc));
+    document.getElementById('accordion-api-second').addEventListener('click', () => {
+      Nova.accordion.closeAll(acc);
+      Nova.accordion.open(acc, 1);
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 元素 | 说明 |
+|---|---|
+| `.nv-accordion` | 根元素 |
+| `details.nv-accordion-item` | 一项；原生 `open` 属性表示初始展开 |
+| `summary` | 标题；脚本会把文字包进 `.nv-accordion-label` 并追加箭头 |
+| `.nv-accordion-content` | 内容区（自动加 `role="region"` 与 `aria-labelledby`） |
+| `.nv-accordion-desc` | 标题下方的副标题 |
+| `.nv-accordion-extra` | 标题右侧的附加信息 |
+
+### 属性
+| 属性 | 位置 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `data-variant` | `.nv-accordion` | 视觉变体 | 不写（分隔线）`bordered` `separated` `ghost` | — |
+| `data-multiple` | `.nv-accordion` | 允许同时展开多项 | 布尔 | 单开 |
+| `data-size` | `.nv-accordion` | 尺寸 | `sm` `md` `lg` | `md` |
+| `data-chevron` | `.nv-accordion` | 箭头位置 | `end` `start` | `end` |
+| `open` | `.nv-accordion-item` | 初始展开（单开模式下只保留第一个） | 布尔 | — |
+| `data-disabled` | `.nv-accordion-item` | 禁用；不可展开收起、不可聚焦 | 布尔 | — |
+| `data-value` | `.nv-accordion-item` | 项的值，用于事件与方法 | 字符串 | 序号 |
+| `data-state` | `.nv-accordion-item` | 只读，`open` / `closed`；动画开始即切换，可用于自定义样式 | — | — |
+
+### 键盘
+| 按键 | 行为 |
+|---|---|
+| `Tab` | 在标题与展开内容中的可聚焦元素间移动 |
+| `Enter` / `空格` | 展开或收起聚焦的项 |
+| `↓` `↑` | 移到下一个/上一个标题（循环） |
+| `Home` / `End` | 移到第一个/最后一个标题 |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:toggle` | 展开或收起前在 `.nv-accordion` 上派发；调用 `preventDefault()` 可阻止这次操作 | `{ open, item, index, value }` |
+
+### 方法
+`target` 可以是序号、`data-value` 或项元素。
+| 方法 | 说明 |
+|---|---|
+| `Nova.accordion.open(el, target)` | 展开（单开模式会收起其它项），返回是否执行 |
+| `Nova.accordion.close(el, target)` | 收起 |
+| `Nova.accordion.toggle(el, target)` | 切换 |
+| `Nova.accordion.openAll(el)` | 全部展开（仅 `data-multiple`） |
+| `Nova.accordion.closeAll(el)` | 全部收起 |
+| `Nova.get(el, 'accordion').value` | 当前展开项的值数组 |
+
+方法默认带动画；传 `{ animate: false }` 立即切换。
+
+### 可定制变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-accordion-duration` | 高度动画时长（毫秒数字，如 `240`） | 按内容高度自动 160–420ms |
+| `--nv-radius` `--nv-border` | 卡片圆角与边框（来自 tokens） | — |
+
+### 说明
+- 没有加载脚本时仍是原生 `<details>`：可展开收起，但没有动画、不限制单开。
+- 浏览器页内查找（Ctrl F）命中收起的内容时会自动展开对应项，并同样派发 `nv:toggle`。
+- 系统开启“减少动态效果”时跳过高度动画。
+-->

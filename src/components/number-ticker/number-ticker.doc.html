@@ -1,0 +1,73 @@
+<!--
+@name number-ticker
+@title Number Ticker 数字滚动
+@category effects
+@order 5
+@deps button
+@desc 进入视口时数字从起始值滚动到目标值，支持千分位、小数、前后缀、紧凑记数与里程表样式；`Nova.ticker.set` 平滑过渡到新值，宽度不跳动。
+-->
+
+<!-- @demo 基础用法 | `data-nv-ticker` + `data-value`，进入视口时从 `data-from`（默认 0）滚动到目标值；`data-prefix` / `data-suffix` 加前后缀，`data-decimals` 保留小数。 -->
+<style>
+  .tk-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; width: 100%; }
+  .tk-row > div { padding: 16px 18px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-lg); background: var(--nv-surface); }
+  .tk-row b { display: block; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .tk-row span.tk-label { font-size: var(--nv-text-sm); color: var(--nv-fg-3); }
+</style>
+<div class="tk-row">
+  <div><b><span data-nv-ticker data-value="128930" data-prefix="¥">0</span></b><span class="tk-label">本月收入</span></div>
+  <div><b><span data-nv-ticker data-value="99.95" data-decimals="2" data-suffix="%">0</span></b><span class="tk-label">可用性</span></div>
+  <div><b><span data-nv-ticker data-value="12600000" data-notation="compact">0</span></b><span class="tk-label">累计调用</span></div>
+  <div><b><span data-nv-ticker data-value="2026" data-from="1990" data-grouping="false" data-duration="2400">1990</span></b><span class="tk-label">从 1990 到今天</span></div>
+</div>
+
+<!-- @demo 里程表 | `data-variant="odometer"` 每一位数字独立纵向滚动，只动画 transform。 -->
+<b style="font-size: 40px; font-weight: 700; letter-spacing: -0.02em"><span data-nv-ticker data-variant="odometer" data-value="8462" data-suffix=" 人在线">0</span></b>
+
+<!-- @demo 动态更新 | `Nova.ticker.set(el, value)` 从当前值平滑滚动到新值；结束时派发 `nv:done`。 -->
+<div class="doc-stack">
+  <b style="font-size: 34px; font-weight: 700"><span id="tk-live" data-nv-ticker data-value="3200" data-prefix="$" data-duration="900">3200</span></b>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="soft" id="tk-up"><i data-nv-icon="arrow-up"></i>随机增加</button>
+    <button class="nv-btn" data-variant="outline" id="tk-down"><i data-nv-icon="arrow-down"></i>随机减少</button>
+  </div>
+  <div class="doc-log" id="tk-log">nv:done →</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('tk-live');
+    const step = (sign) => Nova.ticker.set(el, Math.max(0, (Nova.ticker.get(el) || 0) + sign * Math.round(200 + Math.random() * 1800)));
+    document.getElementById('tk-up').addEventListener('click', () => step(1));
+    document.getElementById('tk-down').addEventListener('click', () => step(-1));
+    el.addEventListener('nv:done', (e) => { document.getElementById('tk-log').textContent = `nv:done → ${e.detail.value}`; });
+  }
+</script>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-nv-ticker` | 启用数字滚动 | — |
+| `data-value` | 目标值；不写时取元素文字 | — |
+| `data-from` | 起始值 | `0` |
+| `data-duration` | 时长（ms） | `1600` |
+| `data-delay` | 延迟（ms） | `0` |
+| `data-decimals` | 小数位数 | `0` |
+| `data-prefix` / `data-suffix` | 前缀 / 后缀 | — |
+| `data-locale` | `Intl.NumberFormat` 的语言 | `zh-CN` |
+| `data-grouping` | 千分位 | `true` |
+| `data-notation` | `standard` / `compact`（「1260万」） | `standard` |
+| `data-variant` | `odometer` 里程表 | — |
+
+### 方法与事件
+| 名称 | 说明 |
+|---|---|
+| `Nova.ticker.set(el, value, { duration })` | 从当前显示值滚动到新值 |
+| `Nova.ticker.play(el)` | 从 `data-from` 重新播放 |
+| `Nova.ticker.get(el)` | 当前目标值 |
+| `nv:done` | 动画结束，`detail: { value }` |
+
+### 无障碍与降级
+- 读屏只读 `.nv-sr-only` 中的终值，动画层 `aria-hidden`；用不可见的终值占位，滚动过程中宽度不变。
+- 减少动态：直接显示终值。
+-->

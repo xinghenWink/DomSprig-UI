@@ -1,0 +1,90 @@
+<!--
+@name descriptions
+@title Descriptions 描述列表
+@category data
+@order 30
+@deps button badge
+@desc 成组展示只读的字段与值，常用于详情页、订单信息、个人资料。基于原生 `<dl>`，支持 1–4 列、跨列、标签在上或在左、表格边框样式，并随容器宽度自动减少列数。纯 CSS。
+-->
+
+<!-- @demo 基础 | 每个字段是一个 `.nv-desc-item`，里面放 `dt` 和 `dd`。`data-cols` 设列数，`data-span` 跨列（2 / 3 / full）。 | block -->
+<div style="width: 100%">
+  <div class="nv-desc-header">
+    <h3 class="nv-desc-title">用户信息</h3>
+    <button class="nv-btn" data-variant="outline" data-size="sm"><i data-nv-icon="pencil"></i>编辑</button>
+  </div>
+  <dl class="nv-desc">
+    <div class="nv-desc-item"><dt>姓名</dt><dd>林夏</dd></div>
+    <div class="nv-desc-item"><dt>手机号</dt><dd>138 0000 1234</dd></div>
+    <div class="nv-desc-item"><dt>所在城市</dt><dd>上海</dd></div>
+    <div class="nv-desc-item"><dt>账号状态</dt><dd><span class="nv-badge" data-color="success" data-dot>正常</span></dd></div>
+    <div class="nv-desc-item" data-span="2"><dt>邮箱</dt><dd>linxia@nova.dev</dd></div>
+    <div class="nv-desc-item" data-span="full"><dt>地址</dt><dd>上海市徐汇区漕溪北路 88 号 圣爱大厦 12 楼</dd></div>
+  </dl>
+</div>
+
+<!-- @demo 带边框 | `data-variant="bordered"` 表格样式，标签带浅色底。适合字段多、需要对齐比较的场景。 | block -->
+<dl class="nv-desc" data-variant="bordered" data-cols="2" style="width: 100%">
+  <div class="nv-desc-item"><dt>订单号</dt><dd data-mono>NV20261114-0832</dd></div>
+  <div class="nv-desc-item"><dt>下单时间</dt><dd>2026-11-14 09:12</dd></div>
+  <div class="nv-desc-item"><dt>支付方式</dt><dd>微信支付</dd></div>
+  <div class="nv-desc-item"><dt>订单状态</dt><dd><span class="nv-badge" data-color="primary">运输中</span></dd></div>
+  <div class="nv-desc-item"><dt>商品金额</dt><dd>¥ 1,280.00</dd></div>
+  <div class="nv-desc-item"><dt>优惠</dt><dd style="color: var(--nv-danger-text)">− ¥ 80.00</dd></div>
+  <div class="nv-desc-item" data-span="full"><dt>备注</dt><dd>工作日送货，到了请先电话联系。</dd></div>
+</dl>
+
+<!-- @demo 标签在上 | `data-layout="vertical"`，标签和值上下排列，适合值较长或列数较多的场景。可与 bordered 组合。 | block -->
+<div class="doc-stack" style="width: 100%; gap: 24px">
+  <dl class="nv-desc" data-layout="vertical" data-cols="4">
+    <div class="nv-desc-item"><dt>项目</dt><dd>Nova UI</dd></div>
+    <div class="nv-desc-item"><dt>负责人</dt><dd>林夏</dd></div>
+    <div class="nv-desc-item"><dt>版本</dt><dd data-mono>1.0.0</dd></div>
+    <div class="nv-desc-item"><dt>许可证</dt><dd>MIT</dd></div>
+  </dl>
+  <dl class="nv-desc" data-layout="vertical" data-variant="bordered" data-cols="3" data-size="sm">
+    <div class="nv-desc-item"><dt>CPU</dt><dd>4 核</dd></div>
+    <div class="nv-desc-item"><dt>内存</dt><dd>16 GB</dd></div>
+    <div class="nv-desc-item"><dt>磁盘</dt><dd>200 GB SSD</dd></div>
+  </dl>
+</div>
+
+<!-- @demo 自适应列数 | 描述列表按自身宽度减列：≤ 720px 最多 2 列，≤ 460px 单列。拖动右下角改变宽度试试。 | block -->
+<div style="width: 100%; max-width: 100%; resize: horizontal; overflow: auto; padding: 12px; border: 1px dashed var(--nv-border-strong); border-radius: var(--nv-radius-lg)">
+  <dl class="nv-desc" data-variant="bordered" data-cols="3">
+    <div class="nv-desc-item"><dt>名称</dt><dd>web-prod-01</dd></div>
+    <div class="nv-desc-item"><dt>地域</dt><dd>华东 2（上海）</dd></div>
+    <div class="nv-desc-item"><dt>规格</dt><dd>4 核 16 GB</dd></div>
+    <div class="nv-desc-item"><dt>公网 IP</dt><dd data-mono>47.100.12.8</dd></div>
+    <div class="nv-desc-item"><dt>状态</dt><dd><span class="nv-badge" data-color="success" data-dot>运行中</span></dd></div>
+    <div class="nv-desc-item"><dt>到期</dt><dd>2027-11-14</dd></div>
+  </dl>
+</div>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-desc` | 描述列表，建议用 `<dl>` |
+| `.nv-desc-item` | 一个字段，内含 `dt` 与 `dd` |
+| `.nv-desc-header` / `.nv-desc-title` | 可选的标题栏 |
+
+### 属性
+| 位置 | 属性 | 说明 | 默认 |
+|---|---|---|---|
+| 列表 | `data-cols` | `1` `2` `3` `4` | `3` |
+| 列表 | `data-layout` | `horizontal` `vertical` | `horizontal` |
+| 列表 | `data-variant` | `plain` `bordered` | `plain` |
+| 列表 | `data-size` | `sm` 紧凑 | — |
+| 字段 | `data-span` | `2` `3` `full` 跨列 | — |
+| `dd` | `data-mono` | 等宽字体（编号、IP、哈希） | — |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-desc-label-width` | 横向布局时标签宽度 | `96px` |
+
+### 说明
+- 自适应基于容器查询，按描述列表自身的宽度判断，放在侧栏、弹窗里同样生效。
+- 带边框样式下，一行没有排满时最后一格右侧留白，可给最后一项写 `data-span` 补齐。
+-->

@@ -1,0 +1,136 @@
+<!--
+@name card
+@title Card 卡片
+@category data
+@order 20
+@deps button avatar badge
+@desc 承载一组相关内容的容器：标题、说明、右上角操作、封面、正文和底部操作区。支持四种外观、横向布局、整卡可点击，以及用 radio / checkbox 做选择卡片。纯 CSS。
+-->
+
+<!-- @demo 基础结构 | header（标题 + 说明 + 右上角操作）、body、footer 都是可选的，间距自动处理。`data-variant` 取 outline（默认）、elevated、filled、ghost。 | block -->
+<style>
+  .cd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; width: 100%; }
+  .cd-art { aspect-ratio: 16 / 9; background: radial-gradient(120% 120% at 0% 0%, oklch(0.78 0.14 var(--_h, 278)), transparent 60%), radial-gradient(120% 120% at 100% 100%, oklch(0.72 0.16 calc(var(--_h, 278) + 60)), transparent 60%), var(--nv-surface-3); }
+</style>
+<div class="cd-grid">
+  <article class="nv-card">
+    <header class="nv-card-header">
+      <div><h3 class="nv-card-title">Outline</h3><p class="nv-card-desc">默认外观，细边框加轻阴影</p></div>
+      <div class="nv-card-extra"><button class="nv-btn" data-variant="ghost" data-size="sm" data-icon aria-label="更多"><i data-nv-icon="more"></i></button></div>
+    </header>
+    <div class="nv-card-body">适合大多数信息分组，在白色和浅灰背景上都清楚。</div>
+    <footer class="nv-card-footer" data-align="end"><button class="nv-btn" data-variant="ghost" data-size="sm">取消</button><button class="nv-btn" data-size="sm">确认</button></footer>
+  </article>
+  <article class="nv-card" data-variant="elevated">
+    <header class="nv-card-header"><div><h3 class="nv-card-title">Elevated</h3><p class="nv-card-desc">更明显的投影</p></div></header>
+    <div class="nv-card-body">需要从背景中突出的内容，如定价方案、推荐位。</div>
+  </article>
+  <article class="nv-card" data-variant="filled">
+    <header class="nv-card-header"><div><h3 class="nv-card-title">Filled</h3><p class="nv-card-desc">浅色填充，无边框</p></div></header>
+    <div class="nv-card-body">适合放在白色卡片内部做次级分组。</div>
+  </article>
+</div>
+
+<!-- @demo 封面与整卡可点击 | `.nv-card-media` 贴边显示，加 `data-inset` 则内缩。卡片内的 `a[data-card-link]` 会铺满整张卡片，其余按钮仍能单独点击。 | block -->
+<div class="cd-grid">
+  <article class="nv-card" data-interactive>
+    <div class="nv-card-media"><div class="cd-art"></div></div>
+    <header class="nv-card-header">
+      <div><h3 class="nv-card-title"><a href="#/card" data-card-link>设计令牌的命名实践</a></h3><p class="nv-card-desc">5 分钟阅读 · 11 月 12 日</p></div>
+    </header>
+    <footer class="nv-card-footer" data-align="between">
+      <span class="nv-badge" data-color="primary">设计系统</span>
+      <button class="nv-btn" data-variant="ghost" data-size="sm" data-icon aria-label="收藏"><i data-nv-icon="heart"></i></button>
+    </footer>
+  </article>
+  <article class="nv-card" data-interactive>
+    <div class="nv-card-media" data-inset><div class="cd-art" style="--_h: 160"></div></div>
+    <header class="nv-card-header">
+      <div><h3 class="nv-card-title"><a href="#/card" data-card-link>暗色模式的对比度</a></h3><p class="nv-card-desc">8 分钟阅读 · 11 月 3 日</p></div>
+    </header>
+    <footer class="nv-card-footer" data-align="between">
+      <span class="nv-badge" data-color="success">无障碍</span>
+      <button class="nv-btn" data-variant="ghost" data-size="sm" data-icon aria-label="收藏"><i data-nv-icon="heart"></i></button>
+    </footer>
+  </article>
+</div>
+
+<!-- @demo 横向布局 | `data-orientation="horizontal"`，封面放左侧，其余内容包进 `.nv-card-content`。封面宽度用 `--nv-card-media-width`。 | block -->
+<article class="nv-card" data-orientation="horizontal" style="max-width: 560px; width: 100%">
+  <div class="nv-card-media"><div class="cd-art" style="--_h: 30; height: 100%"></div></div>
+  <div class="nv-card-content">
+    <header class="nv-card-header">
+      <span class="nv-avatar" data-name="林夏"></span>
+      <div><h3 class="nv-card-title">林夏</h3><p class="nv-card-desc">前端负责人 · 上海</p></div>
+    </header>
+    <div class="nv-card-body">负责组件库与设计令牌，关注可访问性与性能。</div>
+    <footer class="nv-card-footer"><button class="nv-btn" data-size="sm">关注</button><button class="nv-btn" data-variant="outline" data-size="sm">私信</button></footer>
+  </div>
+</article>
+
+<!-- @demo 选择卡片 | `label.nv-card` 里放原生 radio 或 checkbox，选中时卡片高亮；`data-indicator` 在右上角显示勾选标记。表单提交照常工作。 | block -->
+<form class="cd-grid" id="cd-plan" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))">
+  <label class="nv-card" data-size="sm" data-indicator>
+    <input type="radio" name="plan" value="free">
+    <div class="nv-card-header"><div><b class="nv-card-title">免费版</b><p class="nv-card-desc">个人项目</p></div></div>
+    <div class="nv-card-body"><b style="font-size: 22px; color: var(--nv-fg)">¥0</b> / 月</div>
+  </label>
+  <label class="nv-card" data-size="sm" data-indicator>
+    <input type="radio" name="plan" value="pro" checked>
+    <div class="nv-card-header"><div><b class="nv-card-title">专业版</b><p class="nv-card-desc">小团队</p></div></div>
+    <div class="nv-card-body"><b style="font-size: 22px; color: var(--nv-fg)">¥49</b> / 月</div>
+  </label>
+  <label class="nv-card" data-size="sm" data-indicator>
+    <input type="radio" name="plan" value="team">
+    <div class="nv-card-header"><div><b class="nv-card-title">企业版</b><p class="nv-card-desc">按需定制</p></div></div>
+    <div class="nv-card-body"><b style="font-size: 22px; color: var(--nv-fg)">联系销售</b></div>
+  </label>
+  <label class="nv-card" data-size="sm" data-indicator>
+    <input type="radio" name="plan" value="edu" disabled>
+    <div class="nv-card-header"><div><b class="nv-card-title">教育版</b><p class="nv-card-desc">暂未开放</p></div></div>
+    <div class="nv-card-body"><b style="font-size: 22px; color: var(--nv-fg)">—</b></div>
+  </label>
+</form>
+<div class="doc-log" id="cd-plan-log">plan = pro</div>
+<script>
+  {
+    const form = document.getElementById('cd-plan');
+    form.addEventListener('change', () => { document.getElementById('cd-plan-log').textContent = `plan = ${new FormData(form).get('plan')}`; });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 | 说明 |
+|---|---|
+| `.nv-card` | 卡片容器 |
+| `.nv-card-header` | 头部：第一个子元素占满剩余宽度，可以在最前面放 `.nv-avatar` |
+| `.nv-card-title` / `.nv-card-desc` | 标题 / 说明文字 |
+| `.nv-card-extra` | 头部右侧的操作区 |
+| `.nv-card-body` | 正文 |
+| `.nv-card-footer` | 底部；`data-align` 取 `end` `between`；`data-divider` 加分隔线 |
+| `.nv-card-media` | 封面，放 `img` 或 `video`；`data-inset` 内缩 |
+| `.nv-card-content` | 横向布局时包住封面以外的内容 |
+| `.nv-card-grid` | 自适应网格，最小列宽 `--nv-card-min`（默认 240px） |
+
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-variant` | `outline` `elevated` `filled` `ghost` | `outline` |
+| `data-size` | `sm` `md` `lg`，内边距 14 / 20 / 28px | `md` |
+| `data-orientation` | `horizontal` 横向 | 纵向 |
+| `data-interactive` | 悬停浮起；配合 `a[data-card-link]` 整卡可点 | — |
+| `data-indicator` | 选择卡片右上角的勾选标记 | — |
+
+`a.nv-card` 和 `button.nv-card` 自带悬停效果。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-card-ratio` | 封面图片比例 | `16 / 9` |
+| `--nv-card-media-width` | 横向布局时封面宽度 | `38%` |
+
+### 无障碍
+- 整卡可点击时用 `a[data-card-link]` 包标题，读屏读出的链接文字就是标题，不会把整张卡片的内容读成一个链接。
+- 选择卡片使用原生 radio / checkbox，键盘方向键和表单提交都照常工作。
+-->

@@ -1,0 +1,86 @@
+<!--
+@name number-input
+@title Number Input 数字输入框
+@category form
+@order 9
+@deps field
+@desc 带步进按钮的数字输入：键盘方向键步进、按住按钮连续增减、自动夹在 min / max 之间、按精度消除浮点误差。基于原生 `input[type=number]`，表单提交和校验照常工作。
+-->
+
+<!-- @demo 基础 | 原生 `min` `max` `step` 照常写。↑ ↓ 步进，Shift 或 PageUp / PageDown 一次 10 步，Home / End 跳到最小 / 最大值。手动输入越界的数字，失焦时会被夹回范围内。 | col -->
+<div class="doc-narrow doc-stack">
+  <input type="number" class="nv-number" id="ni-basic" value="5" min="0" max="20" aria-label="数量">
+  <div class="doc-log" id="ni-log">value = 5</div>
+</div>
+<script>
+  document.getElementById('ni-basic').addEventListener('nv:change', (e) => {
+    document.getElementById('ni-log').textContent = `value = ${e.detail.value}`;
+  });
+</script>
+
+<!-- @demo 左减右加 | `data-controls="sides"` 适合购物车数量、人数这类整数步进；`data-controls="none"` 不显示按钮，只保留键盘步进。 | col -->
+<div class="doc-narrow doc-stack">
+  <input type="number" class="nv-number" data-controls="sides" value="1" min="1" max="99" aria-label="购买数量">
+  <input type="number" class="nv-number" data-controls="none" value="30" min="0" step="5" aria-label="间隔（分钟）">
+</div>
+
+<!-- @demo 小数与前后缀 | `step="0.01"` 时按两位小数四舍五入，0.1 + 0.2 不会出现 0.30000000000000004；`data-precision` 固定显示位数。把 input 放进自己写的 `.nv-control` 就能加前后缀。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-field">
+    <label class="nv-field-label" for="ni-price">单价</label>
+    <div class="nv-control">
+      <span class="nv-control-affix">¥</span>
+      <input type="number" class="nv-number" id="ni-price" value="19.9" min="0" step="0.1" data-precision="2">
+    </div>
+  </div>
+  <div class="nv-field">
+    <label class="nv-field-label" for="ni-rate">折扣率</label>
+    <div class="nv-control">
+      <input type="number" class="nv-number" id="ni-rate" value="0.85" min="0" max="1" step="0.05">
+      <span class="nv-control-affix">× 原价</span>
+    </div>
+  </div>
+</div>
+
+<!-- @demo 尺寸与状态 | `data-size` 取 sm / md / lg；`disabled` `readonly` `aria-invalid` 与其他输入框一致。 | col -->
+<div class="doc-narrow doc-stack">
+  <input type="number" class="nv-number" data-size="sm" value="8" aria-label="小号">
+  <input type="number" class="nv-number" data-size="lg" data-controls="sides" value="8" aria-label="大号">
+  <input type="number" class="nv-number" value="8" disabled aria-label="禁用">
+  <input type="number" class="nv-number" value="120" max="100" aria-invalid="true" aria-label="超出范围">
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `min` / `max` / `step` | 原生属性，范围与步长 | 无 / 无 / `1` |
+| `data-controls` | `stacked` 右侧上下箭头 · `sides` 左减右加 · `none` 无按钮 | `stacked` |
+| `data-precision` | 固定小数位，失焦时补齐 | 按 `step` 推断 |
+| `data-size` | `sm` `md` `lg`（转移到外框） | `md` |
+| `data-inc-label` / `data-dec-label` | 按钮的读屏文案 | 增加 / 减少 |
+
+### 键盘
+| 按键 | 作用 |
+|---|---|
+| ↑ / ↓ | 加 / 减一步 |
+| Shift + ↑ ↓、PageUp / PageDown | 加 / 减十步 |
+| Home / End | 跳到 `min` / `max`（有设置时） |
+
+### 事件
+- 按钮和键盘修改值时，依次派发原生 `input`、`change`，以及 `nv:change`（`detail: { value }`，空值为 `NaN`）。
+- 用户手动输入后失焦，原生 `change` 照常派发，值已经被夹回范围内。
+
+### 实例
+`Nova.get(input, 'number-input')`：
+
+| 成员 | 说明 |
+|---|---|
+| `value` | 读写数值；写入时夹在范围内，不派发事件 |
+| `stepUp(n)` / `stepDown(n)` | 步进 n 步，会派发事件 |
+| `refresh()` | 改了 `min` `max` 等属性后同步按钮状态（属性变化也会自动同步） |
+
+### 无障碍
+- 原生 `type=number` 就是 spinbutton，读屏会读出当前值；记得写 `label` 或 `aria-label`。
+- 步进按钮 `tabindex="-1"`，键盘用户直接用方向键；按钮带 `aria-label`，读屏的虚拟光标也能点。
+-->

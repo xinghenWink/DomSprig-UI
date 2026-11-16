@@ -1,0 +1,177 @@
+<!--
+@name steps
+@title Steps 步骤条
+@category navigation
+@order 20
+@deps button
+@desc 展示多步流程的进度。横向/纵向、四种状态、序号/对勾/自定义图标、点状变体、可点击切换；空间不足时自动转为纵向。
+-->
+
+<!-- @demo 基础用法 | 用 `data-current`（从 0 开始）指定当前步骤，之前的步骤自动为完成、之后为等待；完成步骤后的连接线用主色填充。 | block -->
+<ol class="nv-steps" data-current="1" aria-label="注册流程">
+  <li class="nv-step"><span class="nv-step-title">创建账号</span><span class="nv-step-desc">填写邮箱与密码</span></li>
+  <li class="nv-step"><span class="nv-step-title">验证邮箱</span><span class="nv-step-desc">点击邮件中的链接</span></li>
+  <li class="nv-step"><span class="nv-step-title">完善资料</span><span class="nv-step-desc">头像与昵称</span></li>
+</ol>
+
+<!-- @demo 状态与图标 | 每步可写 `data-status="finish|process|wait|error"` 覆盖推导结果；根元素的 `data-current-status="error"` 把当前步骤标为出错。`data-icon` 换成自定义图标。 | block -->
+<div class="doc-stack">
+  <ol class="nv-steps" data-current="2" data-current-status="error" aria-label="部署进度">
+    <li class="nv-step"><span class="nv-step-title">拉取代码</span><span class="nv-step-desc">12 秒</span></li>
+    <li class="nv-step"><span class="nv-step-title">安装依赖</span><span class="nv-step-desc">48 秒</span></li>
+    <li class="nv-step"><span class="nv-step-title">运行测试</span><span class="nv-step-desc">3 项用例失败</span></li>
+    <li class="nv-step"><span class="nv-step-title">发布</span></li>
+  </ol>
+  <ol class="nv-steps" data-current="1" aria-label="订单状态">
+    <li class="nv-step" data-icon="shopping-cart"><span class="nv-step-title">已下单</span></li>
+    <li class="nv-step" data-icon="truck"><span class="nv-step-title">运输中</span></li>
+    <li class="nv-step" data-icon="home"><span class="nv-step-title">已签收</span></li>
+  </ol>
+</div>
+
+<!-- @demo 标题位置与尺寸 | `data-label="bottom"` 把标题放到图标下方，适合步骤多、标题短的场景；`data-size="sm"` 为紧凑尺寸。 | block -->
+<div class="doc-stack">
+  <ol class="nv-steps" data-current="2" data-label="bottom" aria-label="申请进度">
+    <li class="nv-step"><span class="nv-step-title">提交申请</span><span class="nv-step-desc">11 月 10 日</span></li>
+    <li class="nv-step"><span class="nv-step-title">部门审批</span><span class="nv-step-desc">11 月 12 日</span></li>
+    <li class="nv-step"><span class="nv-step-title">财务审核</span><span class="nv-step-desc">处理中</span></li>
+    <li class="nv-step"><span class="nv-step-title">打款</span></li>
+    <li class="nv-step"><span class="nv-step-title">完成</span></li>
+  </ol>
+  <ol class="nv-steps" data-current="1" data-size="sm" aria-label="导入数据">
+    <li class="nv-step">上传文件</li>
+    <li class="nv-step">字段映射</li>
+    <li class="nv-step">预览</li>
+    <li class="nv-step">导入</li>
+  </ol>
+</div>
+
+<!-- @demo 纵向 | `data-orientation="vertical"`；步骤下方可放 `.nv-step-content` 自定义内容。 | block -->
+<ol class="nv-steps doc-mid" data-orientation="vertical" data-current="1" aria-label="物流信息">
+  <li class="nv-step"><span class="nv-step-title">已揽收</span><span class="nv-step-desc">11 月 13 日 09:12 · 杭州转运中心</span></li>
+  <li class="nv-step">
+    <span class="nv-step-title">运输中</span>
+    <span class="nv-step-desc">11 月 14 日 18:40 · 预计明天送达</span>
+    <div class="nv-step-content"><button class="nv-btn" data-size="sm" data-variant="outline">查看实时位置</button></div>
+  </li>
+  <li class="nv-step"><span class="nv-step-title">派送中</span></li>
+  <li class="nv-step"><span class="nv-step-title">已签收</span></li>
+</ol>
+
+<!-- @demo 点状 | `data-variant="dot"` 用小圆点代替图标，横向时标题在下方；可与纵向组合做时间线。 | block -->
+<div class="doc-stack">
+  <ol class="nv-steps" data-variant="dot" data-current="2" aria-label="项目里程碑">
+    <li class="nv-step"><span class="nv-step-title">立项</span><span class="nv-step-desc">9 月</span></li>
+    <li class="nv-step"><span class="nv-step-title">设计评审</span><span class="nv-step-desc">10 月</span></li>
+    <li class="nv-step"><span class="nv-step-title">开发</span><span class="nv-step-desc">11 月</span></li>
+    <li class="nv-step"><span class="nv-step-title">上线</span><span class="nv-step-desc">12 月</span></li>
+  </ol>
+  <ol class="nv-steps doc-mid" data-variant="dot" data-orientation="vertical" data-current="1" aria-label="版本记录">
+    <li class="nv-step"><span class="nv-step-title">v1.0 正式版</span><span class="nv-step-desc">新增 40 个组件，支持暗色主题。</span></li>
+    <li class="nv-step"><span class="nv-step-title">v1.1 计划中</span><span class="nv-step-desc">数据表格与虚拟列表。</span></li>
+    <li class="nv-step"><span class="nv-step-title">v2.0</span><span class="nv-step-desc">主题编辑器。</span></li>
+  </ol>
+</div>
+
+<!-- @demo 下单流程 | 真实场景：按钮推进步骤，`data-clickable="finished"` 允许点击已完成的步骤返回修改。宽度不足时（试试手机宽度）自动转为纵向。 | block -->
+<div class="doc-stack">
+  <ol class="nv-steps" id="steps-checkout" data-current="0" data-clickable="finished" aria-label="下单流程">
+    <li class="nv-step"><span class="nv-step-title">确认商品</span><span class="nv-step-desc">2 件商品</span></li>
+    <li class="nv-step"><span class="nv-step-title">收货地址</span><span class="nv-step-desc">选择或新建地址</span></li>
+    <li class="nv-step"><span class="nv-step-title">支付</span><span class="nv-step-desc">微信 / 支付宝 / 银行卡</span></li>
+    <li class="nv-step"><span class="nv-step-title">完成</span></li>
+  </ol>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" id="steps-checkout-prev" disabled>上一步</button>
+    <button class="nv-btn" id="steps-checkout-next">下一步</button>
+  </div>
+  <div class="doc-log" id="steps-checkout-log">当前：第 1 步</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('steps-checkout');
+    const prev = document.getElementById('steps-checkout-prev');
+    const next = document.getElementById('steps-checkout-next');
+    const log = document.getElementById('steps-checkout-log');
+    const total = el.querySelectorAll('.nv-step').length;
+    const sync = (i) => {
+      prev.disabled = i === 0;
+      next.textContent = i >= total - 1 ? '完成' : '下一步';
+      next.disabled = i >= total;
+      log.textContent = i >= total ? '全部完成' : `当前：第 ${i + 1} 步`;
+    };
+    el.addEventListener('nv:change', (e) => sync(e.detail.index));
+    prev.addEventListener('click', () => Nova.steps.prev(el));
+    next.addEventListener('click', () => Nova.steps.next(el));
+  }
+</script>
+
+<!-- @demo 可点击 | `data-clickable` 让每一步都可点击（渲染为按钮，可 Tab 聚焦、Enter 切换），切换前派发可取消的 `nv:change`；`data-disabled` 禁止点击某一步。 | block -->
+<div class="doc-stack">
+  <ol class="nv-steps" id="steps-click" data-current="0" data-clickable data-label="bottom" aria-label="问卷">
+    <li class="nv-step"><span class="nv-step-title">基本信息</span></li>
+    <li class="nv-step"><span class="nv-step-title">工作经历</span></li>
+    <li class="nv-step"><span class="nv-step-title">技能评估</span></li>
+    <li class="nv-step" data-disabled><span class="nv-step-title">面试安排</span><span class="nv-step-desc">需 HR 开放</span></li>
+  </ol>
+  <div class="doc-log" id="steps-click-log">点击任意步骤</div>
+</div>
+<script>
+  {
+    const el = document.getElementById('steps-click');
+    el.addEventListener('nv:change', (e) => {
+      document.getElementById('steps-click-log').textContent = `nv:change → ${e.detail.previous} → ${e.detail.index}`;
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 元素 | 说明 |
+|---|---|
+| `ol.nv-steps` | 根元素，建议写 `aria-label` |
+| `li.nv-step` | 一步；只写文字时文字即标题 |
+| `.nv-step-title` / `.nv-step-desc` | 标题 / 说明 |
+| `.nv-step-icon` | 自定义图标容器（可选，写了就不插入序号） |
+| `.nv-step-content` | 标题下方的自定义内容（纵向时使用） |
+
+### 属性
+| 属性 | 位置 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `data-current` | `.nv-steps` | 当前步骤序号，从 0 开始；等于步骤数表示全部完成 | 数字 | 由各步 `data-status` 推导，否则 `0` |
+| `data-current-status` | `.nv-steps` | 当前步骤的状态 | `process` `error` `finish` `wait` | `process` |
+| `data-orientation` | `.nv-steps` | 方向 | `horizontal` `vertical` | `horizontal` |
+| `data-label` | `.nv-steps` | 横向时标题位置 | `right` `bottom` | `right`（点状为 `bottom`） |
+| `data-variant` | `.nv-steps` | 点状 | `dot` | — |
+| `data-size` | `.nv-steps` | 图标尺寸 32 / 24 | `md` `sm` | `md` |
+| `data-clickable` | `.nv-steps` | 可点击切换；`finished` 只允许回到已完成的步骤 | 布尔 / `finished` | — |
+| `data-responsive` | `.nv-steps` | 横向排不下时自动转纵向；写 `false` 关闭 | 布尔 | 开启 |
+| `data-finish-text` 等 | `.nv-steps` | 读屏状态文案：`data-finish-text` `data-process-text` `data-wait-text` `data-error-text` | 字符串 | `已完成` `进行中` `未开始` `出错` |
+| `data-status` | `.nv-step` | 手动指定状态（调用 `set` 后改为按序号推导） | `finish` `process` `wait` `error` | 推导 |
+| `data-icon` | `.nv-step` | 自定义图标名（`Nova.icons` 中的名称） | 字符串 | 序号 |
+| `data-disabled` | `.nv-step` | 可点击模式下禁止点击该步 | 布尔 | — |
+| `data-collapsed` | `.nv-steps` | 只读：已自动转为纵向 | — | — |
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:change` | 当前步骤变化前派发（点击或方法调用）；`preventDefault()` 可阻止 | `{ index, previous }` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.steps.set(el, index)` | 设为第 `index` 步（0 到步骤数），返回是否变化 |
+| `Nova.steps.next(el)` / `Nova.steps.prev(el)` | 前进 / 后退一步 |
+| `Nova.get(el, 'steps').current` | 当前序号 |
+| `Nova.get(el, 'steps').refresh()` | 重新扫描步骤（增删 `li` 时自动调用） |
+
+### 可定制变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-steps-desc-width` | 横向时说明文字的最大宽度 | `200px` |
+| `--nv-primary` | 完成/进行中颜色与连接线进度色 | 主色 |
+
+### 无障碍
+- 当前步骤带 `aria-current="step"`；每步末尾有仅读屏可见的状态文字（如“（已完成）”），可用 `data-*-text` 改写。
+- 可点击模式下每步是 `<button>`，不可点击的步骤为 `disabled`。
+-->

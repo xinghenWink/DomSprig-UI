@@ -1,0 +1,92 @@
+<!--
+@name tag-input
+@title Tag Input 标签输入
+@category form
+@order 11
+@deps tag
+@desc 把输入变成一串标签：回车或逗号确认，退格删除最后一个，粘贴 "a, b, c" 一次变三个。每个标签对应一个隐藏 input，表单提交得到多个同名值。
+-->
+
+<!-- @demo 基础 | 输入后回车或输入逗号变成标签；输入框为空时按退格，先选中最后一个标签，再按一次才删除，避免误删。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-tag-input" id="ti-basic" data-name="tags" data-placeholder="输入标签，回车确认" aria-label="标签"></div>
+  <div class="doc-log" id="ti-log">values = []</div>
+</div>
+<script>
+  document.getElementById('ti-basic').addEventListener('nv:change', (e) => {
+    document.getElementById('ti-log').textContent = `values = [${e.detail.values.join(', ')}]`;
+  });
+</script>
+
+<!-- @demo 初始值与上限 | `data-value` 按分隔符拆成初始标签；`data-max` 限制个数，达到上限后输入框收起。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-tag-input" data-name="skills" data-value="设计,前端,动效" data-max="5" data-placeholder="最多 5 个" aria-label="技能"></div>
+</div>
+
+<!-- @demo 校验 | `data-pattern` 不匹配、重复、超长都会派发 `nv:invalid { value, reason }` 并拒绝；`data-duplicates` 允许重复。下面只接受小写字母，重复会被拒绝。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-tag-input" id="ti-valid" data-pattern="^[a-z]+$" data-max-length="8" data-placeholder="只接受小写字母" aria-label="代号"></div>
+  <div class="doc-log" id="ti-valid-log">等待输入</div>
+</div>
+<script>
+  const tiValidLog = document.getElementById('ti-valid-log');
+  const reasons = { duplicate: '重复了', pattern: '只接受小写字母', max: '已达上限', maxlength: '太长了' };
+  document.getElementById('ti-valid').addEventListener('nv:invalid', (e) => {
+    tiValidLog.textContent = `拒绝「${e.detail.value}」：${reasons[e.detail.reason] || e.detail.reason}`;
+  });
+  document.getElementById('ti-valid').addEventListener('nv:add', () => { tiValidLog.textContent = '已添加'; });
+</script>
+
+<!-- @demo 样式与尺寸 | `data-variant` 和 `data-color` 作用在生成的标签上；`data-size` 作用在外框，取 sm / md / lg。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-tag-input" data-size="sm" data-value="小,号" data-placeholder="小号" aria-label="小号标签"></div>
+  <div class="nv-tag-input" data-variant="outline" data-color="primary" data-value="主色,描边" data-placeholder="描边主色" aria-label="描边标签"></div>
+  <div class="nv-tag-input" data-size="lg" data-variant="solid" data-color="success" data-value="已完成" data-placeholder="实心" aria-label="实心标签"></div>
+</div>
+
+<!-- @demo 空格分隔 | `data-separator=" "` 时按空格拆分，适合一串关键词；粘贴整段文字也会按空格拆开。 | col -->
+<div class="doc-narrow doc-stack">
+  <div class="nv-tag-input" data-separator=" " data-value="设计 系统 组件库" data-placeholder="空格确认" aria-label="关键词"></div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-name` | 隐藏 input 的 name，每个标签一个，随表单提交 | — |
+| `data-value` | 初始标签，按分隔符拆分 | — |
+| `data-separator` | 分隔符；`" "` 表示空格 | `,` |
+| `data-placeholder` | 输入框占位文字 | — |
+| `data-max` | 最多几个标签 | 不限 |
+| `data-max-length` | 单个标签最长几个字符 | 不限 |
+| `data-pattern` | 正则，不匹配的输入被拒绝 | — |
+| `data-duplicates` | 允许重复 | — |
+| `data-case-sensitive` | 判重时区分大小写 | — |
+| `data-variant` | 标签样式 `soft` `outline` `solid` | `soft` |
+| `data-color` | 标签颜色 `neutral` `primary` `success` `warning` `danger` `info` | `neutral` |
+| `data-size` | 外框尺寸 `sm` `md` `lg` | `md` |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `nv:add` | 即将添加，`detail: { value, values }`，可 `preventDefault` 取消 |
+| `nv:remove` | 即将删除，`detail: { value, values }`，可取消 |
+| `nv:change` | 变化后派发，`detail: { values }` |
+| `nv:invalid` | 输入被拒绝，`detail: { value, reason }`，reason 为 `duplicate` `pattern` `max` `maxlength` |
+
+### 实例
+`Nova.get(el, 'tag-input')`：
+
+| 成员 | 说明 |
+|---|---|
+| `value` | 读写标签数组；写入不派发事件 |
+| `add(v)` | 添加一个标签，会派发事件，返回是否成功 |
+| `remove(v)` | 按值删除，会派发事件 |
+| `clear()` | 清空并派发 `nv:change` |
+| `focus()` | 聚焦输入框 |
+
+### 无障碍
+- 容器是普通的控件框，输入框带 `aria-label`；记得给容器写 `aria-label`。
+- 每个标签的关闭按钮由 tag 组件生成，带 `aria-label`。
+- 输入法组字期间回车不会误确认。
+-->

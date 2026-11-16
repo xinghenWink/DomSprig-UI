@@ -1,0 +1,176 @@
+/* Nova UI · Upload 文件上传   需 upload.js（属性、事件见 upload.js 头注释）
+ * 结构：.nv-upload > .nv-upload-dragger（拖拽区，可选）+ 按钮触发器（可选）+ ul.nv-upload-list
+ * 列表项 .nv-upload-item[data-status=ready|uploading|done|error]，底部细进度条由 --value（0–100）驱动
+ * 拖入文件时容器带 [data-dragover]；data-list="picture" 时列表是缩略图网格
+ */
+
+.nv-upload { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.nv-upload-input { display: none; }
+
+/* ———————————————————— 拖拽区 ———————————————————— */
+.nv-upload-dragger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  padding: 28px 20px;
+  border: 1.5px dashed var(--nv-border-strong);
+  border-radius: var(--nv-radius-lg);
+  background:
+    radial-gradient(120% 80% at 50% 0%, var(--nv-primary-soft), transparent 70%),
+    var(--nv-surface);
+  color: var(--nv-fg-2);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--nv-dur-2) var(--nv-ease),
+    background-color var(--nv-dur-2) var(--nv-ease),
+    transform var(--nv-dur-2) var(--nv-ease);
+}
+.nv-upload-dragger:hover { border-color: var(--nv-primary); }
+.nv-upload-dragger:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--nv-ring); }
+.nv-upload[data-dragover] .nv-upload-dragger {
+  border-color: var(--nv-primary);
+  border-style: solid;
+  background-color: var(--nv-primary-soft);
+  transform: scale(1.012);
+}
+.nv-upload-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 8px;
+  border-radius: var(--nv-radius-full);
+  background: var(--nv-surface-raised);
+  color: var(--nv-primary-text);
+  box-shadow: var(--nv-shadow-sm);
+}
+.nv-upload[data-dragover] .nv-upload-icon { animation: nv-upload-bob 0.9s var(--nv-ease-in-out) infinite; }
+@keyframes nv-upload-bob { 50% { transform: translateY(-3px); } }
+.nv-upload-title { font-size: var(--nv-text-sm); font-weight: 500; color: var(--nv-fg); }
+.nv-upload-title em { color: var(--nv-primary-text); font-style: normal; font-weight: 600; }
+.nv-upload-hint { font-size: var(--nv-text-xs); color: var(--nv-fg-3); }
+
+/* ———————————————————— 文件列表 ———————————————————— */
+.nv-upload-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nv-upload-list:empty { display: none; }
+
+.nv-upload-item {
+  --_c: var(--nv-primary);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "thumb main remove";
+  gap: 0 12px;
+  align-items: center;
+  padding: 8px 8px 8px 10px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface-raised);
+  box-shadow: var(--nv-shadow-xs);
+  overflow: hidden;
+  animation: nv-upload-in var(--nv-dur-3) var(--nv-ease-out);
+}
+@keyframes nv-upload-in { from { opacity: 0; transform: translateY(6px); } }
+.nv-upload-item[data-state="closed"] { animation: nv-upload-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+@keyframes nv-upload-out { to { opacity: 0; transform: scale(0.97); } }
+.nv-upload-item[data-status="error"] { --_c: var(--nv-danger); border-color: color-mix(in oklab, var(--nv-danger) 45%, var(--nv-border)); }
+.nv-upload-item[data-status="done"] { --_c: var(--nv-success); }
+
+/* 底部一条细进度：百分比由 --value 驱动，与 .nv-progress 同一套变量 */
+.nv-upload-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: calc(clamp(0, var(--value, 0), 100) * 1%);
+  background: var(--_c);
+  transition: width var(--nv-dur-3) var(--nv-ease-out), opacity var(--nv-dur-3) var(--nv-ease);
+}
+.nv-upload-item[data-status="done"]::after,
+.nv-upload-item[data-status="error"]::after { opacity: 0; }
+
+.nv-upload-thumb {
+  grid-area: thumb;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--nv-radius-sm);
+  background: color-mix(in oklab, var(--_c) 12%, transparent);
+  color: var(--_c);
+  overflow: hidden;
+}
+.nv-upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.nv-upload-item[data-status="done"] .nv-upload-thumb { background: var(--nv-success-soft); color: var(--nv-success-text); }
+
+.nv-upload-main { grid-area: main; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.nv-upload-name {
+  overflow: hidden;
+  font-size: var(--nv-text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.nv-upload-meta { font-size: var(--nv-text-xs); color: var(--nv-fg-3); font-variant-numeric: tabular-nums; }
+.nv-upload-item[data-status="error"] .nv-upload-meta { color: var(--nv-danger-text); }
+
+.nv-upload-remove {
+  grid-area: remove;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+}
+.nv-upload-remove:hover { background: var(--nv-danger-soft); color: var(--nv-danger-text); }
+
+/* 图片墙：缩略图网格，进度叠在底部 */
+.nv-upload-list[data-variant="picture"] { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+.nv-upload-list[data-variant="picture"] .nv-upload-item {
+  grid-template-columns: 1fr;
+  grid-template-areas: "thumb" "main";
+  gap: 6px;
+  width: 104px;
+  padding: 6px;
+}
+.nv-upload-list[data-variant="picture"] .nv-upload-thumb { width: 100%; height: 72px; }
+.nv-upload-list[data-variant="picture"] .nv-upload-meta { display: none; }
+.nv-upload-list[data-variant="picture"] .nv-upload-name { font-size: var(--nv-text-xs); font-weight: 400; }
+.nv-upload-list[data-variant="picture"] .nv-upload-remove {
+  grid-area: auto;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  background: color-mix(in oklab, var(--nv-surface-raised) 85%, transparent);
+  box-shadow: var(--nv-shadow-xs);
+}
+
+/* 禁用 */
+.nv-upload[data-disabled] { opacity: 0.6; }
+.nv-upload[data-disabled] .nv-upload-dragger { pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-upload-item,
+  .nv-upload[data-dragover] .nv-upload-icon { animation: none; }
+  .nv-upload[data-dragover] .nv-upload-dragger { transform: none; }
+}

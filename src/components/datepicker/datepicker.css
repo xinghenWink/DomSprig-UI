@@ -1,0 +1,277 @@
+/* Nova UI · DatePicker
+ * <input data-nv-date> / <input data-nv-date-range> → 原生 input（视觉隐藏）+ .nv-control.nv-date + 浮层 .nv-panel.nv-date-panel
+ * 可定制：--nv-date-width（控件宽）  --nv-date-cell（日期格边长）  --nv-date-time-col（时间列宽）
+ */
+
+.nv-date-native {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  clip-path: inset(50%) !important;
+  pointer-events: none !important;
+}
+
+/* —— 控件 —— */
+.nv-date {
+  width: var(--nv-date-width, 100%);
+  max-width: 100%;
+  padding-right: calc(var(--_px) - 2px);
+  vertical-align: middle;
+  gap: 4px;
+}
+.nv-date > .nv-date-input { font-variant-numeric: tabular-nums; text-overflow: ellipsis; }
+.nv-date-clear[hidden] { display: none; }
+.nv-date-clear { margin-right: 0; }
+.nv-date-toggle { color: var(--nv-fg-3); }
+.nv-date:has(> [aria-expanded="true"]) .nv-date-toggle { color: var(--nv-primary-text); }
+.nv-date-toggle:disabled { cursor: not-allowed; background: transparent; color: var(--nv-fg-3); opacity: 0.6; }
+.nv-control.nv-date[data-flash] {
+  border-color: var(--nv-danger);
+  box-shadow: 0 0 0 3px var(--nv-danger-ring);
+  animation: nv-date-shake 0.32s var(--nv-ease);
+}
+@keyframes nv-date-shake {
+  20%, 60% { transform: translateX(-3px); }
+  40%, 80% { transform: translateX(3px); }
+}
+@media (prefers-reduced-motion: reduce) { .nv-control.nv-date[data-flash] { animation: none; } }
+
+/* —— 面板 —— */
+.nv-date-panel {
+  --nv-date-cell: 36px;
+  --_list-h: calc(30px + var(--nv-date-cell) * 6);
+  display: flex;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.nv-date-panel button {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.nv-date-panel button:disabled { cursor: not-allowed; }
+.nv-date-panel button:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 1px; }
+.nv-date-main { display: flex; flex-direction: column; min-width: 0; }
+.nv-date-body { display: flex; }
+
+/* 快捷预设 */
+.nv-date-presets {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 96px;
+  padding: 8px;
+  border-right: 1px solid var(--nv-border);
+  background: var(--nv-surface-2);
+}
+.nv-date-panel .nv-date-preset {
+  padding: 6px 10px;
+  border-radius: var(--nv-radius-sm);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-sm);
+  text-align: left;
+  white-space: nowrap;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-date-panel .nv-date-preset:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-date-panel .nv-date-preset[aria-pressed="true"] { background: var(--nv-primary-soft); color: var(--nv-primary-text); font-weight: 500; }
+
+/* 日历 */
+.nv-date-cals { display: flex; }
+.nv-date-cal { flex: none; padding: 10px 12px 8px; }
+.nv-date-cal + .nv-date-cal { border-left: 1px solid var(--nv-border); }
+.nv-date-cal-wide { flex: 1; display: flex; flex-direction: column; }
+.nv-date-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  height: 32px;
+  margin-bottom: 4px;
+}
+.nv-date-nav-gap { flex: none; width: 28px; }
+.nv-date-panel .nv-date-nav {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: var(--nv-radius-sm);
+  color: var(--nv-fg-2);
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-date-nav > svg { width: 16px; height: 16px; }
+.nv-date-panel .nv-date-nav:hover { background: var(--nv-surface-2); color: var(--nv-fg); }
+.nv-date-title { display: flex; align-items: center; gap: 2px; font-weight: 600; }
+.nv-date-panel .nv-date-title-btn {
+  padding: 3px 6px;
+  border-radius: var(--nv-radius-sm);
+  font-weight: 600;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-date-panel .nv-date-title-btn:hover { background: var(--nv-surface-2); color: var(--nv-primary-text); }
+.nv-date-title-text { padding: 3px 6px; }
+
+.nv-date-week,
+.nv-date-row { display: grid; grid-template-columns: repeat(7, var(--nv-date-cell)); }
+.nv-date-week {
+  height: 30px;
+  align-items: center;
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-xs);
+  text-align: center;
+}
+.nv-date-cell { position: relative; display: grid; place-items: center; height: var(--nv-date-cell); }
+.nv-date-panel .nv-date-day {
+  position: relative;
+  z-index: 1;
+  width: calc(var(--nv-date-cell) - 4px);
+  height: calc(var(--nv-date-cell) - 4px);
+  padding: 0;
+  border-radius: var(--nv-radius-md);
+  font-size: var(--nv-text-sm);
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1), box-shadow var(--nv-dur-1);
+}
+.nv-date-panel .nv-date-day:not(:disabled):hover { background: var(--nv-surface-2); }
+.nv-date-cell[data-outside] > .nv-date-day { color: var(--nv-fg-3); }
+.nv-date-panel .nv-date-day:disabled { color: var(--nv-fg-3); opacity: 0.45; text-decoration: line-through; text-decoration-color: color-mix(in oklab, currentColor 50%, transparent); }
+/* 今天：数字下方小圆点 */
+.nv-date-day[data-today] { color: var(--nv-primary-text); font-weight: 600; }
+.nv-date-day[data-today]::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: currentColor;
+}
+/* 键盘游标 */
+.nv-date-cell[data-active] > .nv-date-day { box-shadow: inset 0 0 0 2px var(--nv-primary); }
+
+/* 选中：单值 / 范围端点 */
+.nv-date-panel:not([data-kind="range"]) .nv-date-cell[aria-selected="true"] > .nv-date-day,
+.nv-date-cell:is([data-range-start], [data-range-end]) > .nv-date-day {
+  background: var(--nv-primary);
+  color: var(--nv-primary-fg);
+  font-weight: 600;
+}
+.nv-date-panel:not([data-kind="range"]) .nv-date-cell[aria-selected="true"] > .nv-date-day:hover,
+.nv-date-cell:is([data-range-start], [data-range-end]) > .nv-date-day:hover { background: var(--nv-primary-hover); }
+.nv-date-cell[aria-selected="true"][data-active] > .nv-date-day,
+.nv-date-cell:is([data-range-start], [data-range-end])[data-active] > .nv-date-day {
+  box-shadow: 0 0 0 2px var(--nv-surface-raised), 0 0 0 4px var(--nv-primary);
+}
+/* 范围色带 */
+.nv-date-cell:is([data-in-range], [data-range-start]:not([data-range-end]), [data-range-end]:not([data-range-start]))::before {
+  content: '';
+  position: absolute;
+  inset: 2px 0;
+  background: var(--nv-primary-soft);
+}
+.nv-date-cell[data-range-start]:not([data-range-end])::before { left: 50%; }
+.nv-date-cell[data-range-end]:not([data-range-start])::before { right: 50%; }
+.nv-date-cell[data-in-range]:first-child::before,
+.nv-date-cell[data-range-end]:first-child::before { border-radius: var(--nv-radius-md) 0 0 var(--nv-radius-md); left: 2px; }
+.nv-date-cell[data-in-range]:last-child::before,
+.nv-date-cell[data-range-start]:last-child::before { border-radius: 0 var(--nv-radius-md) var(--nv-radius-md) 0; right: 2px; }
+.nv-date-cell[data-range-end]:first-child::before { right: 50%; }
+.nv-date-cell[data-range-start]:last-child::before { left: 50%; }
+.nv-date-cell[data-in-range] > .nv-date-day:not([data-today]) { color: var(--nv-primary-text); }
+.nv-date-cell[data-in-range] > .nv-date-day:not(:disabled):hover { background: color-mix(in oklab, var(--nv-primary) 14%, transparent); }
+/* 选择中（已点起点）：预览色带更浅 */
+.nv-date-panel[data-pending] .nv-date-cell::before { background: color-mix(in oklab, var(--nv-primary) 7%, transparent); }
+
+/* 月份 / 年份面板 */
+.nv-date-picks {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(40px, 1fr);
+  gap: 6px;
+  padding: 6px 0 4px;
+}
+.nv-date-panel .nv-date-pick {
+  border-radius: var(--nv-radius-md);
+  font-size: var(--nv-text-sm);
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-date-panel .nv-date-pick:not(:disabled):hover { background: var(--nv-surface-2); }
+.nv-date-pick[data-outside] { color: var(--nv-fg-3); }
+.nv-date-pick[data-today] { color: var(--nv-primary-text); font-weight: 600; }
+.nv-date-panel .nv-date-pick:disabled { color: var(--nv-fg-3); opacity: 0.45; }
+.nv-date-panel .nv-date-pick[aria-pressed="true"] { background: var(--nv-primary); color: var(--nv-primary-fg); font-weight: 600; }
+
+/* 时间列 */
+.nv-date-time { display: flex; border-left: 1px solid var(--nv-border); }
+.nv-date-time-col { display: flex; flex-direction: column; width: var(--nv-date-time-col, 56px); }
+.nv-date-time-col + .nv-date-time-col { border-left: 1px solid var(--nv-border); }
+.nv-date-time-head {
+  flex: none;
+  display: grid;
+  place-items: center;
+  height: 46px;
+  border-bottom: 1px solid var(--nv-border);
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-xs);
+  font-weight: 600;
+}
+.nv-date-time-list { flex: 1 1 0; min-height: 0; overflow-y: auto; padding: 4px; scrollbar-width: thin; }
+.nv-date-time-list::after { content: ''; display: block; height: 180px; }
+.nv-date-time-item {
+  display: grid;
+  place-items: center;
+  height: 28px;
+  margin-bottom: 2px;
+  border-radius: var(--nv-radius-sm);
+  font-size: var(--nv-text-sm);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-date-time-item:hover { background: var(--nv-surface-2); }
+.nv-date-time-item[aria-selected="true"] { background: var(--nv-primary-soft); color: var(--nv-primary-text); font-weight: 600; }
+
+/* 底栏 */
+.nv-date-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--nv-border);
+}
+.nv-date-foot-actions { display: flex; gap: 6px; margin-left: auto; }
+.nv-date-status { color: var(--nv-fg-3); font-size: var(--nv-text-sm); }
+
+/* 窄屏：预设放到顶部横排，格子略缩小 */
+@media (max-width: 480px) {
+  .nv-date-panel { --nv-date-cell: 34px; --nv-date-time-col: 50px; flex-direction: column; }
+  .nv-date-presets {
+    flex-direction: row;
+    gap: 4px;
+    min-width: 0;
+    padding: 6px 8px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--nv-border);
+    scrollbar-width: none;
+  }
+  .nv-date-panel .nv-date-preset { flex: none; padding: 5px 9px; }
+  .nv-date-cal { padding: 8px 10px 6px; }
+}

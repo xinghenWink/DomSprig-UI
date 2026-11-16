@@ -1,0 +1,92 @@
+/* Nova UI · Rating 评分
+ * <div class="nv-rating" data-name="score" data-value="3" aria-label="评分"></div>   需 rating.js
+ * 每个星是一个原生 radio，表单提交和方向键照常工作；JS 只负责半星的视觉裁切和悬停预览。
+ * data-max     几颗星，默认 5
+ * data-value   初始分值（也可以在某个 radio 上写 checked）
+ * data-half    允许半星
+ * data-clearable 再次点击当前值时清空
+ * data-size    sm | md（默认）| lg | xl
+ * data-color   warning（默认）| primary | success | danger | info
+ * data-readonly / disabled 只读
+ * 图标默认是星形，可用 CSS 变量 --nv-rating-icon 换成任意 mask 图标
+ */
+.nv-rating {
+  --_s: 22px;
+  --_c: var(--nv-warning);
+  --_gap: 2px;
+  --nv-rating-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.6 14.9 8.5l6.5.9-4.7 4.6 1.1 6.5L12 17.4 6.2 20.5l1.1-6.5L2.6 9.4l6.5-.9Z'/%3E%3C/svg%3E");
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_gap);
+  vertical-align: middle;
+}
+.nv-rating[data-size="sm"] { --_s: 16px; }
+.nv-rating[data-size="lg"] { --_s: 28px; }
+.nv-rating[data-size="xl"] { --_s: 36px; }
+.nv-rating[data-color="primary"] { --_c: var(--nv-primary); }
+.nv-rating[data-color="success"] { --_c: var(--nv-success); }
+.nv-rating[data-color="danger"] { --_c: var(--nv-danger); }
+.nv-rating[data-color="info"] { --_c: var(--nv-info); }
+
+.nv-rating-item { position: relative; width: var(--_s); height: var(--_s); flex: none; }
+
+/* 星形用 mask 画两层：底层是空心轮廓，上层是实心填充，宽度由 --_fill 决定 */
+.nv-rating-item::before,
+.nv-rating-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--nv-border-strong);
+  -webkit-mask: var(--nv-rating-icon) center / contain no-repeat;
+  mask: var(--nv-rating-icon) center / contain no-repeat;
+}
+.nv-rating-item::after {
+  background: var(--_c);
+  clip-path: inset(0 calc((1 - var(--_fill, 0)) * 100%) 0 0);
+  transition: clip-path var(--nv-dur-2) var(--nv-ease);
+}
+
+/* 半星：左右各一个透明 radio，各盖住半颗星；整星模式只有一个 radio，铺满整颗星 */
+.nv-rating-item > input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  appearance: none;
+}
+.nv-rating[data-half] .nv-rating-item > input { width: 50%; }
+.nv-rating[data-half] .nv-rating-item > input:last-of-type { left: 50%; }
+
+/* 悬停预览：JS 给当前悬停的星写 data-hover，前面的星写 data-preview */
+.nv-rating-item[data-preview]::after,
+.nv-rating-item[data-hover]::after { --_fill: var(--_hover-fill, 1); }
+.nv-rating.is-preview .nv-rating-item:not([data-preview], [data-hover])::after { --_fill: 0; }
+
+/* 只读 / 禁用 */
+.nv-rating:is([data-readonly], .is-disabled) .nv-rating-item > input { cursor: default; pointer-events: none; }
+.nv-rating.is-disabled { opacity: 0.5; }
+
+/* 键盘焦点 */
+.nv-rating-item:has(> input:focus-visible) { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 3px; }
+
+/* 分数文字 */
+.nv-rating-value {
+  margin-inline-start: 6px;
+  color: var(--nv-fg-2);
+  font: 600 var(--nv-text-sm) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+}
+.nv-rating[data-size="sm"] .nv-rating-value { font-size: var(--nv-text-xs); }
+.nv-rating[data-size="lg"] .nv-rating-value,
+.nv-rating[data-size="xl"] .nv-rating-value { font-size: var(--nv-text-md); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-rating-item::after { transition: none; }
+}

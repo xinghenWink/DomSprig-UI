@@ -1,0 +1,77 @@
+<!--
+@name pin-input
+@title Pin Input 验证码输入
+@category form
+@order 10
+@desc 短信验证码、一次性密码这类定长输入。只有一个真实的 input 盖在格子上，表单提交、短信验证码自动填充、粘贴和读屏都由浏览器原生完成，格子只负责显示。
+-->
+
+<!-- @demo 基础 | 直接输入或粘贴整串数字，空格和横线会被去掉；填满时派发 `nv:complete { value }`。光标固定在末尾，退格从后往前删。 | col -->
+<div class="doc-stack">
+  <input class="nv-pin" id="pin-basic" data-length="6" aria-label="验证码" autocomplete="one-time-code">
+  <div class="doc-log" id="pin-log">value = （未填满）</div>
+</div>
+<script>
+  const pinLog = document.getElementById('pin-log');
+  document.getElementById('pin-basic').addEventListener('nv:change', (e) => {
+    pinLog.textContent = e.detail.complete ? `完成：${e.detail.value}` : `value = ${e.detail.value || '（未填满）'}`;
+  });
+</script>
+
+<!-- @demo 分组与占位 | `data-group` 每 n 格插一个分隔符；`placeholder` 的第 i 个字符显示在第 i 个空格子里。 | col -->
+<div class="doc-stack">
+  <input class="nv-pin" data-length="6" data-group="3" placeholder="——————" aria-label="分组验证码">
+  <input class="nv-pin" data-length="4" placeholder="1234" aria-label="带占位的验证码">
+</div>
+
+<!-- @demo 尺寸与样式 | `data-size` 取 sm / md / lg；`data-variant` 取 outline（默认）/ attached（连成一体）/ underline（只有下划线）。 | col -->
+<div class="doc-stack">
+  <input class="nv-pin" data-size="sm" data-length="4" value="42" aria-label="小号">
+  <input class="nv-pin" data-variant="attached" data-group="3" value="123" aria-label="连体">
+  <input class="nv-pin" data-size="lg" data-variant="underline" data-length="4" value="88" aria-label="下划线">
+</div>
+
+<!-- @demo 字母、掩码与状态 | `data-type="alphanumeric"` 接受字母数字；`data-mask` 用圆点遮住；`aria-invalid` 格子变红并抖动一次；`disabled` 禁用。 | col -->
+<div class="doc-stack">
+  <input class="nv-pin" data-type="alphanumeric" data-length="5" value="A3F" aria-label="邀请码">
+  <input class="nv-pin" data-mask data-length="4" value="2580" aria-label="支付密码">
+  <input class="nv-pin" data-length="4" value="0000" aria-invalid="true" aria-label="验证码错误">
+  <input class="nv-pin" data-length="4" value="12" disabled aria-label="已禁用">
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-length` | 位数 | `maxlength`，再没有时为 `6` |
+| `data-type` | `numeric` 只收数字 · `alphanumeric` 字母数字 · `any` 除空白外都收 | `numeric` |
+| `data-group` | 每 n 格插一个分隔符 | — |
+| `data-mask` | 用圆点遮住内容 | — |
+| `data-autosubmit` | 填满后自动提交所在表单 | — |
+| `data-size` | `sm` `md` `lg` | `md` |
+| `data-variant` | `outline` `attached` `underline` | `outline` |
+| `placeholder` | 第 i 个字符显示在第 i 个空格子里 | — |
+
+没有写的 `autocomplete` 会补成 `one-time-code`，`inputmode` 和 `pattern` 也会按 `data-type` 补上，短信验证码的自动填充照常工作。
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 原生事件 |
+| `nv:change` | `detail: { value, complete }`，每次内容变化都派发 |
+| `nv:complete` | 刚刚填满时派发，`detail: { value }` |
+
+### 实例
+`Nova.get(input, 'pin-input')`：
+
+| 成员 | 说明 |
+|---|---|
+| `value` | 读写；写入时按类型过滤并截断，不派发事件 |
+| `clear()` | 清空 |
+| `focus()` | 聚焦 |
+
+### 无障碍
+- 只有一个真实的 input，读屏把它当成普通输入框读，记得写 `label` 或 `aria-label`。
+- 格子是纯装饰（`aria-hidden`），高亮位置跟着真实光标走。
+- 没有 JS 时退化成普通输入框，功能不受影响。
+-->

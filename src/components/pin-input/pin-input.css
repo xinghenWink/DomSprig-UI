@@ -1,0 +1,147 @@
+/* Nova UI · Pin Input 验证码输入
+ * <input class="nv-pin" name="code" data-length="6" aria-label="验证码">   需 pin-input.js
+ * 一个真实的 input 盖在格子上，负责输入、粘贴、短信验证码自动填充和表单提交；格子只负责显示。
+ * data-size     sm | md（默认）| lg
+ * data-variant  outline（默认）| attached（格子连成一体）| underline（只有下划线）
+ * data-group="3" 每 3 格插一个分隔符；data-mask 用圆点遮住内容
+ * 状态：input[aria-invalid=true]（格子变红并抖动一次）、disabled
+ */
+.nv-pin-box {
+  --_s: 44px;
+  --_fs: 20px;
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.nv-pin-box[data-size="sm"] { --_s: 36px; --_fs: 16px; }
+.nv-pin-box[data-size="lg"] { --_s: 54px; --_fs: 24px; }
+
+.nv-pin-slots { display: flex; align-items: center; gap: calc(var(--_s) * 0.18); }
+
+/* 真实输入框：透明地盖在格子上 */
+.nv-pin-box > input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  caret-color: transparent;
+  font-size: 16px; /* 小于 16px 时 iOS 聚焦会缩放页面 */
+  cursor: text;
+}
+.nv-pin-box > input::selection { background: transparent; }
+.nv-pin-box > input::placeholder { color: transparent; }
+.nv-pin-box > input:-webkit-autofill { transition: background-color 600000s 0s, color 600000s 0s; }
+.nv-pin-box > input:disabled { cursor: not-allowed; }
+
+.nv-pin-slot {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--_s);
+  height: calc(var(--_s) + 4px);
+  border: 1px solid var(--nv-border-input);
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+  color: var(--nv-fg);
+  font: 600 var(--_fs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), background-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-pin-slot:not([data-filled]) { color: var(--nv-fg-3); font-weight: 400; }
+.nv-pin-box:hover .nv-pin-slot,
+.nv-pin-slot[data-filled] { border-color: var(--nv-border-strong); }
+.nv-pin-slot[data-active] {
+  z-index: 1;
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+
+/* 假光标：当前格为空时闪烁 */
+.nv-pin-slot[data-caret] { color: transparent; }
+.nv-pin-slot[data-caret]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.5px;
+  height: 42%;
+  border-radius: 1px;
+  background: var(--nv-primary);
+  transform: translate(-50%, -50%);
+  animation: nv-pin-blink 1.1s step-end infinite;
+}
+@keyframes nv-pin-blink { 50% { opacity: 0; } }
+
+/* 新输入的字符轻微弹一下 */
+.nv-pin-slot.is-pop { animation: nv-pin-pop var(--nv-dur-3) var(--nv-ease-spring); }
+@keyframes nv-pin-pop { from { transform: scale(0.88); } }
+
+.nv-pin-sep {
+  flex: none;
+  width: calc(var(--_s) * 0.24);
+  height: 2px;
+  margin-inline: calc(var(--_s) * 0.04);
+  border-radius: 1px;
+  background: var(--nv-border-strong);
+}
+
+/* 连成一体 */
+.nv-pin-box[data-variant="attached"] .nv-pin-slots { gap: 0; }
+.nv-pin-box[data-variant="attached"] .nv-pin-slot { border-radius: 0; box-shadow: none; }
+.nv-pin-box[data-variant="attached"] .nv-pin-slot + .nv-pin-slot { margin-left: -1px; }
+.nv-pin-box[data-variant="attached"] .nv-pin-slot:is(:first-child, .nv-pin-sep + *) {
+  border-start-start-radius: var(--nv-radius-md);
+  border-end-start-radius: var(--nv-radius-md);
+}
+.nv-pin-box[data-variant="attached"] .nv-pin-slot:is(:last-child, :has(+ .nv-pin-sep)) {
+  border-start-end-radius: var(--nv-radius-md);
+  border-end-end-radius: var(--nv-radius-md);
+}
+.nv-pin-box[data-variant="attached"] .nv-pin-sep { margin-inline: calc(var(--_s) * 0.2); }
+
+/* 下划线 */
+.nv-pin-box[data-variant="underline"] .nv-pin-slot {
+  border-width: 0 0 2px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.nv-pin-box[data-variant="underline"] .nv-pin-slot[data-active] { box-shadow: none; }
+
+/* 错误 */
+.nv-pin-box:has(> input[aria-invalid="true"]) .nv-pin-slot { border-color: var(--nv-danger); }
+.nv-pin-box:has(> input[aria-invalid="true"]) .nv-pin-slot[data-active] { box-shadow: 0 0 0 3px var(--nv-danger-ring); }
+.nv-pin-box[data-variant="underline"]:has(> input[aria-invalid="true"]) .nv-pin-slot[data-active] { box-shadow: none; }
+.nv-pin-box:has(> input[aria-invalid="true"]) .nv-pin-slots { animation: nv-pin-shake 0.42s var(--nv-ease); }
+@keyframes nv-pin-shake {
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* 禁用 */
+.nv-pin-box:has(> input:disabled) .nv-pin-slot {
+  border-color: var(--nv-border);
+  background: var(--nv-surface-2);
+  box-shadow: none;
+  color: var(--nv-fg-3);
+}
+.nv-pin-box[data-variant="underline"]:has(> input:disabled) .nv-pin-slot { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-pin-slot.is-pop,
+  .nv-pin-box .nv-pin-slots,
+  .nv-pin-slot[data-caret]::after { animation: none; }
+}

@@ -1,0 +1,20 @@
+/* Nova UI · Confetti 彩带
+ * 画布由 confetti.js 在喷发时创建，所有粒子落完后自动移除。
+ * 支持 popover 的浏览器里画布进入顶层（top layer），模态对话框里触发也看得见；
+ * 否则退回 fixed + 高 z-index。画布不拦截任何指针事件。
+ */
+.nv-confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--nv-z-tooltip) + 10);
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none;
+}

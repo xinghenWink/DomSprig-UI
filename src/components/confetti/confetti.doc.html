@@ -1,0 +1,74 @@
+<!--
+@name confetti
+@title Confetti 彩带
+@category effects
+@order 8
+@deps button
+@desc 庆祝时刻的彩带喷发：一行属性绑定到按钮，或用 `Nova.confetti()` 自定义角度、扇形、重力与颜色。共享画布，落完即移除；减少动态时不播放。
+-->
+
+<!-- @demo 绑定到按钮 | `data-confetti` 点击时从按钮喷出（颜色跟随主色）；`data-confetti="screen"` 从屏幕中央偏下喷出。 -->
+<button class="nv-btn" data-confetti><i data-nv-icon="sparkles"></i>完成任务</button>
+<button class="nv-btn" data-variant="soft" data-confetti="screen">全屏庆祝</button>
+<button class="nv-btn" data-variant="outline" data-confetti data-particle-count="160" data-spread="120" data-colors="#f43f5e|#f59e0b|#10b981">更多 · 自定义颜色</button>
+
+<!-- @demo 编程调用 | `Nova.confetti(options)` 返回 Promise，所有粒子落完时 resolve；`Nova.confetti.burst(el, opts)` 从元素中心喷出。 -->
+<button class="nv-btn" data-variant="soft" id="cf-sides">两侧礼花</button>
+<button class="nv-btn" data-variant="soft" id="cf-stars">圆点礼花</button>
+<button class="nv-btn" data-variant="ghost" id="cf-reset">清空</button>
+<script>
+  {
+    document.getElementById('cf-sides').addEventListener('click', () => {
+      Nova.confetti({ x: 0, y: 0.7, angle: 60, spread: 55, particleCount: 80 });
+      Nova.confetti({ x: 1, y: 0.7, angle: 120, spread: 55, particleCount: 80 });
+    });
+    document.getElementById('cf-stars').addEventListener('click', (e) => {
+      Nova.confetti.burst(e.currentTarget, { shapes: ['circle'], particleCount: 50, scalar: 1.3, spread: 360, velocity: 26 });
+    });
+    document.getElementById('cf-reset').addEventListener('click', () => Nova.confetti.reset());
+  }
+</script>
+
+<!-- @demo 提交成功后庆祝 | 真实场景：在异步操作成功后调用。 -->
+<button class="nv-btn" id="cf-submit">发布上线</button>
+<script>
+  {
+    const btn = document.getElementById('cf-submit');
+    btn.addEventListener('click', async () => {
+      Nova.button ? Nova.button.loading(btn, true) : (btn.disabled = true);
+      await new Promise((r) => setTimeout(r, 900));
+      Nova.button ? Nova.button.loading(btn, false) : (btn.disabled = false);
+      Nova.confetti.burst(btn);
+      if (Nova.toast) Nova.toast.success('已发布上线');
+    });
+  }
+</script>
+
+<!-- @api
+### 选项
+`Nova.confetti(options) → Promise`；按钮上的 `data-*` 写成短横线形式（如 `data-particle-count`），数组用竖线分隔。
+
+| 选项 | 说明 | 默认 |
+|---|---|---|
+| `x` / `y` | 喷发点，视口比例 0–1 | `0.5` / `0.6` |
+| `particleCount` | 粒子数 | `80` |
+| `angle` | 喷射方向（度），90 朝上 | `90` |
+| `spread` | 扇形张角（度） | `60` |
+| `velocity` | 初速度 | `30` |
+| `gravity` / `drag` | 重力 / 空气阻力（每帧保留的速度比例） | `1` / `0.92` |
+| `scalar` | 粒子尺寸倍数 | `1` |
+| `colors` | 颜色数组 | 由主色推导 |
+| `shapes` | 形状数组：`square` `circle` `strip` | 三种混合 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.confetti(opts)` | 喷发，所有粒子落完时 resolve |
+| `Nova.confetti.burst(el, opts)` | 从元素中心喷出，颜色读取该元素处的 `--nv-hue` |
+| `Nova.confetti.reset()` | 立即清空并移除画布 |
+
+### 实现与降级
+- 共享一张画布（按 devicePixelRatio 缩放，最高 2 倍），不拦截指针；支持 popover 的浏览器里画布进入顶层，模态框里触发也看得见。
+- 物理：初速度、空气阻力、重力、左右摆动、旋转与翻面；粒子落完即停止 rAF 并移除画布。
+- 减少动态：不播放，Promise 立即 resolve。
+-->

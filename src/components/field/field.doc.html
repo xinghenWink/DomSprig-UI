@@ -1,0 +1,177 @@
+<!--
+@name field
+@title Field 表单项
+@category form
+@order 1
+@deps input
+@desc 表单项包装：标签、必填星号、说明与错误文字。自动关联 label、aria-describedby 与 aria-invalid，错误文字可随时改写；支持横向布局与 .nv-form 纵向表单间距。
+-->
+
+<!-- @demo 基础用法 | `.nv-field` 内放 `.nv-field-label`、控件与 `.nv-field-desc`；不写 `for`/`id` 也会自动关联，说明文字会写入控件的 `aria-describedby`。 | col -->
+<div class="nv-field doc-narrow">
+  <label class="nv-field-label">团队名称</label>
+  <input class="nv-input" placeholder="例如：增长实验室">
+  <p class="nv-field-desc">将显示在邀请邮件与账单抬头中。</p>
+</div>
+
+<!-- @demo 必填与错误 | `data-required` 显示星号；`.nv-field-error` 有文字时显示并给控件加 `aria-invalid="true"`，清空文字即恢复。也可调用 `Nova.field.setError(field, msg)`。 | col -->
+<div class="doc-stack doc-narrow">
+  <div class="nv-field" data-required id="field-phone">
+    <label class="nv-field-label">手机号</label>
+    <div class="nv-control">
+      <span class="nv-control-affix">+86</span>
+      <input type="tel" inputmode="numeric" value="1380013" autocomplete="tel">
+    </div>
+    <p class="nv-field-desc">用于登录与接收验证码。</p>
+    <p class="nv-field-error">请输入 11 位手机号</p>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-size="sm" data-variant="outline" type="button" id="field-toggle">清除错误</button>
+  </div>
+</div>
+<script>
+  {
+    const field = document.getElementById('field-phone');
+    const btn = document.getElementById('field-toggle');
+    btn.addEventListener('click', () => {
+      const has = field.hasAttribute('data-invalid');
+      Nova.field.setError(field, has ? '' : '请输入 11 位手机号');
+      btn.textContent = has ? '显示错误' : '清除错误';
+    });
+  }
+</script>
+
+<!-- @demo 标签附加信息 | `.nv-field-head` 放标签与右侧的 `.nv-field-extra`（可选标记、链接或字数）。 | col -->
+<div class="doc-stack doc-narrow">
+  <div class="nv-field">
+    <div class="nv-field-head">
+      <label class="nv-field-label">密码</label>
+      <a class="nv-field-extra" href="#forgot">忘记密码？</a>
+    </div>
+    <input class="nv-input" type="password" data-toggle autocomplete="current-password">
+  </div>
+  <div class="nv-field">
+    <div class="nv-field-head">
+      <label class="nv-field-label">推荐码</label>
+      <span class="nv-field-extra">选填</span>
+    </div>
+    <input class="nv-input" placeholder="NV-XXXX">
+  </div>
+</div>
+
+<!-- @demo 横向布局 | `data-layout="horizontal"` 标签在左、右对齐，宽度用 `--nv-field-label-width` 调整；窄屏（≤560px）自动改为纵向。 | col -->
+<form class="nv-form doc-mid" onsubmit="return false">
+  <div class="nv-field" data-layout="horizontal" data-required>
+    <label class="nv-field-label">项目名称</label>
+    <input class="nv-input" value="Nova 设计系统">
+  </div>
+  <div class="nv-field" data-layout="horizontal">
+    <label class="nv-field-label">访问地址</label>
+    <div class="nv-input-group">
+      <span class="nv-input-addon">nova.dev/</span>
+      <input class="nv-input" value="design-system">
+    </div>
+    <p class="nv-field-desc">只能包含小写字母、数字和短横线。</p>
+  </div>
+  <div class="nv-field" data-layout="horizontal">
+    <label class="nv-field-label">负责人邮箱</label>
+    <input class="nv-input" type="email" value="lead@nova" aria-invalid="true">
+    <p class="nv-field-error">邮箱格式不正确</p>
+  </div>
+</form>
+
+<!-- @demo 实战：注册表单 | `.nv-form` 统一字段间距，`.nv-form-row` 两列自适应，`.nv-form-actions` 放操作；提交时校验并用 `Nova.field.setError` 显示错误，修改后实时消除。 | col -->
+<form class="nv-form doc-mid" id="field-signup" novalidate>
+  <h3 class="nv-form-title">创建账号</h3>
+  <p class="nv-form-subtitle">免费试用 14 天，无需信用卡。</p>
+  <div class="nv-form-row">
+    <div class="nv-field" data-required>
+      <label class="nv-field-label">姓名</label>
+      <input class="nv-input" name="name" autocomplete="name" placeholder="林晓">
+    </div>
+    <div class="nv-field">
+      <label class="nv-field-label">公司</label>
+      <input class="nv-input" name="company" autocomplete="organization" placeholder="选填">
+    </div>
+  </div>
+  <div class="nv-field" data-required>
+    <label class="nv-field-label">工作邮箱</label>
+    <input class="nv-input" name="email" type="email" autocomplete="email" placeholder="name@company.com">
+  </div>
+  <div class="nv-field" data-required>
+    <label class="nv-field-label">密码</label>
+    <input class="nv-input" name="password" type="password" data-toggle autocomplete="new-password">
+    <p class="nv-field-desc">至少 8 位，包含字母和数字。</p>
+  </div>
+  <div class="nv-form-actions">
+    <button class="nv-btn" type="submit">创建账号</button>
+    <button class="nv-btn" data-variant="ghost" type="reset">重置</button>
+  </div>
+  <div class="doc-log" id="field-signup-log"></div>
+</form>
+<script>
+  {
+    const form = document.getElementById('field-signup');
+    const log = document.getElementById('field-signup-log');
+    const rules = {
+      name: (v) => (v.trim() ? '' : '请填写姓名'),
+      email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : '请输入有效的邮箱地址'),
+      password: (v) => (/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(v) ? '' : '密码至少 8 位，且包含字母和数字'),
+    };
+    const check = (input) => {
+      const msg = rules[input.name] ? rules[input.name](input.value) : '';
+      Nova.field.setError(input.closest('.nv-field'), msg);
+      return !msg;
+    };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const inputs = [...form.elements].filter((el) => rules[el.name]);
+      const bad = inputs.filter((el) => !check(el));
+      if (bad.length) { bad[0].focus(); log.textContent = `有 ${bad.length} 项需要修改`; return; }
+      log.textContent = `提交成功：${new URLSearchParams(new FormData(form))}`;
+    });
+    form.addEventListener('input', (e) => {
+      if (e.target.closest('.nv-field[data-invalid]')) check(e.target);
+    });
+    form.addEventListener('reset', () => {
+      form.querySelectorAll('.nv-field').forEach((f) => Nova.field.setError(f, ''));
+      log.textContent = '';
+    });
+  }
+</script>
+
+<!-- @api
+### 结构
+| 类名 / 属性 | 说明 |
+|---|---|
+| `.nv-field` | 表单项容器（`<div>` 或 `<fieldset>`） |
+| `.nv-field-label` | 标签；`<label>` 自动与控件 `for`/`id` 关联，非可标注控件（如评分）改用 `aria-labelledby` |
+| `.nv-field-head` | 标签行：标签 + `.nv-field-extra` |
+| `.nv-field-desc` | 说明文字，写入 `aria-describedby` |
+| `.nv-field-error` | 错误文字；有内容时显示、加入 `aria-describedby`、给控件设 `aria-invalid="true"`，并带 `aria-live="polite"` |
+| `data-required` | 标签后显示红色星号（不会自动加 `required`，请在控件上自行声明） |
+| `data-layout="horizontal"` | 横向布局 |
+| `data-keep-desc` | 出错时仍显示说明文字（默认隐藏） |
+| `data-field-control` | 写在字段内的某个元素上，指定它为被关联的控件 |
+| `.nv-form` | 纵向表单，字段间距 `--nv-form-gap`；`data-size="sm"` 更紧凑 |
+| `.nv-form-row` | 自适应多列（每列最小 180px） |
+| `.nv-form-actions` | 操作按钮区；`data-align="end"` 右对齐 |
+| `.nv-form-title` / `.nv-form-subtitle` | 表单标题 / 副标题 |
+
+### 状态
+| 属性 | 说明 |
+|---|---|
+| `data-invalid` | 由脚本写在 `.nv-field` 上，表示当前有错误（标签变红） |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.field.setError(field, msg)` | 设置错误文字，传空字符串或 `null` 清除；没有 `.nv-field-error` 时自动创建 |
+| `Nova.get(field, 'field')` | 实例：`refresh()` 重新关联、`control` 当前控件、`setError(msg)`、`destroy()` |
+
+### 可定制变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-field-label-width` | 横向布局的标签列宽 | `112px` |
+| `--nv-form-gap` | `.nv-form` 字段间距 | `20px` |
+-->

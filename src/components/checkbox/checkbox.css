@@ -1,0 +1,195 @@
+/* Nova UI · Checkbox 复选框（纯 CSS）
+ * <input type="checkbox" class="nv-checkbox">            对勾描边绘制动画；el.indeterminate = true 为半选
+ * data-size="sm|md|lg"（14 / 16 / 20px）  data-color="primary|success|warning|danger|neutral"
+ * <label class="nv-check"><input …><span class="nv-check-text"><span class="nv-check-label">标题</span><span class="nv-check-desc">说明</span></span></label>
+ * <div class="nv-check-group" role="group" data-orientation="horizontal" data-columns="2">
+ * <label class="nv-check-card">…</label>                选中时边框高亮（radio 同样可用）；data-indicator="end|none"
+ */
+.nv-checkbox {
+  --_s: 16px;
+  --_r: calc(var(--nv-radius) * 0.45);
+  --_c: var(--nv-primary);
+  --_c-hover: var(--nv-primary-hover);
+  --_on: var(--nv-primary-fg);
+  --_bd: color-mix(in oklab, var(--nv-fg-3) 72%, var(--nv-border-input));
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-content: center;
+  width: var(--_s);
+  height: var(--_s);
+  margin: 0;
+  border: 1px solid var(--_bd);
+  border-radius: var(--_r);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+  vertical-align: middle;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--nv-dur-2) var(--nv-ease),
+    border-color var(--nv-dur-2) var(--nv-ease),
+    box-shadow var(--nv-dur-2) var(--nv-ease),
+    transform var(--nv-dur-3) var(--nv-ease-spring);
+}
+/* 对勾 / 半选横线：遮罩图形 + clip-path 从左到右「描」出来 */
+.nv-checkbox::before {
+  content: "";
+  width: calc(var(--_s) * 0.78);
+  height: calc(var(--_s) * 0.78);
+  background: var(--_on);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5 9.5 17.5 19.5 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5 9.5 17.5 19.5 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--nv-dur-1) var(--nv-ease);
+}
+.nv-checkbox:hover { border-color: var(--nv-fg-3); }
+.nv-checkbox:active:not(:disabled) { transform: scale(0.88); transition-duration: var(--nv-dur-1); }
+.nv-checkbox:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-checkbox:is(:checked, :indeterminate) {
+  border-color: var(--_c);
+  background: var(--_c);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--_c) 30%, transparent);
+}
+.nv-checkbox:is(:checked, :indeterminate):hover { border-color: var(--_c-hover); background: var(--_c-hover); }
+.nv-checkbox:is(:checked, :indeterminate)::before {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path var(--nv-dur-3) var(--nv-ease-out) 40ms;
+}
+.nv-checkbox:indeterminate::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
+}
+.nv-checkbox[aria-invalid="true"]:not(:checked, :indeterminate) { border-color: var(--nv-danger); }
+.nv-checkbox[aria-invalid="true"]:focus-visible { outline-color: var(--nv-danger); }
+.nv-checkbox:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.nv-checkbox:disabled:not(:checked, :indeterminate) { background: var(--nv-surface-2); border-color: var(--nv-border-strong); }
+
+/* —— 尺寸 —— */
+.nv-checkbox[data-size="sm"] { --_s: 14px; --_r: calc(var(--nv-radius) * 0.38); }
+.nv-checkbox[data-size="lg"] { --_s: 20px; --_r: calc(var(--nv-radius) * 0.56); }
+
+/* —— 颜色（radio / switch 共用同一组变量名） —— */
+:is(.nv-checkbox, .nv-radio, .nv-switch)[data-color="success"] { --_c: var(--nv-success); --_c-hover: color-mix(in oklab, var(--nv-success) 88%, black); --_on: #fff; }
+:is(.nv-checkbox, .nv-radio, .nv-switch)[data-color="danger"] { --_c: var(--nv-danger); --_c-hover: color-mix(in oklab, var(--nv-danger) 88%, black); --_on: #fff; }
+:is(.nv-checkbox, .nv-radio, .nv-switch)[data-color="warning"] { --_c: var(--nv-warning); --_c-hover: color-mix(in oklab, var(--nv-warning) 90%, black); --_on: oklch(0.25 0.06 60); }
+:is(.nv-checkbox, .nv-radio, .nv-switch)[data-color="neutral"] { --_c: var(--nv-fg); --_c-hover: color-mix(in oklab, var(--nv-fg) 86%, var(--nv-bg)); --_on: var(--nv-fg-inverse); }
+
+/* —— 标签包装 .nv-check —— */
+.nv-check {
+  --_fs: var(--nv-text-md);
+  --_lh: calc(var(--_fs) * 1.5);
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 100%;
+  color: var(--nv-fg);
+  font: var(--_fs) / 1.5 var(--nv-font);
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.nv-check[data-size="sm"] { --_fs: var(--nv-text-sm); gap: 8px; }
+.nv-check[data-size="lg"] { --_fs: var(--nv-text-lg); gap: 12px; }
+/* 控件与首行文字垂直居中 */
+.nv-check > :is(.nv-checkbox, .nv-radio, .nv-switch) { margin-top: calc((var(--_lh) - var(--_s)) / 2); }
+.nv-check-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nv-check-label { color: var(--nv-fg); }
+.nv-check-text:has(> .nv-check-desc) > .nv-check-label { font-weight: 500; }
+.nv-check-desc { font-size: var(--nv-text-sm); line-height: 1.45; color: var(--nv-fg-2); }
+.nv-check:has(> :disabled) { cursor: not-allowed; opacity: 0.5; }
+.nv-check:has(> :disabled) > :disabled { opacity: 1; }
+.nv-check:hover > .nv-checkbox:not(:checked, :indeterminate, :disabled) { border-color: var(--nv-fg-3); }
+/* 控件放到右侧：data-reverse（设置项列表常用，配合 data-block 两端对齐） */
+.nv-check[data-reverse] { flex-direction: row-reverse; }
+.nv-check[data-block] { display: flex; width: 100%; justify-content: space-between; }
+.nv-check[data-block]:not([data-reverse]) { justify-content: flex-start; }
+.nv-check[data-block] > .nv-check-text { flex: 1; }
+
+/* —— 分组 —— */
+.nv-check-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.nv-check-group[data-orientation="horizontal"] { flex-direction: row; flex-wrap: wrap; gap: 10px 22px; }
+.nv-check-group[data-columns] { display: grid; grid-template-columns: repeat(var(--_cols, 2), minmax(0, 1fr)); gap: 12px; }
+.nv-check-group[data-columns="3"] { --_cols: 3; }
+.nv-check-group[data-columns="4"] { --_cols: 4; }
+@media (max-width: 560px) {
+  .nv-check-group[data-columns] { grid-template-columns: minmax(0, 1fr); }
+}
+/* float 让 legend 变成普通子项，从而参与 flex/grid 间距 */
+.nv-check-group > legend {
+  float: left;
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-bottom: 2px;
+  padding: 0;
+  font-size: var(--nv-text-md);
+  font-weight: 500;
+  color: var(--nv-fg);
+}
+
+/* —— 可选卡片 .nv-check-card —— */
+.nv-check-card {
+  --_lh: calc(var(--nv-text-md) * 1.5);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / 1.5 var(--nv-font);
+  box-shadow: var(--nv-shadow-xs);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--nv-dur-2) var(--nv-ease),
+    background-color var(--nv-dur-2) var(--nv-ease),
+    box-shadow var(--nv-dur-2) var(--nv-ease),
+    transform var(--nv-dur-2) var(--nv-ease);
+}
+.nv-check-card > :is(.nv-checkbox, .nv-radio) { margin-top: calc((var(--_lh) - var(--_s)) / 2); }
+.nv-check-card:hover { border-color: var(--nv-border-strong); }
+.nv-check-card:active:not(:has(> :disabled)) { transform: scale(0.99); }
+.nv-check-card:has(> :checked) {
+  border-color: var(--nv-primary);
+  background: color-mix(in oklab, var(--nv-primary) 5%, var(--nv-surface));
+  box-shadow: 0 0 0 1px var(--nv-primary), 0 4px 14px -6px color-mix(in oklab, var(--nv-primary) 40%, transparent);
+}
+.nv-check-card:has(> :focus-visible) { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-check-card > :focus-visible { outline: 0; }
+.nv-check-card:has(> :disabled) { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.nv-check-card:has(> :disabled) > :disabled { opacity: 1; }
+.nv-check-card[data-indicator="end"] > :is(.nv-checkbox, .nv-radio) { order: 9; margin-left: auto; }
+.nv-check-card[data-indicator="none"] > :is(.nv-checkbox, .nv-radio) {
+  position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none;
+}
+.nv-check-card > .nv-check-text { flex: 1; }
+.nv-check-card .nv-check-label { font-weight: 500; }
+.nv-check-card-icon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--nv-radius-md);
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  transition: background-color var(--nv-dur-2), color var(--nv-dur-2);
+}
+.nv-check-card-icon > svg { width: 18px; height: 18px; }
+.nv-check-card:has(> :checked) .nv-check-card-icon { background: var(--nv-primary-soft); color: var(--nv-primary-text); }
+.nv-check-card-extra { margin-left: auto; font-weight: 600; color: var(--nv-fg); white-space: nowrap; }

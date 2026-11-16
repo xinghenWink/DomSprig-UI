@@ -1,0 +1,157 @@
+/* Nova UI · Pagination
+ * <nav class="nv-pagination" data-total="250" data-page="1" data-page-size="10">（由 pagination.js 渲染）
+ * data-variant  soft（默认）| solid | outline        data-size  sm | md | lg
+ * data-show-total · data-size-options="10,20,50" · data-jumper · data-simple · data-disabled
+ */
+.nv-pagination {
+  --_size: var(--nv-pagination-size, var(--nv-h-sm));
+  --_fs: var(--nv-text-sm);
+  --_radius: calc(var(--nv-radius-md) * 0.85);
+  --_cur-bg: var(--nv-primary-soft);
+  --_cur-fg: var(--nv-primary-text);
+  --_cur-ring: inset 0 0 0 1px color-mix(in oklab, var(--nv-primary) 38%, transparent);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  color: var(--nv-fg-2);
+  font: var(--_fs) / 1.2 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+}
+.nv-pagination[data-size="sm"] { --_size: 28px; --_fs: var(--nv-text-xs); --_radius: calc(var(--nv-radius-md) * 0.7); gap: 6px 10px; }
+.nv-pagination[data-size="lg"] { --_size: var(--nv-h-md); --_fs: var(--nv-text-md); --_radius: var(--nv-radius-md); }
+.nv-pagination[data-align="center"] { justify-content: center; }
+.nv-pagination[data-align="end"] { justify-content: flex-end; }
+
+.nv-pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nv-pagination-list > li { display: flex; }
+
+.nv-pagination-item {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--_size);
+  height: var(--_size);
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--_radius);
+  background: transparent;
+  color: var(--nv-fg);
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease),
+    border-color var(--nv-dur-1) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease), transform var(--nv-dur-1) var(--nv-ease);
+}
+.nv-pagination-item > svg, .nv-pagination-item .nv-icon { width: 16px; height: 16px; }
+.nv-pagination-item:hover:not(:disabled, [aria-current="page"]) { background: var(--nv-surface-2); }
+.nv-pagination-item:active:not(:disabled) { transform: scale(0.94); }
+.nv-pagination-item:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; z-index: 1; }
+.nv-pagination-item:disabled { opacity: 0.5; cursor: not-allowed; }
+.nv-pagination-item:is(.nv-pagination-prev, .nv-pagination-next) { color: var(--nv-fg-2); padding: 0; }
+.nv-pagination-item:is(.nv-pagination-prev, .nv-pagination-next):hover:not(:disabled) { color: var(--nv-fg); }
+
+/* 当前页 */
+.nv-pagination-item[aria-current="page"] {
+  background: var(--_cur-bg);
+  color: var(--_cur-fg);
+  font-weight: 600;
+  box-shadow: var(--_cur-ring);
+  cursor: default;
+}
+.nv-pagination[data-variant="solid"] {
+  --_cur-bg: var(--nv-primary);
+  --_cur-fg: var(--nv-primary-fg);
+  --_cur-ring: 0 1px 2px color-mix(in oklab, var(--nv-primary) 35%, transparent), 0 4px 10px -4px color-mix(in oklab, var(--nv-primary) 55%, transparent);
+}
+.nv-pagination[data-variant="outline"] .nv-pagination-item {
+  border-color: var(--nv-border-input);
+  background: var(--nv-surface);
+  box-shadow: var(--nv-shadow-xs);
+}
+.nv-pagination[data-variant="outline"] .nv-pagination-item:hover:not(:disabled, [aria-current="page"]) { border-color: var(--nv-border-strong); background: var(--nv-surface-2); }
+.nv-pagination[data-variant="outline"] .nv-pagination-item[aria-current="page"] {
+  border-color: var(--nv-primary);
+  background: var(--nv-surface);
+  color: var(--nv-primary-text);
+  box-shadow: 0 0 0 3px var(--nv-ring);
+}
+.nv-pagination[data-variant="outline"] .nv-pagination-more { border-color: transparent; background: transparent; box-shadow: none; }
+
+/* 省略号：悬停 / 聚焦时显示双箭头，点击跳 5 页 */
+.nv-pagination-more { color: var(--nv-fg-3); padding: 0; }
+.nv-pagination-more > span { grid-area: 1 / 1; display: inline-flex; transition: opacity var(--nv-dur-1), transform var(--nv-dur-2) var(--nv-ease-out); }
+.nv-pagination-jump { opacity: 0; transform: scale(0.7); color: var(--nv-primary-text); }
+.nv-pagination-more:is(:hover, :focus-visible):not(:disabled) .nv-pagination-dots { opacity: 0; transform: scale(0.7); }
+.nv-pagination-more:is(:hover, :focus-visible):not(:disabled) .nv-pagination-jump { opacity: 1; transform: none; }
+@media (hover: none) {
+  .nv-pagination-more .nv-pagination-dots { opacity: 0; }
+  .nv-pagination-more .nv-pagination-jump { opacity: 1; transform: none; color: var(--nv-fg-3); }
+}
+
+/* 总数 */
+.nv-pagination-total { color: var(--nv-fg-2); white-space: nowrap; }
+
+/* 每页条数（原生 select 外观；有 Select 组件时由其接管） */
+.nv-pagination .nv-control {
+  --_h: var(--_size);
+  --_px: 10px;
+  --_fs: inherit;
+  width: auto;
+  border-radius: var(--_radius);
+}
+.nv-pagination-sizer.nv-control { position: relative; padding: 0; cursor: pointer; }
+.nv-pagination-sizer.nv-control > select {
+  height: calc(var(--_size) - 2px);
+  margin: 0;
+  padding: 0 28px 0 10px;
+  border: 0;
+  outline: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.nv-pagination-sizer.nv-control > select:disabled { cursor: not-allowed; }
+.nv-pagination-sizer.nv-control > select option { background: var(--nv-surface-raised); color: var(--nv-fg); }
+.nv-pagination-caret {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  display: inline-flex;
+  color: var(--nv-fg-3);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 跳转 / 简洁模式输入框 */
+.nv-pagination-jumper { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.nv-pagination-input.nv-control {
+  width: calc(var(--_size) + 18px);
+  min-height: var(--_size);
+  height: var(--_size);
+  padding: 0 6px;
+  text-align: center;
+  font: 500 var(--_fs) / 1 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+}
+.nv-pagination-simple { display: inline-flex; align-items: center; gap: 8px; margin: 0 4px; color: var(--nv-fg-2); }
+.nv-pagination-slash { color: var(--nv-fg-3); }
+.nv-pagination-count { min-width: 1.5em; color: var(--nv-fg); font-weight: 500; }
+
+.nv-pagination[aria-disabled="true"] { cursor: not-allowed; }
+.nv-pagination[aria-disabled="true"] .nv-pagination-item[aria-current="page"] { opacity: 0.5; }

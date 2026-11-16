@@ -1,0 +1,110 @@
+<!--
+@name textarea
+@title Textarea 多行输入
+@category form
+@order 3
+@deps field
+@desc 多行文本输入。随内容自动增高（可设最小/最大行数）、右下角字数统计、填充变体与错误/禁用/只读状态，外观与输入框一致。
+-->
+
+<!-- @demo 基础用法 | `<textarea class="nv-textarea">`，用 `rows` 控制初始高度，可纵向拖拽调整。 | col -->
+<div class="nv-field doc-mid">
+  <label class="nv-field-label">问题描述</label>
+  <textarea class="nv-textarea" rows="4" placeholder="请尽量描述复现步骤、期望结果与实际结果"></textarea>
+  <p class="nv-field-desc">支持粘贴错误日志，我们会在 1 个工作日内回复。</p>
+</div>
+
+<!-- @demo 自动高度 | `data-autosize` 随内容增高；`data-min-rows` / `data-max-rows` 限制行数，超过最大行数后出现滚动条。在隐藏容器中初始化也能正确计算。 | col -->
+<div class="nv-field doc-mid">
+  <label class="nv-field-label">发布说明</label>
+  <textarea class="nv-textarea" data-autosize data-min-rows="2" data-max-rows="6" placeholder="输入几行试试…">新增 Field、Input、Textarea 等 12 个表单组件。
+所有控件统一 32 / 38 / 44px 三档高度。</textarea>
+  <p class="nv-field-desc">最少 2 行，最多 6 行。</p>
+</div>
+
+<!-- @demo 字数统计 | `maxlength` + `data-count` 在右下角显示「当前/上限」，到达上限时变色。 | col -->
+<div class="nv-field doc-mid">
+  <label class="nv-field-label">个人简介</label>
+  <textarea class="nv-textarea" rows="3" maxlength="120" data-count>前端工程师，关注设计系统与无障碍体验。</textarea>
+</div>
+
+<!-- @demo 尺寸与变体 | `data-size="sm|md|lg"` 调整字号与内边距；`data-variant="filled"` 为填充风格。 | col -->
+<div class="doc-stack doc-mid">
+  <textarea class="nv-textarea" data-size="sm" rows="2" placeholder="小号" aria-label="小号"></textarea>
+  <textarea class="nv-textarea" rows="2" placeholder="默认" aria-label="默认"></textarea>
+  <textarea class="nv-textarea" data-size="lg" rows="2" placeholder="大号" aria-label="大号"></textarea>
+  <textarea class="nv-textarea" data-variant="filled" rows="2" placeholder="填充变体" aria-label="填充变体"></textarea>
+</div>
+
+<!-- @demo 状态 | 错误态由 Field 的 `.nv-field-error` 自动设置 `aria-invalid`；`disabled` 禁用，`readonly` 只读。 | col -->
+<div class="doc-stack doc-mid">
+  <div class="nv-field">
+    <label class="nv-field-label">退款原因</label>
+    <textarea class="nv-textarea" rows="2" maxlength="200" data-count>太贵</textarea>
+    <p class="nv-field-error">请至少输入 10 个字，方便我们改进</p>
+  </div>
+  <textarea class="nv-textarea" rows="2" disabled aria-label="禁用">订单已完成，无法修改备注</textarea>
+  <textarea class="nv-textarea" rows="2" readonly aria-label="只读">合同条款 3.2：服务期满前 30 天可申请续约。</textarea>
+</div>
+
+<!-- @demo 实战：评论框 | 自动增高 + 字数统计 + 工具栏；`Ctrl/⌘ + Enter` 发送，空内容时按钮禁用。 | col -->
+<div class="doc-stack doc-mid" id="textarea-comment">
+  <textarea class="nv-textarea" id="textarea-comment-input" data-autosize data-min-rows="3" data-max-rows="8" maxlength="500" data-count placeholder="写下你的评论…（Ctrl + Enter 发送）" aria-label="评论"></textarea>
+  <div class="nv-form-actions" data-align="end">
+    <button class="nv-btn" data-variant="ghost" data-size="sm" type="button" id="textarea-comment-cancel">取消</button>
+    <button class="nv-btn" data-size="sm" type="button" id="textarea-comment-send" disabled>发送</button>
+  </div>
+  <div class="doc-log" id="textarea-comment-log"></div>
+</div>
+<script>
+  {
+    const ta = document.getElementById('textarea-comment-input');
+    const send = document.getElementById('textarea-comment-send');
+    const log = document.getElementById('textarea-comment-log');
+    const sync = () => { send.disabled = !ta.value.trim(); };
+    const submit = () => {
+      if (send.disabled) return;
+      log.textContent = `已发送 ${ta.value.trim().length} 字`;
+      ta.value = '';
+      Nova.textarea.resize(ta);
+      sync();
+    };
+    ta.addEventListener('input', sync);
+    ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); submit(); } });
+    send.addEventListener('click', submit);
+    document.getElementById('textarea-comment-cancel').addEventListener('click', () => { ta.value = ''; Nova.textarea.resize(ta); sync(); });
+  }
+</script>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-textarea"` | 基础类 | — | — |
+| `data-size` | 尺寸 | `sm` `md` `lg` | `md` |
+| `data-variant` | 填充变体 | `filled` | — |
+| `data-resize` | 禁止拖拽调整 | `none` | 可纵向拖拽 |
+| `data-autosize` | 随内容自动增高（需 textarea.js） | 布尔 | — |
+| `data-min-rows` | 自动高度的最小行数 | 数字 | `rows` 或 `2` |
+| `data-max-rows` | 自动高度的最大行数，超出滚动 | 数字 | 不限 |
+| `data-count` | 右下角字数，配合 `maxlength` 显示上限 | 布尔 | — |
+| `aria-invalid="true"` | 错误态 | — | — |
+| `disabled` / `readonly` | 禁用 / 只读 | 布尔 | — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `input` / `change` | 原生事件，照常触发 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.textarea.resize(el)` | 脚本修改 `value` 后刷新高度与字数 |
+| `Nova.get(el, 'textarea')` | 实例：`resize()` `refresh()` `destroy()` |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-border-input` / `--nv-ring` | 边框 / 聚焦环 |
+| `--nv-radius` | 圆角基准 |
+-->

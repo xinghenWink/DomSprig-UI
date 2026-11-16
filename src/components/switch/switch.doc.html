@@ -1,0 +1,132 @@
+<!--
+@name switch
+@title Switch 开关
+@category form
+@order 6
+@deps checkbox
+@desc 立即生效的开关。原生 checkbox + role="switch"，滑块弹性滑动、按住拉伸，支持尺寸、颜色、加载态、轨道内图标与带说明的设置项布局。
+-->
+
+<!-- @demo 基础用法 | `<input type="checkbox" role="switch" class="nv-switch">`，放进 `.nv-check` 标签里点击文字也能切换。 -->
+<label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" checked>飞行模式</label>
+<label class="nv-check"><input type="checkbox" role="switch" class="nv-switch">蓝牙</label>
+<input type="checkbox" role="switch" class="nv-switch" aria-label="勿扰模式">
+
+<!-- @demo 尺寸与颜色 | `data-size="sm|md|lg"` 对应轨道高度 16 / 20 / 24px；`data-color` 切换开启颜色。 | col -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <label class="nv-check" data-size="sm"><input type="checkbox" role="switch" class="nv-switch" data-size="sm" checked>小号</label>
+    <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" checked>默认</label>
+    <label class="nv-check" data-size="lg"><input type="checkbox" role="switch" class="nv-switch" data-size="lg" checked>大号</label>
+  </div>
+  <div class="doc-row">
+    <input type="checkbox" role="switch" class="nv-switch" data-color="success" checked aria-label="成功色">
+    <input type="checkbox" role="switch" class="nv-switch" data-color="warning" checked aria-label="警告色">
+    <input type="checkbox" role="switch" class="nv-switch" data-color="danger" checked aria-label="危险色">
+    <input type="checkbox" role="switch" class="nv-switch" data-color="neutral" checked aria-label="中性色">
+  </div>
+</div>
+
+<!-- @demo 轨道内图标 | `data-icons` 在轨道空白处显示 ✓ / ✕，帮助色弱用户区分状态；`data-icons="theme"` 为太阳 / 月亮。 -->
+<input type="checkbox" role="switch" class="nv-switch" data-icons checked aria-label="自动保存">
+<input type="checkbox" role="switch" class="nv-switch" data-icons aria-label="自动播放">
+<input type="checkbox" role="switch" class="nv-switch" data-icons="theme" aria-label="深色模式">
+<input type="checkbox" role="switch" class="nv-switch" data-icons="theme" data-size="lg" checked aria-label="深色模式（大号）">
+
+<!-- @demo 加载与禁用 | 需要请求服务器时加 `data-loading`：滑块变成加载圈，点击与空格键都会被拦截；`Nova.switch.loading(el, bool)` 切换并同步 `aria-busy`。 | col -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" data-loading>同步中</label>
+    <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" data-loading checked>保存中</label>
+    <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" disabled>禁用</label>
+    <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" disabled checked>禁用开启</label>
+  </div>
+  <label class="nv-check"><input type="checkbox" role="switch" class="nv-switch" id="switch-remote">切换时请求服务器（800ms）</label>
+  <div class="doc-log" id="switch-remote-log"></div>
+</div>
+<script>
+  {
+    const sw = document.getElementById('switch-remote');
+    const log = document.getElementById('switch-remote-log');
+    sw.addEventListener('change', () => {
+      Nova.switch.loading(sw, true);
+      log.textContent = '请求中…';
+      setTimeout(() => {
+        Nova.switch.loading(sw, false);
+        log.textContent = `已${sw.checked ? '开启' : '关闭'}`;
+      }, 800);
+    });
+  }
+</script>
+
+<!-- @demo 实战：通知设置 | `.nv-check` 加 `data-reverse data-block`：文字在左、开关在右两端对齐；开关带 `name` 可直接随表单提交。 | block -->
+<form class="doc-mid" id="switch-settings">
+  <fieldset class="nv-check-group">
+    <legend>通知</legend>
+    <label class="nv-check" data-reverse data-block>
+      <input type="checkbox" role="switch" class="nv-switch" name="email" checked>
+      <span class="nv-check-text">
+        <span class="nv-check-label">邮件通知</span>
+        <span class="nv-check-desc">项目动态、评论与提及会发送到你的邮箱。</span>
+      </span>
+    </label>
+    <label class="nv-check" data-reverse data-block>
+      <input type="checkbox" role="switch" class="nv-switch" name="push">
+      <span class="nv-check-text">
+        <span class="nv-check-label">桌面推送</span>
+        <span class="nv-check-desc">浏览器打开时实时提醒。</span>
+      </span>
+    </label>
+    <label class="nv-check" data-reverse data-block>
+      <input type="checkbox" role="switch" class="nv-switch" name="marketing" data-color="neutral">
+      <span class="nv-check-text">
+        <span class="nv-check-label">产品资讯</span>
+        <span class="nv-check-desc">新功能与活动，每月不超过 2 封。</span>
+      </span>
+    </label>
+  </fieldset>
+  <div class="doc-log" id="switch-settings-log"></div>
+</form>
+<script>
+  {
+    const form = document.getElementById('switch-settings');
+    const log = document.getElementById('switch-settings-log');
+    const show = () => { log.textContent = `提交：${new URLSearchParams(new FormData(form)) || '（无）'}`; };
+    form.addEventListener('change', show);
+    show();
+  }
+</script>
+
+<!-- @api
+### 属性（写在 `<input type="checkbox" role="switch" class="nv-switch">` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `role="switch"` | 让读屏软件朗读为「开关」，必写 | — | — |
+| `data-size` | 尺寸（轨道 28×16 / 36×20 / 44×24） | `sm` `md` `lg` | `md` |
+| `data-color` | 开启颜色 | `primary` `success` `warning` `danger` `neutral` | `primary` |
+| `data-icons` | 轨道内图标（`sm` 尺寸不显示） | 布尔 / `theme` | — |
+| `data-loading` | 加载态，阻止切换（需 switch.js） | 布尔 | — |
+| `checked` / `disabled` | 原生属性 | 布尔 | — |
+| `aria-invalid="true"` | 错误态（关闭时红色描边） | — | — |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `change` / `input` | 原生事件 |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.switch.loading(el, on)` | 切换加载态，同步 `aria-busy` |
+
+### 键盘
+| 按键 | 说明 |
+|---|---|
+| `Space` | 切换开关（加载中无效） |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-primary` | 开启颜色 |
+| `--nv-ease-spring` / `--nv-dur-4` | 滑块弹性缓动与时长 |
+-->

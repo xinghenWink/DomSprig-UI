@@ -1,0 +1,73 @@
+<!--
+@name backdrop
+@title Backdrop 装饰背景
+@category effects
+@order 9
+@deps button
+@desc 点阵、网格、极光、噪点与流星背景层，配色随主色和明暗主题变化；不拦截指针，默认垫在内容下方，离开视口自动暂停。
+-->
+
+<!-- @demo 点阵与网格 | 容器加 `.nv-bg-host`（相对定位 + 隔离层叠 + 裁切），里面放一个背景层。点阵和网格默认径向渐隐，`data-color="primary"` 改用主色。 | block -->
+<style>
+  .bd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; width: 100%; }
+  .bd-box { height: 180px; display: grid; place-items: center; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-xl); background: var(--nv-surface); font-weight: 600; color: var(--nv-fg-2); }
+</style>
+<div class="bd-grid">
+  <div class="nv-bg-host bd-box"><div class="nv-bg-dots" aria-hidden="true"></div>.nv-bg-dots</div>
+  <div class="nv-bg-host bd-box"><div class="nv-bg-grid" aria-hidden="true"></div>.nv-bg-grid</div>
+  <div class="nv-bg-host bd-box"><div class="nv-bg-grid" data-color="primary" data-fade="top" aria-hidden="true"></div>primary · fade top</div>
+</div>
+
+<!-- @demo 极光与噪点 | `.nv-bg-aurora` 柔和流动的光斑，颜色由 `--nv-hue` 推导；叠一层 `.nv-bg-noise` 颗粒感更自然。 | block -->
+<div class="nv-bg-host bd-box" style="height: 240px">
+  <div class="nv-bg-aurora" aria-hidden="true"></div>
+  <div class="nv-bg-noise" aria-hidden="true"></div>
+  <span style="font-size: 22px; color: var(--nv-fg)">极光 + 噪点</span>
+</div>
+
+<!-- @demo 流星 | `data-nv-meteors="数量"` 生成流星，起点、时长和延迟随机；`data-speed` 是时长倍率（越大越慢）。 | block -->
+<div class="nv-bg-host bd-box" style="height: 240px">
+  <div data-nv-meteors="14" aria-hidden="true"></div>
+  <div class="nv-bg-dots" aria-hidden="true"></div>
+  <span style="font-size: 22px; color: var(--nv-fg)">流星 + 点阵</span>
+</div>
+
+<!-- @demo 营销页首屏 | 组合网格与极光做首屏背景，内容正常排版即可。 | block -->
+<div class="nv-bg-host" style="width: 100%; padding: 56px 24px; text-align: center; border-radius: var(--nv-radius-xl); border: 1px solid var(--nv-border); background: var(--nv-bg)">
+  <div class="nv-bg-grid" data-fade="radial" aria-hidden="true"></div>
+  <div class="nv-bg-aurora" data-fade="top" aria-hidden="true"></div>
+  <h3 style="margin: 0 0 10px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em">更快地交付好看的产品</h3>
+  <p style="margin: 0 0 22px; color: var(--nv-fg-2)">背景层只负责氛围，不影响内容的可读性与交互。</p>
+  <button class="nv-btn" data-size="lg">免费开始</button>
+</div>
+
+<!-- @api
+### 类名与属性
+| 名称 | 说明 |
+|---|---|
+| `.nv-bg-host` | 容器：`position: relative` + `isolation: isolate` + 裁切。也可以自己写前两项 |
+| `.nv-bg-dots` | 点阵 |
+| `.nv-bg-grid` | 网格线 |
+| `.nv-bg-aurora` | 极光光斑（随 `--nv-hue`） |
+| `.nv-bg-noise` | 颗粒噪点 |
+| `[data-nv-meteors="12"]` | 流星，数字为数量（0–60），需 backdrop.js |
+| `data-color="primary"` | 点阵 / 网格改用主色 |
+| `data-fade` | `radial`（点阵、网格默认）· `top` · `bottom` · `none`；极光和流星写了才启用渐隐 |
+| `data-speed` | 流星时长倍率，默认 `1` |
+
+背景层都是 `inset: 0` 的绝对定位层，`z-index: -1`，不拦截指针。
+
+### CSS 变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-bg-fade-at` / `--nv-bg-fade-size` | 径向渐隐的中心与椭圆尺寸 |
+| `--nv-bg-dots-color` / `-size` / `-radius` | 点阵颜色、间距、点半径 |
+| `--nv-bg-grid-color` / `-size` / `-width` | 网格颜色、间距、线宽 |
+| `--nv-bg-aurora-a` / `-b` / `-c` / `-duration` / `-opacity` | 极光三色、周期、透明度 |
+| `--nv-bg-noise-color` / `-opacity` | 噪点颜色与透明度 |
+| `--nv-meteor-color` / `--nv-meteor-length` | 流星颜色与尾迹长度 |
+
+### 降级
+- 极光与流星离开视口时暂停动画。
+- 减少动态：不生成流星，极光定格。
+-->

@@ -1,0 +1,206 @@
+/* Nova UI · Command 命令面板
+ * 命令式：Nova.command.open({ items, placeholder, emptyText }) → 遮罩 .nv-command-dialog > .nv-command[role=dialog]
+ * 内嵌：  <div class="nv-command" data-nv-command> .nv-command-input + .nv-command-list > .nv-item[data-value] </div>
+ * 可定制：--nv-command-width（面板宽 640px）  --nv-command-top（面板距顶 12vh）  --nv-command-max-height（列表最大高度）
+ */
+.nv-command {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-xl);
+  background: var(--nv-surface-raised);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  box-shadow: var(--nv-shadow-sm);
+  transition: border-color var(--nv-dur-2) var(--nv-ease), box-shadow var(--nv-dur-2) var(--nv-ease);
+}
+.nv-command [hidden] { display: none; }
+
+/* —— 内嵌版聚焦：与输入类控件一致 —— */
+.nv-command[data-nv-command]:focus-within {
+  border-color: var(--nv-primary);
+  box-shadow: 0 0 0 3px var(--nv-ring), var(--nv-shadow-sm);
+}
+
+/* —— 搜索行 —— */
+.nv-command-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  height: 44px;
+  padding: 0 12px 0 14px;
+  border-bottom: 1px solid var(--nv-border);
+  color: var(--nv-fg-3);
+}
+.nv-command-search > svg { width: 16px; height: 16px; flex: none; }
+.nv-command-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--nv-fg);
+  font: inherit;
+}
+.nv-command .nv-command-input:focus-visible { outline: 0; }
+.nv-command-input::placeholder { color: var(--nv-fg-3); opacity: 1; }
+.nv-command-input::-webkit-search-cancel-button { display: none; }
+
+.nv-command-esc {
+  flex: none;
+  height: 22px;
+  padding: 0 7px;
+  border: 1px solid var(--nv-border);
+  border-radius: 6px;
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  font: 500 var(--nv-text-xs) / 1 var(--nv-font-mono);
+  cursor: pointer;
+  transition: color var(--nv-dur-1), border-color var(--nv-dur-1), background-color var(--nv-dur-1);
+}
+.nv-command-esc:hover { color: var(--nv-fg); border-color: var(--nv-border-strong); background: var(--nv-surface-3); }
+
+/* —— 列表 —— */
+.nv-command-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: var(--nv-command-max-height, 320px);
+  padding: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+}
+.nv-command-list .nv-panel-sep { margin: 5px -6px; }
+.nv-command-list .nv-panel-label { padding: 8px 10px 4px; }
+
+.nv-command-item { gap: 10px; padding: 7px 10px; scroll-margin-block: 6px; }
+.nv-command-item[aria-selected="true"] { font-weight: 400; }
+.nv-command-item[data-active]:not([data-color]) {
+  background: color-mix(in oklab, var(--nv-fg) 6.5%, transparent);
+}
+.nv-command-item-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--nv-fg-2);
+}
+.nv-command-item-icon > svg { width: 16px; height: 16px; }
+.nv-command-item[data-active]:not([data-color]) > :is(.nv-command-item-icon, svg) { color: var(--nv-fg); }
+.nv-command-item-text {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.nv-command-item-text > .nv-item-label { flex: 0 1 auto; }
+.nv-command-item-desc,
+.nv-command-item .nv-item-desc {
+  flex: 0 100 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-xs);
+}
+.nv-command-hl {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--nv-primary-text);
+  font-weight: 600;
+}
+.nv-command-item[data-color="danger"] .nv-command-hl { color: inherit; }
+
+/* —— 快捷键 —— */
+.nv-command-kbds { display: inline-flex; align-items: center; gap: 4px; flex: none; margin-left: auto; padding-left: 8px; }
+.nv-command-kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--nv-border);
+  border-bottom-color: var(--nv-border-input);
+  border-radius: 5px;
+  background: var(--nv-surface-2);
+  color: var(--nv-fg-2);
+  font: 500 var(--nv-text-xs) / 1 var(--nv-font-mono);
+  white-space: nowrap;
+}
+
+.nv-command-empty { padding: 28px 16px; }
+
+/* —— 底部键位提示 —— */
+.nv-command-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+  min-height: 40px;
+  padding: 6px 14px;
+  border-top: 1px solid var(--nv-border);
+  background: color-mix(in oklab, var(--nv-surface-2) 55%, transparent);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-xs);
+}
+.nv-command-hint { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.nv-command-hint > .nv-command-kbd:last-of-type { margin-right: 2px; }
+.nv-command-hint .nv-command-kbd { min-width: 18px; height: 18px; padding: 0 4px; background: var(--nv-surface-raised); }
+
+/* ———————————————— 命令面板（遮罩 + 弹出） ———————————————— */
+.nv-command-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nv-z-modal);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--nv-command-top, 12vh) 16px 16px;
+  background: var(--nv-overlay);
+}
+.nv-command-dialog[data-state="open"] { animation: nv-fade-in var(--nv-dur-2) var(--nv-ease-out); }
+.nv-command-dialog[data-state="closed"] { animation: nv-fade-out var(--nv-dur-2) var(--nv-ease) forwards; pointer-events: none; }
+.nv-command-dialog > .nv-command {
+  width: min(var(--nv-command-width, 640px), 100%);
+  max-height: 100%;
+  box-shadow: var(--nv-shadow-xl);
+  transform-origin: 50% 0;
+}
+.nv-command-dialog[data-state="open"] > .nv-command {
+  animation: nv-command-in var(--nv-dur-4) var(--nv-ease-spring), nv-fade-in var(--nv-dur-2) var(--nv-ease-out);
+}
+.nv-command-dialog[data-state="closed"] > .nv-command { animation: nv-command-out var(--nv-dur-2) var(--nv-ease) forwards; }
+.nv-command-dialog .nv-command-search { height: 52px; padding: 0 14px 0 18px; gap: 12px; }
+.nv-command-dialog .nv-command-search > svg { width: 18px; height: 18px; }
+.nv-command-dialog .nv-command-input { font-size: var(--nv-text-lg); }
+.nv-command-dialog .nv-command-list { max-height: var(--nv-command-max-height, min(420px, 56vh)); padding: 6px 8px 8px; }
+.nv-command-dialog .nv-command-item { min-height: 40px; }
+.nv-command-dialog .nv-command-empty { padding: 44px 16px; }
+
+@keyframes nv-command-in { from { transform: translateY(-8px) scale(0.96); } }
+@keyframes nv-command-out { to { transform: scale(0.97); } }
+
+@media (max-width: 639px) {
+  .nv-command-dialog { padding: max(16px, 8vh) 12px 12px; }
+  .nv-command-dialog > .nv-command { border-radius: var(--nv-radius-lg); }
+  .nv-command-dialog .nv-command-list { max-height: var(--nv-command-max-height, min(420px, 60vh)); }
+  .nv-command-item-desc { display: none; }
+}
+/* 触屏设备不需要键位提示 */
+@media (hover: none) and (pointer: coarse) {
+  .nv-command-footer { display: none; }
+}

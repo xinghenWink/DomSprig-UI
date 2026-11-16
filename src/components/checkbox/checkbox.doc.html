@@ -1,0 +1,186 @@
+<!--
+@name checkbox
+@title Checkbox 复选框
+@category form
+@order 4
+@desc 原生复选框的精致外观：对勾描边绘制动画、半选态、标签与说明、横纵分组与可选卡片；纯 CSS，表单提交与键盘操作完全原生。
+-->
+
+<!-- @demo 基础用法 | `<input type="checkbox" class="nv-checkbox">` 包在 `<label class="nv-check">` 里，点击文字也能切换；半选态通过脚本设置 `el.indeterminate = true`。 -->
+<label class="nv-check"><input type="checkbox" class="nv-checkbox" checked>记住我</label>
+<label class="nv-check"><input type="checkbox" class="nv-checkbox">订阅产品更新</label>
+<label class="nv-check"><input type="checkbox" class="nv-checkbox" id="checkbox-mixed">部分选中</label>
+<script>
+  { document.getElementById('checkbox-mixed').indeterminate = true; }
+</script>
+
+<!-- @demo 标题与说明 | `.nv-check-text` 内放 `.nv-check-label` 与 `.nv-check-desc`，控件与首行文字自动对齐。 | col -->
+<div class="nv-check-group doc-mid">
+  <label class="nv-check">
+    <input type="checkbox" class="nv-checkbox" name="notify" value="comment" checked>
+    <span class="nv-check-text">
+      <span class="nv-check-label">评论与提及</span>
+      <span class="nv-check-desc">有人评论你的文档或 @ 你时通知。</span>
+    </span>
+  </label>
+  <label class="nv-check">
+    <input type="checkbox" class="nv-checkbox" name="notify" value="digest">
+    <span class="nv-check-text">
+      <span class="nv-check-label">每周摘要</span>
+      <span class="nv-check-desc">每周一上午发送团队动态汇总邮件。</span>
+    </span>
+  </label>
+</div>
+
+<!-- @demo 分组与排列 | `.nv-check-group` 默认纵向；`data-orientation="horizontal"` 横向自动换行。推荐用 `<fieldset>` + `<legend>` 提供分组名称。 | col -->
+<div class="doc-stack doc-mid">
+  <fieldset class="nv-check-group" data-orientation="horizontal">
+    <legend>技术栈</legend>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="stack" value="js" checked>JavaScript</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="stack" value="ts" checked>TypeScript</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="stack" value="css">CSS</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="stack" value="node">Node.js</label>
+  </fieldset>
+</div>
+
+<!-- @demo 尺寸与颜色 | `data-size="sm|md|lg"`（14 / 16 / 20px），标签字号用 `.nv-check` 上的 `data-size`；`data-color` 切换语义色。 | col -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <label class="nv-check" data-size="sm"><input type="checkbox" class="nv-checkbox" data-size="sm" checked>小号</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" checked>默认</label>
+    <label class="nv-check" data-size="lg"><input type="checkbox" class="nv-checkbox" data-size="lg" checked>大号</label>
+  </div>
+  <div class="doc-row">
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" checked>主色</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" data-color="success" checked>成功</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" data-color="warning" checked>警告</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" data-color="danger" checked>危险</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" data-color="neutral" checked>中性</label>
+  </div>
+</div>
+
+<!-- @demo 状态 | `disabled` 禁用（整行变淡、不可点）；`aria-invalid="true"` 错误态，用于必须勾选的协议。 | col -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" disabled>未选禁用</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" disabled checked>已选禁用</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" disabled id="checkbox-mixed-dis">半选禁用</label>
+  </div>
+  <label class="nv-check">
+    <input type="checkbox" class="nv-checkbox" aria-invalid="true" aria-describedby="checkbox-terms-err">
+    <span class="nv-check-text">
+      <span>我已阅读并同意《服务条款》</span>
+      <span class="nv-check-desc" id="checkbox-terms-err">注册前需同意服务条款</span>
+    </span>
+  </label>
+</div>
+<script>
+  { document.getElementById('checkbox-mixed-dis').indeterminate = true; }
+</script>
+
+<!-- @demo 全选与半选联动 | 父项根据子项状态显示全选 / 半选 / 未选；父项 `aria-controls` 指向子项，键盘 `Space` 切换。 | col -->
+<fieldset class="nv-check-group doc-mid" id="checkbox-perm">
+  <legend>成员权限</legend>
+  <label class="nv-check">
+    <input type="checkbox" class="nv-checkbox" id="checkbox-all" aria-controls="checkbox-perm-list">
+    <span class="nv-check-label">全部权限</span>
+  </label>
+  <div class="nv-check-group" id="checkbox-perm-list">
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="perm" value="read" checked>查看项目</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="perm" value="edit" checked>编辑文档</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="perm" value="invite">邀请成员</label>
+    <label class="nv-check"><input type="checkbox" class="nv-checkbox" name="perm" value="billing">管理账单</label>
+  </div>
+  <div class="doc-log" id="checkbox-perm-log"></div>
+</fieldset>
+<script>
+  {
+    const all = document.getElementById('checkbox-all');
+    const items = [...document.querySelectorAll('#checkbox-perm-list .nv-checkbox')];
+    const log = document.getElementById('checkbox-perm-log');
+    const sync = () => {
+      const n = items.filter((i) => i.checked).length;
+      all.checked = n === items.length;
+      all.indeterminate = n > 0 && n < items.length;
+      log.textContent = `已选 ${n} / ${items.length}：${items.filter((i) => i.checked).map((i) => i.value).join(', ') || '无'}`;
+    };
+    all.addEventListener('change', () => { items.forEach((i) => { i.checked = all.checked; }); sync(); });
+    items.forEach((i) => i.addEventListener('change', sync));
+    sync();
+  }
+</script>
+
+<!-- @demo 可选卡片 | `.nv-check-card` 选中时边框高亮；`data-indicator="end"` 把勾选框放到右侧，`.nv-check-card-icon` 放图标。`.nv-check-group[data-columns="2"]` 两列网格，窄屏自动单列。 | block -->
+<fieldset class="nv-check-group" data-columns="2">
+  <legend>附加服务</legend>
+  <label class="nv-check-card" data-indicator="end">
+    <input type="checkbox" class="nv-checkbox" name="addon" value="backup" checked>
+    <span class="nv-check-card-icon"><i data-nv-icon="cloud-upload"></i></span>
+    <span class="nv-check-text">
+      <span class="nv-check-label">自动备份</span>
+      <span class="nv-check-desc">每日备份，保留 30 天 · ¥19/月</span>
+    </span>
+  </label>
+  <label class="nv-check-card" data-indicator="end">
+    <input type="checkbox" class="nv-checkbox" name="addon" value="sso">
+    <span class="nv-check-card-icon"><i data-nv-icon="lock"></i></span>
+    <span class="nv-check-text">
+      <span class="nv-check-label">单点登录</span>
+      <span class="nv-check-desc">支持 SAML 与企业微信 · ¥49/月</span>
+    </span>
+  </label>
+  <label class="nv-check-card" data-indicator="end">
+    <input type="checkbox" class="nv-checkbox" name="addon" value="audit">
+    <span class="nv-check-card-icon"><i data-nv-icon="list"></i></span>
+    <span class="nv-check-text">
+      <span class="nv-check-label">审计日志</span>
+      <span class="nv-check-desc">记录全部成员操作 · ¥29/月</span>
+    </span>
+  </label>
+  <label class="nv-check-card" data-indicator="end">
+    <input type="checkbox" class="nv-checkbox" name="addon" value="support" disabled>
+    <span class="nv-check-card-icon"><i data-nv-icon="users"></i></span>
+    <span class="nv-check-text">
+      <span class="nv-check-label">专属客服</span>
+      <span class="nv-check-desc">仅企业版可用</span>
+    </span>
+  </label>
+</fieldset>
+
+<!-- @api
+### 属性（写在 `<input type="checkbox" class="nv-checkbox">` 上）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-size` | 尺寸 14 / 16 / 20px | `sm` `md` `lg` | `md` |
+| `data-color` | 选中颜色 | `primary` `success` `warning` `danger` `neutral` | `primary` |
+| `checked` / `disabled` | 原生属性 | 布尔 | — |
+| `el.indeterminate` | 半选态（只能通过脚本设置） | 布尔 | `false` |
+| `aria-invalid="true"` | 错误态（未选中时红色边框） | — | — |
+
+### 结构
+| 类名 / 属性 | 说明 |
+|---|---|
+| `.nv-check` | 标签包装；`data-size` 调整文字大小，`data-reverse` 控件在右，`data-block` 撑满 |
+| `.nv-check-text` / `.nv-check-label` / `.nv-check-desc` | 文字区 / 标题 / 说明 |
+| `.nv-check-group` | 分组（建议 `<fieldset>` + `<legend>`）；`data-orientation="horizontal"`、`data-columns="2\|3\|4"` |
+| `.nv-check-card` | 可选卡片；`data-indicator="end\|none"` 控件位置 |
+| `.nv-check-card-icon` / `.nv-check-card-extra` | 卡片图标 / 右侧附加信息（如价格） |
+
+### 事件
+| 事件 | 说明 |
+|---|---|
+| `change` / `input` | 原生事件 |
+
+### 键盘
+| 按键 | 说明 |
+|---|---|
+| `Space` | 切换选中 |
+| `Tab` | 在复选框之间移动 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-primary` | 选中颜色 |
+| `--nv-radius` | 圆角基准（复选框圆角 = 0.45 倍） |
+| `--nv-dur-3` / `--nv-ease-out` | 对勾绘制动画时长与缓动 |
+-->

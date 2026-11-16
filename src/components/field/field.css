@@ -1,0 +1,147 @@
+/* Nova UI · Field 表单项
+ * <div class="nv-field" data-required>
+ *   <label class="nv-field-label" for="email">邮箱</label>
+ *   <input class="nv-input" id="email">
+ *   <p class="nv-field-desc">说明文字</p>
+ *   <p class="nv-field-error">错误文字（有内容时显示，并自动设置 aria-invalid）</p>
+ * </div>
+ * data-layout="horizontal"   标签在左（宽度 --nv-field-label-width）
+ * <form class="nv-form">       纵向表单：统一字段间距；.nv-form-row 两列；.nv-form-actions 操作区
+ */
+.nv-field {
+  --_gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_gap);
+  min-width: 0;
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+}
+.nv-field-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  font-size: var(--nv-text-md);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--nv-fg);
+  cursor: default;
+}
+label.nv-field-label { cursor: pointer; }
+.nv-field[data-required] .nv-field-label::after {
+  content: "*";
+  margin-left: -2px;
+  color: var(--nv-danger-text);
+  font-weight: 600;
+}
+/* 标签右侧的附加信息：<span class="nv-field-extra">可选</span> 或链接 */
+.nv-field-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nv-field-extra {
+  font-size: var(--nv-text-sm);
+  font-weight: 400;
+  color: var(--nv-fg-2);
+}
+a.nv-field-extra { color: var(--nv-primary-text); text-decoration: none; }
+a.nv-field-extra:hover { text-decoration: underline; text-underline-offset: 3px; }
+a.nv-field-extra:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; border-radius: 4px; }
+
+.nv-field-desc,
+.nv-field-error {
+  margin: 0;
+  font-size: var(--nv-text-sm);
+  line-height: 1.45;
+}
+.nv-field-desc { color: var(--nv-fg-2); }
+.nv-field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--nv-danger-text);
+  animation: nv-field-in var(--nv-dur-2) var(--nv-ease-out);
+}
+.nv-field-error::before {
+  content: "";
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  background: currentColor;
+  -webkit-mask: var(--_nv-field-alert) center / contain no-repeat;
+  mask: var(--_nv-field-alert) center / contain no-repeat;
+}
+.nv-field-error:empty,
+.nv-field-error[hidden] { display: none; }
+/* 有错误时隐藏说明文字，避免信息过载（data-keep-desc 保留） */
+.nv-field[data-invalid]:not([data-keep-desc]) .nv-field-desc { display: none; }
+.nv-field[data-invalid] .nv-field-label { color: var(--nv-danger-text); }
+.nv-field:has(:disabled) .nv-field-label { color: var(--nv-fg-2); }
+
+:root {
+  --_nv-field-alert: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 7.5V13M12 16.5h.01'/%3E%3C/svg%3E");
+}
+
+@keyframes nv-field-in {
+  from { opacity: 0; transform: translateY(-3px); }
+}
+
+/* —— 横向布局 —— */
+.nv-field[data-layout="horizontal"] {
+  display: grid;
+  grid-template-columns: var(--nv-field-label-width, 112px) minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: var(--_gap);
+  align-items: start;
+}
+.nv-field[data-layout="horizontal"] > :is(.nv-field-label, .nv-field-head) {
+  grid-column: 1;
+  grid-row: 1;
+  /* 与 38px 控件的首行文字对齐 */
+  min-height: var(--nv-h-md);
+  justify-content: flex-end;
+  text-align: right;
+}
+.nv-field[data-layout="horizontal"][data-size="sm"] > .nv-field-label { min-height: var(--nv-h-sm); }
+.nv-field[data-layout="horizontal"][data-size="lg"] > .nv-field-label { min-height: var(--nv-h-lg); }
+.nv-field[data-layout="horizontal"][data-align="start"] > .nv-field-label { justify-content: flex-start; text-align: left; }
+.nv-field[data-layout="horizontal"] > :not(.nv-field-label, .nv-field-head) { grid-column: 2; }
+@media (max-width: 560px) {
+  .nv-field[data-layout="horizontal"] { display: flex; }
+  .nv-field[data-layout="horizontal"] > .nv-field-label { min-height: 0; justify-content: flex-start; text-align: left; }
+}
+
+/* —— 表单 —— */
+.nv-form {
+  --nv-form-gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nv-form-gap);
+  margin: 0;
+  min-width: 0;
+}
+.nv-form[data-size="sm"] { --nv-form-gap: 14px; }
+.nv-form-title { margin: 0; font-size: var(--nv-text-xl); font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; }
+.nv-form-subtitle { margin: -14px 0 0; font-size: var(--nv-text-md); color: var(--nv-fg-2); }
+.nv-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--nv-form-gap) 16px;
+}
+.nv-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+.nv-form-actions[data-align="end"] { justify-content: flex-end; }
+.nv-form-sep { height: 1px; margin: 4px 0; border: 0; background: var(--nv-border); }
+fieldset.nv-field,
+fieldset.nv-form { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+legend.nv-field-label { padding: 0; margin-bottom: var(--_gap); }

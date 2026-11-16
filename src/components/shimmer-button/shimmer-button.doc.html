@@ -1,0 +1,90 @@
+<!--
+@name shimmer-button
+@title Shimmer Button 流光按钮
+@category effects
+@order 1
+@deps button
+@desc 一束光沿边框环绕、表面高光扫过的强调按钮；另有可用于任意元素的扫光 `data-shine` 与柔和光晕 `data-glow`。
+-->
+
+<!-- @demo 流光按钮 | 单独使用 `.nv-shimmer` 自带深色主色底，明暗主题都清晰；`data-size="sm|md|lg"` 调整尺寸。 -->
+<button class="nv-shimmer" data-size="sm">立即体验</button>
+<button class="nv-shimmer">免费开始使用<i data-nv-icon="arrow-right"></i></button>
+<button class="nv-shimmer" data-size="lg"><i data-nv-icon="sparkles"></i>生成我的方案</button>
+
+<!-- @demo 叠加在按钮上 | 与 `.nv-btn` 组合时沿用按钮的变体、颜色和尺寸，只加上流光；浅底变体的光带自动改用主色。 -->
+<button class="nv-btn nv-shimmer">升级到专业版</button>
+<button class="nv-btn nv-shimmer" data-variant="gradient">开启 AI 助手</button>
+<button class="nv-btn nv-shimmer" data-variant="outline">预约演示</button>
+<button class="nv-btn nv-shimmer" data-color="success">确认发布</button>
+
+<!-- @demo 扫光 | `data-shine` 在悬停、键盘聚焦或触屏按下时扫过一道高光，任意容器都能用；`data-shine="loop"` 自动循环，适合吸引注意的入口。 -->
+<style>
+  .shimmer-promo {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-xl);
+    background: var(--nv-surface); color: inherit; text-decoration: none;
+  }
+  .shimmer-promo > svg { color: var(--nv-primary-text); }
+  .shimmer-promo b { display: block; font-size: var(--nv-text-md); }
+  .shimmer-promo span { font-size: var(--nv-text-sm); color: var(--nv-fg-2); }
+</style>
+<div class="doc-stack doc-mid">
+  <a class="shimmer-promo" href="#/shimmer-button" data-shine>
+    <i data-nv-icon="zap" data-size="22"></i>
+    <div><b>年度会员 7 折</b><span>悬停或聚焦卡片，看看扫光效果</span></div>
+  </a>
+  <div class="doc-row">
+    <button class="nv-btn" data-shine="loop">领取新人礼包</button>
+    <button class="nv-btn" data-variant="soft" data-shine>悬停扫光</button>
+  </div>
+</div>
+
+<!-- @demo 光晕 | `data-glow` 给元素加一圈主色光晕，悬停或聚焦时增强；`data-glow="pulse"` 缓慢呼吸。颜色跟随按钮的 `data-color`，也可用 `--nv-glow-color` 指定。 -->
+<button class="nv-btn" data-glow>发光按钮</button>
+<button class="nv-btn" data-glow="pulse">呼吸光晕</button>
+<button class="nv-btn" data-variant="outline" data-color="success" data-glow>同步完成</button>
+<button class="nv-btn" data-color="danger" data-glow="pulse">直播中</button>
+
+<!-- @demo 营销页主操作 | 一个区域只放一个流光按钮作为主操作，次要操作用普通按钮。 | block -->
+<style>
+  .shimmer-cta { display: grid; justify-items: center; gap: 10px; padding: 12px 0; text-align: center; }
+  .shimmer-cta h3 { margin: 0; font-size: clamp(22px, 4vw, 30px); letter-spacing: -0.02em; }
+  .shimmer-cta p { margin: 0 0 12px; color: var(--nv-fg-2); }
+</style>
+<div class="shimmer-cta">
+  <h3>把灵感更快变成产品</h3>
+  <p>14 天免费试用，无需绑定信用卡。</p>
+  <div class="doc-row">
+    <a class="nv-btn nv-shimmer" data-size="lg" href="#/shimmer-button">开始免费试用<i data-nv-icon="arrow-right"></i></a>
+    <a class="nv-btn" data-variant="ghost" data-size="lg" href="#/shimmer-button">查看价格</a>
+  </div>
+</div>
+
+<!-- @api
+### 类名与属性
+| 名称 | 位置 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `.nv-shimmer` | `button` / `a` | 流光按钮；可与 `.nv-btn` 叠加 | — | — |
+| `data-size` | `.nv-shimmer`（单独使用时） | 尺寸；叠加 `.nv-btn` 时沿用按钮尺寸 | `sm` `md` `lg` | 高 40px |
+| `data-shine` | 任意元素 | 悬停 / 键盘聚焦 / 按下时扫光；`loop` 自动循环。光层 `<span class="nv-shine" aria-hidden="true">` 由脚本注入 | 布尔 \| `loop` | — |
+| `data-glow` | 任意元素 | 柔和光晕，悬停 / 聚焦增强；`pulse` 呼吸 | 布尔 \| `pulse` | — |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-shimmer-color` | 边框光环与表面高光的颜色 | 主色提亮（浅底变体为主色） |
+| `--nv-shimmer-duration` | 光环绕一圈的时长 | `3s` |
+| `--nv-shimmer-width` | 光环粗细 | `1.5px` |
+| `--nv-shimmer-bg` | 单独使用时的底色 | 主色压暗 |
+| `--nv-shine-color` | 扫光高光色 | 半透明白 |
+| `--nv-shine-duration` | 单次扫光时长 | `800ms` |
+| `--nv-shine-interval` | `loop` 模式的循环周期 | `3.6s` |
+| `--nv-glow-color` | 光晕颜色 | 元素的 `data-color` 色，否则主色 |
+| `--nv-glow-size` | 光晕扩散范围 | `28px` |
+
+### 无障碍与降级
+- 装饰层（伪元素、`.nv-shine`）不参与读屏，按钮文字照常读出。
+- 触屏没有悬停：扫光在按下时播放；需要持续可见的效果用 `data-shine="loop"`。
+- **减少动态**：光环停在固定角度成为静态描边，扫光与呼吸关闭，光晕保持静态。
+-->

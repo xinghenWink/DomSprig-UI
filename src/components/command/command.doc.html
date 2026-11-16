@@ -1,0 +1,244 @@
+<!--
+@name command
+@title Command 命令面板
+@category overlay
+@order 60
+@deps button
+@desc ⌘K 式的命令面板与内嵌命令菜单：模糊匹配评分（前缀 / 词首 / 缩写）、命中字符高亮、分组与快捷键、拼音关键词，完整键盘与读屏支持。
+-->
+
+<!-- @demo 全局搜索 | 一次 `Nova.command.open()` 调用就得到完整的命令面板；本站顶栏搜索（`Ctrl K`）就是用它实现的。这个示例绑定了 `Ctrl J`。 | col -->
+<div class="doc-row">
+  <button type="button" class="nv-btn" data-variant="outline" id="command-search-btn"><i data-nv-icon="search"></i>搜索文档<kbd class="nv-btn-kbd">Ctrl J</kbd></button>
+</div>
+<div class="doc-log" id="command-search-log"></div>
+<script>
+  {
+    const btn = document.getElementById('command-search-btn');
+    const log = document.getElementById('command-search-log');
+    const docs = [
+      { id: 'start', label: '快速开始', group: '指南', icon: 'zap', desc: '安装与引入', keywords: 'getting started install kuaisu' },
+      { id: 'theme', label: '主题定制', group: '指南', icon: 'palette', desc: '设计变量、主色与明暗', keywords: 'theme token hue zhuti' },
+      { id: 'a11y', label: '无障碍', group: '指南', icon: 'users', desc: '键盘与读屏', keywords: 'a11y aria keyboard' },
+      { id: 'button', label: 'Button 按钮', group: '组件', icon: 'grid', keywords: 'anniu' },
+      { id: 'modal', label: 'Modal 对话框', group: '组件', icon: 'grid', keywords: 'dialog duihuakuang' },
+      { id: 'dropdown', label: 'Dropdown 下拉菜单', group: '组件', icon: 'grid', keywords: 'menu caidan' },
+      { id: 'toast', label: 'Toast 轻提示', group: '组件', icon: 'grid', keywords: 'message notification tishi' },
+      { id: 'command', label: 'Command 命令面板', group: '组件', icon: 'grid', keywords: 'palette search mingling' },
+    ];
+    const open = () => Nova.command.open({
+      placeholder: '搜索文档…',
+      items: docs.map((it) => ({ ...it, onSelect: () => { log.textContent = `打开：${it.label}`; } })),
+    });
+    btn.addEventListener('click', open);
+    document.addEventListener('keydown', (e) => {
+      // 只在示例可见时响应，避免和其它页面的快捷键冲突
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey || e.key.toLowerCase() !== 'j' || !btn.getClientRects().length) return;
+      e.preventDefault();
+      open();
+    });
+  }
+</script>
+
+<!-- @demo 分组、图标、快捷键与描述 | `group` 分组（按首次出现的顺序），`icon` 图标名，`shortcut` 渲染为键帽，`desc` 次要说明，`disabled` 禁用。输入时分组按最佳匹配排序，空分组自动隐藏。 -->
+<button type="button" class="nv-btn" id="command-rich-btn"><i data-nv-icon="command"></i>打开命令面板</button>
+<script>
+  {
+    document.getElementById('command-rich-btn').addEventListener('click', () => {
+      Nova.command.open({
+        items: [
+          { id: 'calendar', label: '日历', group: '建议', icon: 'calendar', desc: '查看本周日程', keywords: 'calendar rili' },
+          { id: 'emoji', label: '搜索表情', group: '建议', icon: 'sparkles', keywords: 'emoji biaoqing' },
+          { id: 'upload', label: '上传文件', group: '建议', icon: 'upload', desc: '最大 200 MB', keywords: 'upload' },
+          { id: 'profile', label: '个人资料', group: '设置', icon: 'user', shortcut: 'Ctrl P', keywords: 'profile' },
+          { id: 'billing', label: '账单与发票', group: '设置', icon: 'credit-card', shortcut: 'Ctrl B', keywords: 'billing invoice' },
+          { id: 'settings', label: '偏好设置', group: '设置', icon: 'settings', shortcut: ['Ctrl', ','], keywords: 'settings preferences' },
+          { id: 'notify', label: '通知规则', group: '设置', icon: 'bell', desc: '需要管理员权限', disabled: true },
+        ],
+      });
+    });
+  }
+</script>
+
+<!-- @demo 执行操作 | `onSelect` 在面板关闭、焦点归还之后执行；在其中再打开一个面板即可做「二级页面」。 | col -->
+<div class="doc-row">
+  <button type="button" class="nv-btn" data-variant="soft" id="command-action-btn"><i data-nv-icon="zap"></i>快捷操作</button>
+</div>
+<div class="doc-log" id="command-action-log"></div>
+<script>
+  {
+    const log = document.getElementById('command-action-log');
+    const hues = [[278, '紫罗兰'], [252, '靛蓝'], [222, '天蓝'], [165, '翡翠'], [45, '琥珀'], [12, '珊瑚']];
+    const pickHue = () => Nova.command.open({
+      placeholder: '选择主色…',
+      items: hues.map(([h, name]) => ({
+        id: `hue-${h}`, label: name, group: '主色', icon: 'palette', desc: `色相 ${h}°`,
+        onSelect: () => { Nova.theme.setHue(h); log.textContent = `主色已切换为${name}`; },
+      })),
+    });
+    document.getElementById('command-action-btn').addEventListener('click', () => {
+      Nova.command.open({
+        placeholder: '你想做什么？',
+        items: [
+          { id: 'theme', label: '切换明暗主题', group: '外观', icon: 'moon', keywords: 'theme dark light zhuti', onSelect: () => { Nova.theme.toggle(); log.textContent = `当前主题：${Nova.theme.resolved()}`; } },
+          { id: 'hue', label: '更换主色…', group: '外观', icon: 'palette', keywords: 'color hue yanse', onSelect: pickHue },
+          { id: 'copy', label: '复制当前页面链接', group: '页面', icon: 'link', keywords: 'copy url', onSelect: () => {
+            navigator.clipboard.writeText(location.href).then(() => { log.textContent = '链接已复制'; }, () => { log.textContent = '复制失败：浏览器拒绝访问剪贴板'; });
+          } },
+          { id: 'top', label: '回到顶部', group: '页面', icon: 'arrow-up', keywords: 'top scroll', onSelect: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+        ],
+      });
+    });
+  }
+</script>
+
+<!-- @demo 拼音关键词与自定义文案 | `keywords` 参与匹配但不高亮，适合放拼音全拼和首字母；`placeholder` `emptyText` `footer` 都可覆盖。试试输入 `zw` 或 `sheji`。 -->
+<button type="button" class="nv-btn" data-variant="outline" id="command-contact-btn"><i data-nv-icon="users"></i>选择联系人</button>
+<script>
+  {
+    const people = [
+      { id: 'zhangwei', label: '张伟', keywords: 'zhangwei zw chanpin', desc: '产品经理 · 北京', group: '团队成员' },
+      { id: 'lina', label: '李娜', keywords: 'lina ln sheji', desc: '设计师 · 上海', group: '团队成员' },
+      { id: 'wangfang', label: '王芳', keywords: 'wangfang wf qianduan', desc: '前端工程师 · 杭州', group: '团队成员' },
+      { id: 'liuyang', label: '刘洋', keywords: 'liuyang ly houduan', desc: '后端工程师 · 深圳', group: '团队成员' },
+      { id: 'chenjing', label: '陈静', keywords: 'chenjing cj sheji', desc: '设计顾问 · 外部', group: '外部协作' },
+      { id: 'yangfan', label: '杨帆', keywords: 'yangfan yf fawu', desc: '法务 · 外部', group: '外部协作' },
+    ];
+    document.getElementById('command-contact-btn').addEventListener('click', () => {
+      Nova.command.open({
+        label: '选择联系人',
+        placeholder: '搜索联系人，支持拼音…',
+        emptyText: '没有匹配的联系人，换个关键词试试',
+        footer: [{ keys: '↵', label: '发起会话' }, { keys: 'Esc', label: '取消' }],
+        items: people.map((p) => ({ ...p, icon: 'user' })),
+      });
+    });
+  }
+</script>
+
+<!-- @demo 内嵌命令菜单 | 给容器加 `data-nv-command`：`.nv-command-input` + `.nv-command-list` 中的 `[data-value]` 选项，扁平写 `.nv-panel-label` 与 `.nv-panel-sep` 即自动分组。选择时派发 `nv:select`。 -->
+<div class="doc-stack doc-mid">
+  <div class="nv-command" data-nv-command id="command-inline" aria-label="文件操作" data-empty-text="没有匹配的操作">
+    <input class="nv-command-input" placeholder="输入操作名称…">
+    <div class="nv-command-list">
+      <div class="nv-panel-label">文件</div>
+      <div class="nv-item" data-value="new-file"><i data-nv-icon="file"></i>新建文件<span class="nv-command-kbds"><kbd class="nv-command-kbd">Ctrl</kbd><kbd class="nv-command-kbd">N</kbd></span></div>
+      <div class="nv-item" data-value="new-folder" data-keywords="mkdir directory"><i data-nv-icon="folder"></i>新建文件夹</div>
+      <div class="nv-item" data-value="upload"><i data-nv-icon="upload"></i>上传文件<span class="nv-item-desc">最大 200 MB</span></div>
+      <hr class="nv-panel-sep">
+      <div class="nv-panel-label">编辑</div>
+      <div class="nv-item" data-value="rename"><i data-nv-icon="pencil"></i>重命名<span class="nv-command-kbds"><kbd class="nv-command-kbd">F2</kbd></span></div>
+      <div class="nv-item" data-value="copy-link"><i data-nv-icon="link"></i>复制链接</div>
+      <div class="nv-item" data-value="archive" aria-disabled="true"><i data-nv-icon="inbox"></i>归档（只读文件不可用）</div>
+      <div class="nv-item" data-value="trash" data-color="danger"><i data-nv-icon="trash"></i>移到回收站</div>
+    </div>
+  </div>
+  <div class="doc-log" id="command-inline-log">选择一项试试</div>
+</div>
+<script>
+  {
+    const log = document.getElementById('command-inline-log');
+    document.getElementById('command-inline').addEventListener('nv:select', (e) => {
+      log.textContent = `nv:select → ${e.detail.value}`;
+    });
+  }
+</script>
+
+<!-- @demo 匹配规则 | 评分分档：完全一致 > 前缀 > 词首（空格、短横线、驼峰、中英文交界） > 连续子串 > 子序列（缩写）。试试 `gp`、`push`、`tp`、`推送`。 -->
+<div class="doc-stack doc-mid">
+  <div class="nv-command" data-nv-command id="command-fuzzy" aria-label="开发者命令" data-placeholder="输入命令…">
+    <div class="nv-command-list">
+      <div class="nv-item" data-value="push"><i data-nv-icon="arrow-up"></i>Git: Push</div>
+      <div class="nv-item" data-value="pull"><i data-nv-icon="arrow-down"></i>Git: Pull</div>
+      <div class="nv-item" data-value="commit"><i data-nv-icon="check"></i>Git: Commit All</div>
+      <div class="nv-item" data-value="remote" data-keywords="push origin"><i data-nv-icon="cloud-upload"></i>推送到远程仓库</div>
+      <div class="nv-item" data-value="toggle"><i data-nv-icon="grid"></i>togglePanel 切换面板</div>
+      <div class="nv-item" data-value="line"><i data-nv-icon="arrow-right"></i>Go to Line…<span class="nv-command-kbds"><kbd class="nv-command-kbd">Ctrl</kbd><kbd class="nv-command-kbd">G</kbd></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- @api
+### Nova.command.open(options)
+打开命令面板，返回 `{ close }`。已有面板打开时会先关闭它。面板关闭后焦点回到打开前的元素。
+
+| 选项 | 说明 | 类型 | 默认 |
+|---|---|---|---|
+| `items` | 命令项列表（字段见下表） | `Item[]` | `[]` |
+| `placeholder` | 输入框占位 | `string` | `输入命令或搜索…` |
+| `emptyText` | 无结果时的提示 | `string` | `没有找到相关结果` |
+| `label` | 对话框与列表的无障碍名称 | `string` | `命令面板` |
+| `query` | 初始搜索词 | `string` | `''` |
+| `footer` | 底部键位提示；`false` 隐藏，或传 `[{ keys, label }]` 自定义 | `false \| Hint[]` | `↑↓ 选择 · ↵ 确认 · Esc 关闭` |
+| `countText` | 读屏播报的结果数量，`{n}` 为数量 | `string` | `{n} 条结果` |
+| `closeText` | 右上角 Esc 按钮的无障碍名称 | `string` | `关闭` |
+| `onSelect(item)` | 任一项被选中时调用（在该项自己的 `onSelect` 之后） | `function` | — |
+| `onClose()` | 面板关闭时调用（选择、Esc、点遮罩、`close()`） | `function` | — |
+
+### 命令项 Item
+| 字段 | 说明 | 类型 |
+|---|---|---|
+| `id` | 唯一标识，写入选项的 `data-value` | `string` |
+| `label` | 显示文字，参与匹配并高亮命中字符 | `string` |
+| `group` | 分组名，同名项归为一组；省略则进入无标题分组 | `string` |
+| `icon` | 图标名（`Nova.icon` 中的名称）或 DOM 节点 | `string \| Node` |
+| `keywords` | 额外匹配词（拼音、英文别名…），命中不高亮；字符串按空格或逗号拆分 | `string \| string[]` |
+| `shortcut` | 快捷键展示，如 `'Ctrl K'` `'Ctrl+K'` 或 `['Ctrl', ',']` | `string \| string[]` |
+| `desc` | 次要说明，显示在标签右侧（窄屏隐藏） | `string` |
+| `disabled` | 禁用：不可选中，键盘导航跳过 | `boolean` |
+| `onSelect(item)` | 选中时调用；此时面板已关闭、焦点已归还 | `function` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.command.open(options)` | 打开命令面板，返回 `{ close, closed }` |
+| `Nova.command.close()` | 关闭当前打开的命令面板 |
+| `Nova.command.refresh(el)` | 内嵌版选项增删后重新扫描 |
+| `Nova.command.match(query, text, keywords?)` | 评分工具，返回 `{ score, positions }` 或 `null`，可复用于其它搜索场景 |
+| `Nova.get(el, 'command')` | 内嵌版实例：`filter(q)` `refresh()` `focus()` `query` `destroy()` |
+
+### 内嵌版结构与属性
+| 属性 / 结构 | 说明 | 默认 |
+|---|---|---|
+| `data-nv-command` | 加在 `.nv-command` 容器上，自动增强 | — |
+| `.nv-command-input` | 搜索输入框；省略时自动创建 | — |
+| `.nv-command-list` | 选项列表；可扁平书写 `.nv-panel-label` 标题与 `.nv-panel-sep` 分隔线，自动包成分组；也可直接写 `.nv-command-group` | — |
+| `[data-value]` | 选项，`nv:select` 的 `value`；文字即匹配内容 | — |
+| `data-keywords` | 选项的额外匹配词 | — |
+| `aria-disabled="true"` | 禁用选项 | — |
+| `.nv-command-kbds > .nv-command-kbd` | 选项右侧的快捷键键帽 | — |
+| `aria-label` | 列表与输入框的无障碍名称 | — |
+| `data-placeholder` | 输入框占位（输入框自身的 `placeholder` 优先） | `搜索…` |
+| `data-empty-text` | 无结果提示 | `没有找到相关结果` |
+| `data-count-text` | 读屏播报的结果数量，`{n}` 为数量 | `{n} 条结果` |
+
+内嵌版的分组保持书写顺序，组内按评分排序；分隔线只在两侧都有可见分组时显示。
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:select` | 内嵌版选中一项（点击或 Enter），在 `.nv-command` 上派发 | `{ value, item }` |
+
+### 键盘
+| 按键 | 作用 |
+|---|---|
+| `↑` `↓` | 移动高亮项，首尾循环 |
+| `Home` `End` | 跳到第一项 / 最后一项 |
+| `PageUp` `PageDown` | 每次移动 8 项 |
+| `Enter` | 选中高亮项（输入法组字时不触发） |
+| `Esc` | 关闭命令面板；内嵌版清空搜索词 |
+| `Tab` | 焦点停留在面板内 |
+
+### 无障碍
+- 面板为 `role="dialog"` + `aria-modal="true"`，打开时锁定页面滚动、焦点陷阱，关闭后还焦。
+- 输入框是 `role="combobox"`，通过 `aria-activedescendant` 指向高亮项，焦点始终留在输入框；列表 `role="listbox"`，分组 `role="group"` 并由组标题命名。
+- 结果数量变化时通过 `role="status"` 的隐藏区域播报（`countText` / `emptyText`）。
+- 所有文字通过 `textContent` 渲染，高亮用 DOM 构造的 `<mark class="nv-command-hl">`，不会执行标签中的 HTML。
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-command-width` | 命令面板宽度（窄屏自动收窄） | `640px` |
+| `--nv-command-top` | 命令面板距视口顶部的距离 | `12vh` |
+| `--nv-command-max-height` | 列表最大高度，超出滚动 | 面板 `min(420px, 56vh)`，内嵌 `320px` |
+-->

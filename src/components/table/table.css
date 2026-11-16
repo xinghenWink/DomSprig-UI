@@ -1,0 +1,395 @@
+/* Nova UI · Table
+ * 纯 CSS：<div class="nv-table-wrap"><table class="nv-table">…</table></div>
+ *   data-striped 斑马纹 · data-bordered 单元格边框 · data-hover 行悬停 · data-size="sm|lg"
+ *   .nv-table-wrap[data-sticky-header] + --nv-table-max-height：表头吸顶（容器内滚动）
+ *   单元格：data-align="center|right"；选中行：<tr aria-selected="true">
+ * JS（table.js）：Nova.table(el, opts) 生成 .nv-table-root，额外部件见下方。
+ */
+
+/* ———————————— 容器 ———————————— */
+.nv-table-wrap {
+  position: relative;
+  max-width: 100%;
+  max-height: var(--nv-table-max-height, none);
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-table-bg, var(--nv-surface));
+  box-shadow: var(--nv-shadow-xs);
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.nv-table-wrap::-webkit-scrollbar { width: 10px; height: 10px; }
+.nv-table-wrap::-webkit-scrollbar-thumb { background: var(--nv-border-strong); border: 3px solid transparent; border-radius: 99px; background-clip: padding-box; }
+.nv-table-wrap::-webkit-scrollbar-corner { background: transparent; }
+
+/* ———————————— 表格 ———————————— */
+.nv-table {
+  /* 颜色通道：全部是不透明色，固定列 / 吸顶表头叠在内容上也不会透出 */
+  --_bg: var(--nv-table-bg, var(--nv-surface));
+  --_head-bg: var(--nv-table-head-bg, color-mix(in oklab, var(--nv-surface-2) 78%, var(--_bg)));
+  --_hover-bg: var(--nv-table-hover-bg, color-mix(in oklab, var(--nv-surface-2) 85%, var(--_bg)));
+  --_stripe-bg: color-mix(in oklab, var(--nv-surface-2) 55%, var(--_bg));
+  --_sel-bg: var(--nv-table-selected-bg, color-mix(in oklab, var(--nv-primary) 7%, var(--_bg)));
+  --_sel-hover-bg: color-mix(in oklab, var(--nv-primary) 11%, var(--_bg));
+  --_line: var(--nv-table-border, var(--nv-border));
+  --_fix-shadow: light-dark(color-mix(in oklab, var(--nv-shadow-c) 14%, transparent), oklch(0 0 0 / 0.5));
+  /* 尺寸通道 */
+  --_py: 11px;
+  --_px: 16px;
+  --_head-py: 10px;
+  --_fs: var(--nv-text-md);
+
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--nv-fg);
+  font: var(--_fs) / 1.45 var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  text-align: start;
+}
+.nv-table[data-size="sm"] { --_py: 7px; --_px: 12px; --_head-py: 7px; --_fs: var(--nv-text-sm); }
+.nv-table[data-size="lg"] { --_py: 15px; --_px: 20px; --_head-py: 13px; }
+
+.nv-table > caption {
+  caption-side: bottom;
+  padding: 10px var(--_px);
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-sm);
+  text-align: start;
+}
+
+/* 表头 */
+.nv-table > thead > tr > th {
+  position: relative;
+  padding: var(--_head-py) var(--_px);
+  border-bottom: 1px solid var(--_line);
+  background: var(--_head-bg);
+  color: var(--nv-fg-2);
+  font-size: var(--nv-text-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: start;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* 单元格 */
+.nv-table > tbody > tr { --_row-bg: var(--_bg); }
+.nv-table > tbody > tr > :is(td, th) {
+  padding: var(--_py) var(--_px);
+  border-bottom: 1px solid var(--_line);
+  background-color: var(--_row-bg);
+  white-space: nowrap;
+  vertical-align: middle;
+  transition: background-color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-table > tbody > tr > th { font-weight: 500; text-align: start; }
+.nv-table > tfoot > tr > :is(td, th) {
+  padding: var(--_py) var(--_px);
+  border-top: 1px solid var(--_line);
+  background: var(--_head-bg);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.nv-table :is(th, td)[data-align="center"] { text-align: center; }
+.nv-table :is(th, td)[data-align="right"] { text-align: end; }
+.nv-table :is(th, td)[data-wrap] { white-space: normal; }
+.nv-table[data-wrap] > tbody > tr > td { white-space: normal; }
+
+/* 容器内最后一行不画底线（容器自带边框） */
+.nv-table-wrap > .nv-table > tbody > tr:last-child > :is(td, th) { border-bottom-color: transparent; }
+.nv-table-wrap > .nv-table > tfoot > tr:last-child > :is(td, th) { border-bottom: 0; }
+
+/* 斑马纹 / 悬停 / 选中 */
+.nv-table[data-striped] > tbody > tr:nth-child(even of :not(.nv-table-expanded-row)) { --_row-bg: var(--_stripe-bg); }
+.nv-table[data-hover] > tbody > tr:not(.nv-table-expanded-row, .nv-table-empty-row, .nv-table-skeleton-row):hover { --_row-bg: var(--_hover-bg); }
+.nv-table > tbody > tr[aria-selected="true"] { --_row-bg: var(--_sel-bg); }
+.nv-table[data-hover] > tbody > tr[aria-selected="true"]:hover { --_row-bg: var(--_sel-hover-bg); }
+
+/* 边框 */
+.nv-table[data-bordered] > * > tr > :is(th, td) { border-right: 1px solid var(--_line); }
+.nv-table[data-bordered] > * > tr > :is(th, td):last-child { border-right: 0; }
+:not(.nv-table-wrap) > .nv-table[data-bordered] { border: 1px solid var(--_line); }
+
+/* 吸顶表头（在 .nv-table-wrap 内滚动） */
+.nv-table-wrap[data-sticky-header] > .nv-table > thead > tr > th { position: sticky; top: 0; z-index: 2; }
+.nv-table-wrap[data-sticky-header][data-ping-top] > .nv-table > thead > tr > th {
+  box-shadow: 0 8px 12px -10px var(--_fix-shadow);
+}
+
+/* ———————————— 固定列（table.js 写入 left/right 偏移与 data-fixed） ———————————— */
+.nv-table :is(th, td)[data-fixed] { position: sticky; z-index: 1; }
+.nv-table > thead > tr > th[data-fixed] { z-index: 3; }
+.nv-table :is(th, td)[data-fixed-edge]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  width: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--nv-dur-2) var(--nv-ease);
+}
+.nv-table :is(th, td)[data-fixed-edge="left"]::after { right: -14px; box-shadow: inset 12px 0 10px -10px var(--_fix-shadow); }
+.nv-table :is(th, td)[data-fixed-edge="right"]::after { left: -14px; box-shadow: inset -12px 0 10px -10px var(--_fix-shadow); }
+.nv-table-wrap[data-ping-left] :is(th, td)[data-fixed-edge="left"]::after,
+.nv-table-wrap[data-ping-right] :is(th, td)[data-fixed-edge="right"]::after { opacity: 1; }
+
+/* ———————————— 排序 ———————————— */
+.nv-table th.nv-table-sortable { padding-block: calc(var(--_head-py) - 4px); }
+.nv-table-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100% + 16px);
+  margin: 0 -8px;
+  padding: 4px 6px 4px 8px;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-table-sort:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-table-sort:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-table-sort-icon { flex: none; width: 14px; height: 14px; color: var(--nv-fg-3); }
+.nv-table-sort-icon path { opacity: 0.55; transition: opacity var(--nv-dur-1), stroke var(--nv-dur-1); }
+.nv-table th[aria-sort="ascending"], .nv-table th[aria-sort="descending"] { color: var(--nv-fg); }
+.nv-table th[aria-sort="ascending"] .nv-table-sort-up,
+.nv-table th[aria-sort="descending"] .nv-table-sort-down { stroke: var(--nv-primary); opacity: 1; }
+.nv-table th[aria-sort="ascending"] .nv-table-sort-down,
+.nv-table th[aria-sort="descending"] .nv-table-sort-up { opacity: 0.25; }
+
+/* ———————————— 勾选列 / 展开列 ———————————— */
+.nv-table :is(th, td).nv-table-check {
+  width: calc(var(--_px) + 20px);
+  min-width: calc(var(--_px) + 20px);
+  padding-right: 0;
+  line-height: 0;
+}
+:where(.nv-table-check input[type="checkbox"]) {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  vertical-align: middle;
+  accent-color: var(--nv-primary);
+  cursor: pointer;
+}
+:where(.nv-table-check input[type="checkbox"]:disabled) { cursor: not-allowed; opacity: 0.5; }
+.nv-table :is(th, td).nv-table-expand {
+  width: calc(var(--_px) + 24px);
+  min-width: calc(var(--_px) + 24px);
+  padding-right: 0;
+  padding-left: calc(var(--_px) - 4px);
+  line-height: 0;
+}
+.nv-table-expand-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-table-expand-btn:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-table-expand-btn:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 0; }
+.nv-table-expand-btn > svg { transition: transform var(--nv-dur-2) var(--nv-ease-out); }
+.nv-table-expand-btn[aria-expanded="true"] { color: var(--nv-fg); }
+.nv-table-expand-btn[aria-expanded="true"] > svg { transform: rotate(90deg); }
+
+/* 展开行：内容随横向滚动保持在可视区（宽度 = 容器宽度） */
+.nv-table > tbody > tr.nv-table-expanded-row > td {
+  --_row-bg: color-mix(in oklab, var(--nv-surface-2) 55%, var(--_bg));
+  padding: 0;
+  white-space: normal;
+}
+.nv-table-expanded-clip {
+  position: sticky;
+  left: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  width: var(--_vw, 100%);
+  max-width: 100%;
+}
+.nv-table-wrap .nv-table-expanded-clip { max-width: none; }
+.nv-table-expanded-body { min-height: 0; overflow: hidden; }
+.nv-table-expanded-inner { padding: 14px var(--_px) 16px; }
+.nv-table-expanded-clip[data-state="open"] { animation: nv-table-expand var(--nv-dur-3) var(--nv-ease-out); }
+.nv-table-expanded-clip[data-state="closed"] { animation: nv-table-collapse var(--nv-dur-2) var(--nv-ease) forwards; }
+@keyframes nv-table-expand { from { grid-template-rows: 0fr; opacity: 0; } to { grid-template-rows: 1fr; opacity: 1; } }
+@keyframes nv-table-collapse { from { grid-template-rows: 1fr; opacity: 1; } to { grid-template-rows: 0fr; opacity: 0; } }
+
+/* 可点击行 */
+.nv-table > tbody > tr[data-clickable] { cursor: pointer; }
+.nv-table > tbody > tr[data-clickable]:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: -2px; }
+
+/* ———————————— 空状态 / 骨架 / 加载遮罩 ———————————— */
+.nv-table > tbody > tr.nv-table-empty-row > td { padding: 0; border-bottom-color: transparent; }
+.nv-table-empty {
+  position: sticky;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: var(--_vw, 100%);
+  padding: 44px 16px;
+  color: var(--nv-fg-3);
+  font-size: var(--nv-text-sm);
+  white-space: normal;
+  text-align: center;
+}
+.nv-table-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--nv-radius-lg);
+  background: var(--nv-surface-2);
+  border: 1px solid var(--nv-border);
+  color: var(--nv-fg-3);
+}
+.nv-table-empty-icon > svg { width: 22px; height: 22px; }
+
+.nv-table-skeleton {
+  display: block;
+  width: 72%;
+  max-width: 180px;
+  height: 10px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--nv-surface-2) 30%, var(--nv-surface-3) 50%, var(--nv-surface-2) 70%) 0 0 / 200% 100%;
+  animation: nv-shimmer 1.4s linear infinite;
+}
+.nv-table-skeleton-row:nth-child(3n + 2) > td:nth-child(odd) .nv-table-skeleton { width: 54%; }
+.nv-table-skeleton-row:nth-child(3n) > td:nth-child(even) .nv-table-skeleton { width: 40%; }
+.nv-table-skeleton-row > .nv-table-check .nv-table-skeleton,
+.nv-table-skeleton-row > .nv-table-expand .nv-table-skeleton { width: 16px; height: 16px; border-radius: 4px; }
+.nv-table > tbody > tr.nv-table-skeleton-row > td { height: calc(var(--_py) * 2 + 20px); }
+
+.nv-table-container { position: relative; }
+.nv-table-mask {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  border-radius: var(--nv-radius-lg);
+  background: color-mix(in oklab, var(--nv-surface) 58%, transparent);
+  animation: nv-fade-in var(--nv-dur-2) var(--nv-ease-out);
+}
+.nv-table-mask[hidden] { display: none; }
+.nv-table-mask-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-full);
+  background: var(--nv-surface-raised);
+  box-shadow: var(--nv-shadow-md);
+  color: var(--nv-fg-2);
+  font: 500 var(--nv-text-sm) / 1.2 var(--nv-font);
+}
+.nv-table-mask-box > .nv-spinner { color: var(--nv-primary); font-size: 14px; }
+
+/* ———————————— 已选操作栏 ———————————— */
+.nv-table-bar {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows var(--nv-dur-3) var(--nv-ease-out), opacity var(--nv-dur-2) var(--nv-ease), margin var(--nv-dur-3) var(--nv-ease-out);
+}
+.nv-table-bar[data-state="open"] { grid-template-rows: 1fr; opacity: 1; margin-bottom: 10px; }
+.nv-table-bar-clip { min-height: 0; overflow: hidden; }
+.nv-table-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-height: 44px;
+  padding: 5px 6px 5px 14px;
+  border: 1px solid color-mix(in oklab, var(--nv-primary) 26%, var(--nv-border));
+  border-radius: var(--nv-radius-lg);
+  background: color-mix(in oklab, var(--nv-primary) 7%, var(--nv-surface));
+  font-size: var(--nv-text-sm);
+}
+.nv-table-bar-count { margin-right: 8px; color: var(--nv-fg); white-space: nowrap; }
+.nv-table-bar-count > b { margin: 0 2px; color: var(--nv-primary-text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.nv-table-bar-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.nv-table-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--nv-radius-md);
+  background: transparent;
+  color: var(--nv-fg);
+  font: 500 var(--nv-text-sm) / 1 var(--nv-font);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-table-bar-btn > svg { width: 15px; height: 15px; color: var(--nv-fg-2); }
+.nv-table-bar-btn:hover { background: color-mix(in oklab, var(--nv-primary) 12%, transparent); }
+.nv-table-bar-btn:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-table-bar-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.nv-table-bar-btn[data-color="danger"], .nv-table-bar-btn[data-color="danger"] > svg { color: var(--nv-danger-text); }
+.nv-table-bar-btn[data-color="danger"]:hover { background: var(--nv-danger-soft); }
+.nv-table-bar-clear { margin-left: auto; color: var(--nv-fg-2); }
+
+/* ———————————— 底部分页 ———————————— */
+.nv-table-footer { display: flex; justify-content: flex-end; margin-top: 14px; }
+.nv-table-footer > .nv-pagination { justify-content: flex-end; }
+
+/* ———————————— 单元格辅助类 ———————————— */
+.nv-table-media { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.nv-table-media > :last-child { min-width: 0; }
+.nv-table-primary { display: block; color: var(--nv-fg); font-weight: 500; }
+.nv-table-sub { display: block; color: var(--nv-fg-3); font-size: var(--nv-text-xs); line-height: 1.4; }
+.nv-table-ellipsis { display: block; max-width: var(--_w, 240px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nv-table-mono { font-family: var(--nv-font-mono); font-size: 0.92em; }
+.nv-table-actions { display: inline-flex; align-items: center; gap: 2px; margin: -4px -8px; }
+.nv-table-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--nv-radius-sm);
+  background: transparent;
+  color: var(--nv-primary-text);
+  font: 500 var(--nv-text-sm) / 1 var(--nv-font);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1), color var(--nv-dur-1);
+}
+.nv-table-action > svg { width: 15px; height: 15px; }
+.nv-table-action:hover { background: var(--nv-primary-soft); }
+.nv-table-action:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-table-action[data-color="neutral"] { color: var(--nv-fg-2); }
+.nv-table-action[data-color="neutral"]:hover { background: var(--nv-surface-3); color: var(--nv-fg); }
+.nv-table-action[data-color="danger"] { color: var(--nv-danger-text); }
+.nv-table-action[data-color="danger"]:hover { background: var(--nv-danger-soft); }
+.nv-table-action[data-icon] { width: 28px; padding: 0; }
+.nv-table-action:disabled { opacity: 0.5; cursor: not-allowed; }

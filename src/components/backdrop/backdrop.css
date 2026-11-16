@@ -1,0 +1,154 @@
+/* Nova UI · Backdrop 装饰背景
+ * 背景层都是容器内的绝对定位层（inset: 0），不拦截指针，默认 z-index: -1 垫在内容下面。
+ * 容器需要建立层叠上下文：加 .nv-bg-host（position: relative + isolation: isolate + 裁切），
+ * 或自行写 position: relative; isolation: isolate。
+ *   .nv-bg-dots    点阵           .nv-bg-grid   网格线（默认径向渐隐）
+ *   .nv-bg-aurora  极光光斑（随 --nv-hue）  .nv-bg-noise  颗粒噪点
+ *   [data-nv-meteors="12"]  流星（backdrop.js 生成）
+ * 渐隐：data-fade="radial"（默认）| "top" | "bottom" | "none"；
+ *       --nv-bg-fade-at 渐隐中心、--nv-bg-fade-size 椭圆尺寸。
+ */
+.nv-bg-host { position: relative; isolation: isolate; overflow: clip; }
+
+.nv-bg-dots, .nv-bg-grid, .nv-bg-aurora, .nv-bg-noise, [data-nv-meteors] {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* —— 渐隐遮罩 ——
+ * 点阵、网格默认径向渐隐；极光与流星写了 data-fade 才启用。遮罩只看透明度，black 仅表示「不透明」。
+ * data-fade="radial" 径向（中心保留） | "top" 保留顶部、向下渐隐 | "bottom" 保留底部 | "none" 关闭 */
+.nv-bg-dots, .nv-bg-grid, .nv-bg-aurora, [data-nv-meteors] {
+  --_fade: radial-gradient(ellipse var(--nv-bg-fade-size, 70% 70%) at var(--nv-bg-fade-at, 50% 40%), black 25%, transparent 100%);
+}
+:is(.nv-bg-dots, .nv-bg-grid, .nv-bg-aurora, [data-nv-meteors])[data-fade="top"] { --_fade: linear-gradient(to bottom, black 15%, transparent 95%); }
+:is(.nv-bg-dots, .nv-bg-grid, .nv-bg-aurora, [data-nv-meteors])[data-fade="bottom"] { --_fade: linear-gradient(to top, black 15%, transparent 95%); }
+.nv-bg-dots, .nv-bg-grid, :is(.nv-bg-aurora, [data-nv-meteors])[data-fade] {
+  -webkit-mask-image: var(--_fade);
+  mask-image: var(--_fade);
+}
+:is(.nv-bg-dots, .nv-bg-grid, .nv-bg-aurora, [data-nv-meteors])[data-fade="none"] { -webkit-mask-image: none; mask-image: none; }
+
+/* —— 点阵 —— */
+.nv-bg-dots {
+  --_c: var(--nv-bg-dots-color, color-mix(in oklab, var(--nv-fg) 22%, transparent));
+  --_s: var(--nv-bg-dots-size, 20px);
+  --_r: var(--nv-bg-dots-radius, 1px);
+  background-image: radial-gradient(circle at center, var(--_c) var(--_r), transparent calc(var(--_r) + 0.5px));
+  background-size: var(--_s) var(--_s);
+  background-position: calc(var(--_s) / -2) calc(var(--_s) / -2);
+}
+.nv-bg-dots[data-color="primary"] { --_c: var(--nv-bg-dots-color, color-mix(in oklab, var(--nv-primary) 45%, transparent)); }
+
+/* —— 网格 —— */
+.nv-bg-grid {
+  --_c: var(--nv-bg-grid-color, color-mix(in oklab, var(--nv-fg) 9%, transparent));
+  --_s: var(--nv-bg-grid-size, 40px);
+  --_w: var(--nv-bg-grid-width, 1px);
+  background-image:
+    linear-gradient(to right, var(--_c) var(--_w), transparent var(--_w)),
+    linear-gradient(to bottom, var(--_c) var(--_w), transparent var(--_w));
+  background-size: var(--_s) var(--_s);
+  background-position: calc(50% - var(--_s) / 2) -1px;
+}
+.nv-bg-grid[data-color="primary"] { --_c: var(--nv-bg-grid-color, color-mix(in oklab, var(--nv-primary) 22%, transparent)); }
+/* —— 极光：两层柔和光斑缓慢漂移，色相跟随 --nv-hue —— */
+.nv-bg-aurora {
+  --_a: var(--nv-bg-aurora-a, light-dark(oklch(0.8 0.13 var(--nv-hue) / 0.55), oklch(0.55 0.2 var(--nv-hue) / 0.42)));
+  --_b: var(--nv-bg-aurora-b, light-dark(oklch(0.84 0.12 calc(var(--nv-hue) + 55) / 0.5), oklch(0.58 0.18 calc(var(--nv-hue) + 55) / 0.34)));
+  --_c: var(--nv-bg-aurora-c, light-dark(oklch(0.82 0.12 calc(var(--nv-hue) - 50) / 0.45), oklch(0.52 0.17 calc(var(--nv-hue) - 50) / 0.32)));
+  --_dur: var(--nv-bg-aurora-duration, 22s);
+  overflow: hidden;
+  opacity: var(--nv-bg-aurora-opacity, 1);
+}
+.nv-bg-aurora::before, .nv-bg-aurora::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  will-change: transform;
+  animation: nv-aurora-a var(--_dur) var(--nv-ease-in-out) infinite alternate;
+}
+.nv-bg-aurora::before {
+  background:
+    radial-gradient(closest-side at 32% 38%, var(--_a), transparent),
+    radial-gradient(closest-side at 70% 30%, var(--_b), transparent);
+  background-size: 60% 70%, 55% 60%;
+  background-repeat: no-repeat;
+  background-position: 18% 22%, 82% 14%;
+}
+.nv-bg-aurora::after {
+  background:
+    radial-gradient(closest-side at 50% 50%, var(--_c), transparent),
+    radial-gradient(closest-side at 50% 50%, var(--_a), transparent);
+  background-size: 58% 62%, 44% 50%;
+  background-repeat: no-repeat;
+  background-position: 62% 72%, 30% 80%;
+  animation-name: nv-aurora-b;
+  animation-duration: calc(var(--_dur) * 1.35);
+}
+@keyframes nv-aurora-a {
+  0% { transform: translate3d(-6%, -4%, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(5%, 3%, 0) rotate(8deg) scale(1.08); }
+  100% { transform: translate3d(-2%, 6%, 0) rotate(-6deg) scale(0.96); }
+}
+@keyframes nv-aurora-b {
+  0% { transform: translate3d(6%, 5%, 0) rotate(0deg) scale(1.05); }
+  50% { transform: translate3d(-5%, -2%, 0) rotate(-10deg) scale(0.95); }
+  100% { transform: translate3d(3%, -6%, 0) rotate(6deg) scale(1.1); }
+}
+.nv-bg-aurora[data-paused]::before, .nv-bg-aurora[data-paused]::after { animation-play-state: paused; }
+
+/* —— 噪点：前景色 + 噪声遮罩，明暗主题自动适配 —— */
+.nv-bg-noise {
+  background: var(--nv-bg-noise-color, var(--nv-fg));
+  opacity: var(--nv-bg-noise-opacity, 0.07);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -0.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -0.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-size: 160px;
+  mask-size: 160px;
+}
+
+/* —— 流星：backdrop.js 生成 .nv-meteor，自右上向左下划过 —— */
+[data-nv-meteors] { overflow: hidden; }
+.nv-meteor {
+  --_c: var(--nv-meteor-color, var(--nv-primary-text));
+  position: absolute;
+  top: var(--_y, 0%);
+  left: var(--_x, 50%);
+  width: var(--nv-meteor-length, 96px);
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--_c), transparent);
+  transform-origin: 0 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: nv-meteor var(--_dur, 8s) linear var(--_delay, 0s) infinite;
+}
+.nv-meteor::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--_c);
+  box-shadow: 0 0 6px 1px color-mix(in oklab, var(--_c) 60%, transparent);
+  transform: translateY(-50%);
+}
+@keyframes nv-meteor {
+  0% { opacity: 0; transform: rotate(calc(var(--nv-meteor-angle, 35deg) * -1)) translateX(0); }
+  3% { opacity: 1; }
+  26% { opacity: 1; }
+  34%, 100% { opacity: 0; transform: rotate(calc(var(--nv-meteor-angle, 35deg) * -1)) translateX(calc(var(--_dist, 600px) * -1)); }
+}
+[data-nv-meteors][data-paused] .nv-meteor { animation-play-state: paused; }
+
+/* —— 减少动态：极光定格、流星不出现，点阵 / 网格 / 噪点本就是静态 —— */
+@media (prefers-reduced-motion: reduce) {
+  .nv-bg-aurora::before, .nv-bg-aurora::after { animation: none; }
+  .nv-meteor { display: none; }
+}

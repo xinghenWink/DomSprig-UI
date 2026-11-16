@@ -1,0 +1,177 @@
+/* Nova UI · Drawer 抽屉
+ * <div class="nv-drawer" id hidden data-side="right">   根节点 = 遮罩（打开时移到 body）
+ *   <div class="nv-drawer-panel">
+ *     <div class="nv-drawer-header">  .nv-drawer-title .nv-drawer-desc .nv-drawer-close
+ *     <div class="nv-drawer-body">    内部滚动
+ *     <div class="nv-drawer-footer">
+ * data-side   right | left | top | bottom（默认 right）
+ * data-size   sm | md | lg | xl | full（左右：宽 320/400/560/720/100%；上下：高 30/45/65/85/100dvh，默认随内容）
+ * data-static 点击遮罩不关闭
+ */
+.nv-drawer {
+  --_w: var(--nv-drawer-width, 400px);
+  --_h: auto;
+  --_pad: 20px;
+  position: fixed;
+  inset: 0;
+  z-index: var(--nv-z-modal);
+  background: var(--nv-overlay);
+  color: var(--nv-fg);
+  font: var(--nv-text-md) / var(--nv-leading) var(--nv-font);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+.nv-drawer[hidden] { display: none; }
+.nv-drawer[data-state="open"] { animation: nv-fade-in var(--nv-dur-3) var(--nv-ease-out); }
+.nv-drawer[data-state="closed"] { animation: nv-fade-out var(--nv-dur-3) var(--nv-ease) forwards; pointer-events: none; }
+
+.nv-drawer[data-size="sm"] { --_w: 320px; --_h: 30dvh; }
+.nv-drawer[data-size="md"] { --_h: 45dvh; }
+.nv-drawer[data-size="lg"] { --_w: 560px; --_h: 65dvh; }
+.nv-drawer[data-size="xl"] { --_w: 720px; --_h: 85dvh; }
+.nv-drawer[data-size="full"] { --_w: 100vw; --_h: 100dvh; }
+
+/* —— 面板（默认右侧） —— */
+.nv-drawer-panel {
+  --_from: translateX(100%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(var(--_w), 100vw - 48px);
+  border-left: 1px solid var(--nv-border);
+  background: var(--nv-surface-raised);
+  box-shadow: var(--nv-shadow-xl);
+  outline: 0;
+  transition: transform var(--nv-dur-3) var(--nv-ease-out);
+}
+.nv-drawer[data-size="full"] > .nv-drawer-panel { width: 100vw; border: 0; }
+.nv-drawer[data-side="left"] > .nv-drawer-panel {
+  --_from: translateX(-100%);
+  right: auto;
+  left: 0;
+  border-left: 0;
+  border-right: 1px solid var(--nv-border);
+}
+.nv-drawer:is([data-side="top"], [data-side="bottom"]) > .nv-drawer-panel {
+  left: 0;
+  right: 0;
+  width: auto;
+  height: var(--_h);
+  max-height: min(var(--_h), 100dvh - 40px);
+  border-left: 0;
+}
+.nv-drawer:is([data-side="top"], [data-side="bottom"]):not([data-size]) > .nv-drawer-panel { max-height: 85dvh; }
+.nv-drawer[data-side="top"] > .nv-drawer-panel {
+  --_from: translateY(-100%);
+  bottom: auto;
+  border-bottom: 1px solid var(--nv-border);
+  border-radius: 0 0 var(--nv-radius-xl) var(--nv-radius-xl);
+}
+.nv-drawer[data-side="bottom"] > .nv-drawer-panel {
+  --_from: translateY(100%);
+  top: auto;
+  border-top: 1px solid var(--nv-border);
+  border-radius: var(--nv-radius-xl) var(--nv-radius-xl) 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nv-drawer[data-size="full"]:is([data-side="top"], [data-side="bottom"]) > .nv-drawer-panel { max-height: 100dvh; border-radius: 0; }
+
+.nv-drawer[data-state="open"] > .nv-drawer-panel { animation: nv-drawer-in var(--nv-dur-4) var(--nv-ease-out) backwards; }
+.nv-drawer[data-state="closed"] > .nv-drawer-panel { animation: nv-drawer-out var(--nv-dur-3) var(--nv-ease-in-out) forwards; }
+.nv-drawer[data-state="open"] > .nv-drawer-panel[data-bounce] { animation: nv-drawer-bounce 340ms var(--nv-ease-out); }
+/* 嵌套：下层抽屉轻微后退 */
+.nv-drawer[data-behind] > .nv-drawer-panel { transform: scale(0.97); }
+@keyframes nv-drawer-in { from { transform: var(--_from); } }
+@keyframes nv-drawer-out { to { transform: var(--_from); } }
+@keyframes nv-drawer-bounce { 40% { transform: scale(1.015); } }
+
+/* —— 头部 —— */
+.nv-drawer-header {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 18px var(--_pad) 4px;
+}
+.nv-drawer-header:has(> .nv-drawer-close) { padding-right: 56px; }
+.nv-drawer-title {
+  margin: 0;
+  font-size: var(--nv-text-lg);
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.nv-drawer-desc { margin: 0; color: var(--nv-fg-2); font-size: var(--nv-text-sm); line-height: 1.55; }
+.nv-drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--nv-radius-md);
+  background: transparent;
+  color: var(--nv-fg-3);
+  cursor: pointer;
+  transition: background-color var(--nv-dur-1) var(--nv-ease), color var(--nv-dur-1) var(--nv-ease);
+}
+.nv-drawer-close:hover { background: var(--nv-surface-2); color: var(--nv-fg); }
+.nv-drawer-close:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: 2px; }
+.nv-drawer-close > svg { width: 18px; height: 18px; }
+
+/* —— 正文 —— */
+.nv-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 14px var(--_pad);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-block: 1px solid transparent;
+  color: var(--nv-fg-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--nv-border-strong) transparent;
+  transition: border-color var(--nv-dur-2) var(--nv-ease);
+}
+.nv-drawer-body > :first-child { margin-top: 0; }
+.nv-drawer-body > :last-child { margin-bottom: 0; }
+/* 抽屉内的操作 / 导航列表：直接放 .nv-item（button 或 a） */
+.nv-drawer-body:has(> .nv-item) { padding-inline: 12px; }
+.nv-drawer-body > .nv-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--nv-fg);
+  font-family: inherit;
+  text-align: start;
+  text-decoration: none;
+}
+.nv-drawer-body > .nv-item:hover { background: var(--nv-surface-2); }
+.nv-drawer-body > .nv-item:focus-visible { outline: 2px solid var(--nv-primary); outline-offset: -2px; }
+.nv-drawer-body > .nv-item[aria-current="page"] { background: var(--nv-primary-soft); color: var(--nv-primary-text); font-weight: 500; }
+.nv-drawer-body > .nv-item[aria-current="page"] > svg { color: currentColor; }
+.nv-drawer-body :is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--nv-primary); }
+.nv-drawer-panel[data-scroll-top] > .nv-drawer-body { border-top-color: var(--nv-border); }
+.nv-drawer-panel[data-scroll-bottom] > .nv-drawer-body { border-bottom-color: var(--nv-border); }
+
+/* —— 底部 —— */
+.nv-drawer-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px var(--_pad) 18px;
+}
+.nv-drawer-extra { margin-right: auto; color: var(--nv-fg-3); font-size: var(--nv-text-sm); }
+
+@media (max-width: 639px) {
+  .nv-drawer { --_pad: 16px; }
+  .nv-drawer:is([data-side="top"], [data-side="bottom"]) .nv-drawer-footer > .nv-btn { flex: 1 1 0; }
+}

@@ -1,0 +1,47 @@
+/* Nova UI · Tilt 3D 倾斜 / 磁吸
+ * [data-nv-tilt]           指针悬停时 3D 倾斜，离开后弹性复位（JS 弹簧，transform 写在元素上）
+ *   data-max="10"          最大倾斜角（度）      data-perspective="900"  透视距离（px）
+ *   data-scale="1.03"      悬停放大              data-spring="0.5"       复位弹性 0（无回弹）–1（强回弹）
+ *   data-reverse           反向（光标所在一侧抬起）
+ *   data-glare             高光反射层（注入 .nv-tilt-glare，--nv-tilt-glare 定制颜色）
+ * [data-nv-magnetic]       磁吸：光标靠近时元素被轻微吸引（写 translate 属性，不覆盖 transform）
+ *   data-strength="0.35"   吸引强度 0–1          data-radius="60"        元素外的感应距离（px）
+ * 触屏与减少动态：不倾斜、不吸附，保持静止。
+ */
+[data-nv-tilt] {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+[data-nv-tilt][data-active] { will-change: transform; }
+
+.nv-tilt-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--nv-dur-4) var(--nv-ease);
+}
+[data-nv-tilt][data-active] > .nv-tilt-glare { opacity: 1; }
+.nv-tilt-glare > span {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%,
+    var(--nv-tilt-glare, color-mix(in oklab, white 42%, transparent)) 0%,
+    transparent 38%);
+  mix-blend-mode: soft-light;
+  will-change: transform;
+}
+/* 倾斜元素自身需要是定位容器，高光层才能覆盖它 */
+:where([data-nv-tilt][data-glare]) { position: relative; }
+
+[data-nv-magnetic][data-active] { will-change: translate; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-tilt-glare { display: none; }
+}

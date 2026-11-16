@@ -1,0 +1,90 @@
+<!--
+@name avatar
+@title Avatar 头像
+@category data
+@order 40
+@deps badge
+@desc 图片、文字或图标头像。只写 `data-name` 就能生成文字头像，配色由名字推导，同一个人每次颜色都一样；图片加载失败时自动回退。头像组重叠排列，超出部分显示 +N。
+-->
+
+<!-- @demo 三种内容 | 图片、`data-name` 文字头像、图标。图片地址失效时回退为 alt 的文字头像。 -->
+<span class="nv-avatar"><img src="https://i.pravatar.cc/96?img=32" alt="林夏"></span>
+<span class="nv-avatar" data-name="周屿"></span>
+<span class="nv-avatar" data-name="Chen Mo"></span>
+<span class="nv-avatar" data-name="许诺"></span>
+<span class="nv-avatar"><img src="data:image/png;base64,AA==" alt="宋一"></span>
+<span class="nv-avatar"><i data-nv-icon="user"></i></span>
+
+<!-- @demo 尺寸与形状 | `data-size` 取 xs / sm / md / lg / xl；`data-shape="square"` 圆角方形，适合团队、应用或机构。 -->
+<span class="nv-avatar" data-size="xs" data-name="何川"></span>
+<span class="nv-avatar" data-size="sm" data-name="何川"></span>
+<span class="nv-avatar" data-name="何川"></span>
+<span class="nv-avatar" data-size="lg" data-name="何川"></span>
+<span class="nv-avatar" data-size="xl" data-name="何川"></span>
+<span class="nv-avatar" data-size="lg" data-shape="square" data-color="primary"><i data-nv-icon="zap" data-size="20"></i></span>
+<span class="nv-avatar" data-size="lg" data-shape="square" data-name="Nova Labs"></span>
+
+<!-- @demo 在线状态与角标 | `data-status` 取 online / busy / away / offline。数字角标用 Badge 的 `.nv-indicator` 包一层。 -->
+<span class="nv-avatar" data-name="林夏" data-status="online"></span>
+<span class="nv-avatar" data-name="周屿" data-status="busy"></span>
+<span class="nv-avatar" data-name="陈默" data-status="away"></span>
+<span class="nv-avatar" data-name="许诺" data-status="offline"></span>
+<span class="nv-indicator" data-count="3" data-overlap="circle"><span class="nv-avatar" data-size="lg" data-name="宋一"></span></span>
+
+<!-- @demo 头像组 | `.nv-avatar-group` 重叠排列；`data-max` 限制显示数量，其余折叠成 +N，悬停 +N 可看到被折叠的名字。 | col left -->
+<div class="nv-avatar-group" data-max="4">
+  <span class="nv-avatar" data-name="林夏"></span>
+  <span class="nv-avatar" data-name="周屿"></span>
+  <span class="nv-avatar" data-name="陈默"></span>
+  <span class="nv-avatar" data-name="许诺"></span>
+  <span class="nv-avatar" data-name="宋一"></span>
+  <span class="nv-avatar" data-name="何川"></span>
+  <span class="nv-avatar" data-name="Ada Wong"></span>
+</div>
+<div class="nv-avatar-group" data-size="sm">
+  <button class="nv-avatar" data-name="林夏" aria-label="林夏"></button>
+  <button class="nv-avatar" data-name="周屿" aria-label="周屿"></button>
+  <button class="nv-avatar" data-name="陈默" aria-label="陈默"></button>
+</div>
+
+<!-- @demo 用户信息 | 头像搭配名字和说明文字的常见排版。 | left -->
+<style>
+  .av-user { display: flex; align-items: center; gap: 12px; }
+  .av-user b { display: block; font-weight: 600; }
+  .av-user small { color: var(--nv-fg-3); font-size: var(--nv-text-sm); }
+</style>
+<div class="av-user">
+  <span class="nv-avatar" data-size="lg" data-name="林夏" data-status="online"></span>
+  <div><b>林夏</b><small>前端负责人 · linxia@nova.dev</small></div>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 默认 |
+|---|---|---|
+| `data-name` | 名字。生成文字头像（中文取最后两个字，英文取前两个单词首字母），并推导配色 | — |
+| `data-size` | `xs` `sm` `md` `lg` `xl`（20 / 28 / 36 / 44 / 56px） | `md` |
+| `data-shape` | `square` 圆角方形 | 圆形 |
+| `data-status` | `online` `busy` `away` `offline` | — |
+| `data-color` | `primary` `success` `warning` `danger` `info` `neutral`，覆盖自动配色 | 由名字推导 |
+
+### 头像组
+| 属性 | 说明 |
+|---|---|
+| `.nv-avatar-group` | 重叠排列容器，头像之间有一圈背景色描边 |
+| `data-max` | 最多显示几个，其余折叠为 +N |
+| `data-size` | 统一组内头像尺寸 |
+
+增删组内头像会自动重新计算 +N；也可以调用 `Nova.get(el, 'avatar-group').refresh()`。
+
+### CSS 变量与方法
+| 名称 | 说明 |
+|---|---|
+| `--nv-avatar-ring` | 状态点和头像组描边的颜色，放在非默认背景上时改成背景色 |
+| `Nova.avatar.initials(name)` | 计算文字头像的内容 |
+| `Nova.avatar.hue(name)` | 名字对应的色相（0–359） |
+
+### 无障碍
+- 文字头像和图标头像自动加 `role="img"` 与 `aria-label`（取名字）。
+- 可点击的头像用 `<a>` 或 `<button>`，并自己写 `aria-label`。
+-->

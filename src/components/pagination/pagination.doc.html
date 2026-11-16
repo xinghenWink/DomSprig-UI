@@ -1,0 +1,142 @@
+<!--
+@name pagination
+@title Pagination 分页
+@category navigation
+@order 30
+@desc 把长列表拆成多页。自动折叠页码（省略号可一键跳 5 页），支持总数、每页条数、快速跳转、简洁模式与三种外观；声明式 data-* 或 Nova.pagination() 都能用。
+-->
+
+<!-- @demo 基础用法 | 写好 `data-total` `data-page` `data-page-size`，脚本自动渲染。首尾各保留 1 页、当前页两侧各 1 页，其余折叠为省略号；悬停省略号可跳 5 页。 -->
+<div class="doc-stack">
+  <nav class="nv-pagination" data-total="50" data-page="2" data-page-size="10"></nav>
+  <nav class="nv-pagination" data-total="250" data-page="12" data-page-size="10"></nav>
+</div>
+
+<!-- @demo 外观与尺寸 | `data-variant="soft|solid|outline"` 控制当前页样式；`data-size="sm|md|lg"` 对应 28 / 32 / 38px，比同档按钮小一号，放在表格底部不抢眼。 -->
+<div class="doc-stack">
+  <nav class="nv-pagination" data-variant="solid" data-total="120" data-page="3"></nav>
+  <nav class="nv-pagination" data-variant="outline" data-total="120" data-page="3"></nav>
+  <nav class="nv-pagination" data-size="sm" data-total="120" data-page="3" aria-label="评论分页"></nav>
+  <nav class="nv-pagination" data-size="lg" data-total="120" data-page="3" aria-label="商品分页"></nav>
+</div>
+
+<!-- @demo 总数、每页条数与跳转 | `data-show-total` 显示总数，`data-size-options` 切换每页条数（页面有 Select 组件时自动增强为自定义下拉），`data-jumper` 输入页码后回车跳转。 -->
+<div class="doc-stack">
+  <nav class="nv-pagination" id="pagination-full" data-total="1286" data-page="1" data-page-size="20"
+       data-show-total data-size-options="10,20,50,100" data-jumper aria-label="订单列表分页"></nav>
+  <div class="doc-log" id="pagination-full-log">切换页码或每页条数试试</div>
+</div>
+<script>
+  {
+    const nav = document.getElementById('pagination-full');
+    const log = document.getElementById('pagination-full-log');
+    nav.addEventListener('nv:change', (e) => {
+      const { page, pageSize } = e.detail;
+      log.textContent = `nv:change → 第 ${page} 页，每页 ${pageSize} 条`;
+    });
+  }
+</script>
+
+<!-- @demo 简洁模式 | `data-simple` 只保留上一页 / 页码输入 / 下一页，适合卡片底部、移动端与窄侧栏。 -->
+<nav class="nv-pagination" data-simple data-total="86" data-page="2" data-page-size="10" aria-label="消息分页"></nav>
+
+<!-- @demo 脚本控制与联动 | `Nova.pagination(el, opts)` 创建或更新；`set()` 静默同步外部状态，`goTo()` 跳页并派发事件。下面模拟搜索结果：换关键词后总数变化、回到第 1 页。 -->
+<div class="doc-stack doc-mid">
+  <div class="doc-row">
+    <button type="button" class="nv-btn" data-variant="outline" data-size="sm" id="pagination-api-a">关键词「耳机」</button>
+    <button type="button" class="nv-btn" data-variant="outline" data-size="sm" id="pagination-api-b">关键词「键盘」</button>
+    <button type="button" class="nv-btn" data-variant="ghost" data-size="sm" id="pagination-api-last">跳到末页</button>
+  </div>
+  <nav id="pagination-api" aria-label="搜索结果分页"></nav>
+  <div class="doc-log" id="pagination-api-log"></div>
+</div>
+<script>
+  {
+    const log = document.getElementById('pagination-api-log');
+    const pager = Nova.pagination(document.getElementById('pagination-api'), {
+      total: 368,
+      pageSize: 12,
+      showTotal: (total, [start, end]) => `第 ${start}–${end} 条，共 ${total} 条`,
+      onChange: ({ page }) => { log.textContent = `加载第 ${page} 页…`; },
+    });
+    document.getElementById('pagination-api-a').addEventListener('click', () => {
+      pager.set({ total: 368, page: 1 });
+      log.textContent = '「耳机」共 368 条结果';
+    });
+    document.getElementById('pagination-api-b').addEventListener('click', () => {
+      pager.set({ total: 57, page: 1 });
+      log.textContent = '「键盘」共 57 条结果';
+    });
+    document.getElementById('pagination-api-last').addEventListener('click', () => pager.goTo(pager.get().pageCount));
+  }
+</script>
+
+<!-- @demo 禁用与无障碍 | `data-disabled` 整体禁用（加载中时常用）。根元素是 `<nav>`，默认 `aria-label="分页"`，同页多个分页时请分别命名；当前页带 `aria-current="page"`，每个按钮都有「第 N 页」的可读名称；Tab 逐个聚焦，Enter / 空格翻页，翻页后焦点保留在对应按钮上。 -->
+<nav class="nv-pagination" data-disabled data-total="90" data-page="4" aria-label="已禁用的分页"></nav>
+
+<!-- @api
+### 属性（`<nav class="nv-pagination">`）
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `data-total` | 数据总条数 | 数字 | `0` |
+| `data-page` | 当前页（从 1 开始，自动夹紧到有效范围） | 数字 | `1` |
+| `data-page-size` | 每页条数 | 数字 | `10` |
+| `data-siblings` | 当前页两侧显示的页码数 | 数字 | `1` |
+| `data-boundaries` | 首尾始终显示的页码数 | 数字 | `1` |
+| `data-show-total` | 显示「共 N 条」 | 布尔 | — |
+| `data-size-options` | 每页条数选项，逗号分隔；页面有 Select 组件时自动增强 | `10,20,50` | — |
+| `data-jumper` | 显示快速跳转输入框（回车或失焦跳转） | 布尔 | — |
+| `data-simple` | 简洁模式：上一页 / 页码输入 / 下一页 | 布尔 | — |
+| `data-disabled` | 整体禁用 | 布尔 | — |
+| `data-hide-on-single-page` | 只有 1 页时隐藏 | 布尔 | — |
+| `data-variant` | 当前页外观 | `soft` `solid` `outline` | `soft` |
+| `data-size` | 尺寸（28 / 32 / 38px） | `sm` `md` `lg` | `md` |
+| `data-align` | 对齐 | `center` `end` | 左对齐 |
+| `aria-label` | 导航名称，同页多个分页时应各不相同 | 文本 | `分页` |
+
+### 文案（均可用 data-* 或同名 JS 选项覆盖）
+| 属性 | 默认 | 占位符 |
+|---|---|---|
+| `data-total-text` | `共 {total} 条` | `{total}` `{start}` `{end}` |
+| `data-size-text` | `{size} 条/页` | `{size}` |
+| `data-page-text` | `第 {page} 页`（页码按钮的可读名称） | `{page}` |
+| `data-prev-text` / `data-next-text` | `上一页` / `下一页` | — |
+| `data-prev-more-text` / `data-next-more-text` | `向前 {n} 页` / `向后 {n} 页` | `{n}` |
+| `data-jumper-text` / `data-jumper-suffix` | `跳至` / `页` | — |
+| `data-size-label` / `data-jumper-label` | `每页条数` / `跳转到指定页` | — |
+
+### JS
+```js
+const pager = Nova.pagination(el, {
+  total: 250, page: 1, pageSize: 10,
+  siblings: 1, boundaries: 1,
+  showTotal: true,                 // 或 (total, [start, end]) => '自定义文本'
+  sizeOptions: [10, 20, 50],
+  jumper: true, simple: false, disabled: false,
+  onChange: ({ page, pageSize }) => {},
+});
+```
+对同一元素再次调用 `Nova.pagination(el, opts)` 会合并选项并重绘，返回同一实例；声明式元素也可用 `Nova.get(el, 'pagination')` 取实例。
+
+### 事件
+| 事件 | 说明 | detail |
+|---|---|---|
+| `nv:change` | 用户翻页、跳转或修改每页条数时派发（冒泡）；`set()` 不派发 | `{ page, pageSize }` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `set({ page, total, pageSize })` | 静默更新状态并重绘，不派发事件 |
+| `goTo(page)` | 跳到指定页并派发 `nv:change`，返回是否发生变化 |
+| `get()` | 返回 `{ page, pageSize, total, pageCount }` |
+| `update(opts)` | 合并任意选项并重绘 |
+| `destroy()` | 移除监听并清空内容 |
+| `Nova.pagination.items(page, count, siblings, boundaries)` | 页码序列算法（`'start'` / `'end'` 表示省略号），便于自定义渲染 |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-pagination-size` | 页码按钮边长（默认 `--nv-h-sm` 32px） |
+| `--nv-primary` / `--nv-hue` | 当前页颜色 |
+| `--nv-radius` | 圆角基准 |
+-->

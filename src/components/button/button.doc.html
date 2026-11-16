@@ -1,0 +1,118 @@
+<!--
+@name button
+@title Button 按钮
+@category general
+@order 1
+@desc 触发一个操作。6 种变体 × 5 种颜色 × 4 种尺寸，支持图标、加载、按钮组与按压水波纹；纯 CSS 即可使用。
+-->
+
+<!-- @demo 变体 | 用 `data-variant` 区分强调程度：一个区域内只放一个实心主按钮。 -->
+<button class="nv-btn">实心 Solid</button>
+<button class="nv-btn" data-variant="soft">柔和 Soft</button>
+<button class="nv-btn" data-variant="outline">描边 Outline</button>
+<button class="nv-btn" data-variant="ghost">幽灵 Ghost</button>
+<button class="nv-btn" data-variant="link">链接 Link</button>
+<button class="nv-btn" data-variant="gradient">渐变 Gradient</button>
+
+<!-- @demo 颜色 | `data-color` 表达语义；危险操作用 danger。 -->
+<div class="doc-stack">
+  <div class="doc-row">
+    <button class="nv-btn">主色</button>
+    <button class="nv-btn" data-color="neutral">中性</button>
+    <button class="nv-btn" data-color="success">成功</button>
+    <button class="nv-btn" data-color="warning">警告</button>
+    <button class="nv-btn" data-color="danger">危险</button>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="soft">主色</button>
+    <button class="nv-btn" data-variant="soft" data-color="neutral">中性</button>
+    <button class="nv-btn" data-variant="soft" data-color="success">成功</button>
+    <button class="nv-btn" data-variant="soft" data-color="warning">警告</button>
+    <button class="nv-btn" data-variant="soft" data-color="danger">危险</button>
+  </div>
+  <div class="doc-row">
+    <button class="nv-btn" data-variant="outline" data-color="primary">主色</button>
+    <button class="nv-btn" data-variant="outline">中性</button>
+    <button class="nv-btn" data-variant="outline" data-color="success">成功</button>
+    <button class="nv-btn" data-variant="outline" data-color="warning">警告</button>
+    <button class="nv-btn" data-variant="outline" data-color="danger">危险</button>
+  </div>
+</div>
+
+<!-- @demo 尺寸 | `data-size="xs|sm|md|lg"`，与输入框等控件高度对齐。 -->
+<button class="nv-btn" data-size="xs">超小</button>
+<button class="nv-btn" data-size="sm">小号</button>
+<button class="nv-btn">默认</button>
+<button class="nv-btn" data-size="lg">大号</button>
+
+<!-- @demo 图标 | 图标放在文字前后；仅图标时加 `data-icon` 并写 `aria-label`。 -->
+<button class="nv-btn"><i data-nv-icon="plus"></i>新建项目</button>
+<button class="nv-btn" data-variant="outline">导出<i data-nv-icon="download"></i></button>
+<button class="nv-btn" data-variant="soft" data-color="neutral"><i data-nv-icon="search"></i>搜索<kbd class="nv-btn-kbd">Ctrl K</kbd></button>
+<button class="nv-btn" data-icon aria-label="设置"><i data-nv-icon="settings"></i></button>
+<button class="nv-btn" data-icon data-variant="outline" aria-label="收藏"><i data-nv-icon="star"></i></button>
+<button class="nv-btn" data-icon data-variant="ghost" aria-label="更多"><i data-nv-icon="more"></i></button>
+<button class="nv-btn" data-icon data-shape="pill" data-variant="soft" aria-label="喜欢"><i data-nv-icon="heart"></i></button>
+
+<!-- @demo 加载与禁用 | `data-loading` 显示旋转圈并阻止重复点击；`Nova.button.loading(el, bool)` 可在脚本中切换。 -->
+<button class="nv-btn" data-loading>保存中</button>
+<button class="nv-btn" data-variant="outline" data-loading>同步中</button>
+<button class="nv-btn" id="btn-demo-submit"><i data-nv-icon="cloud-upload"></i>点我提交</button>
+<button class="nv-btn" disabled>不可用</button>
+<button class="nv-btn" data-variant="outline" disabled>不可用</button>
+<script>
+  document.getElementById('btn-demo-submit').addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+    Nova.button.loading(btn, true);
+    setTimeout(() => Nova.button.loading(btn, false), 1600);
+  });
+</script>
+
+<!-- @demo 形状、撑满与水波纹 | `data-shape="pill"` 胶囊；`data-block` 撑满父容器；`data-ripple` 按压时出现水波纹。 -->
+<div class="doc-stack doc-narrow">
+  <div class="doc-row">
+    <button class="nv-btn" data-shape="pill">胶囊按钮</button>
+    <button class="nv-btn" data-shape="pill" data-variant="outline" data-ripple>水波纹</button>
+    <button class="nv-btn" data-ripple data-color="neutral">按住试试</button>
+  </div>
+  <button class="nv-btn" data-block data-size="lg" data-ripple>撑满宽度</button>
+</div>
+
+<!-- @demo 按钮组 | 相邻按钮合并圆角，适合分段操作。 -->
+<div class="nv-btn-group">
+  <button class="nv-btn" data-variant="outline"><i data-nv-icon="chevron-left"></i>上一页</button>
+  <button class="nv-btn" data-variant="outline">今天</button>
+  <button class="nv-btn" data-variant="outline">下一页<i data-nv-icon="chevron-right"></i></button>
+</div>
+<div class="nv-btn-group">
+  <button class="nv-btn">合并</button>
+  <button class="nv-btn" data-icon aria-label="更多合并方式"><i data-nv-icon="chevron-down"></i></button>
+</div>
+
+<!-- @api
+### 属性
+| 属性 | 说明 | 取值 | 默认 |
+|---|---|---|---|
+| `class="nv-btn"` | 按钮基础类，可用于 `<button>` 或 `<a>` | — | — |
+| `data-variant` | 视觉变体 | `solid` `soft` `outline` `ghost` `link` `gradient` | `solid` |
+| `data-color` | 语义颜色 | `primary` `neutral` `success` `warning` `danger` | `primary` |
+| `data-size` | 尺寸 | `xs` `sm` `md` `lg` | `md` |
+| `data-icon` | 方形图标按钮，必须配 `aria-label` | 布尔 | — |
+| `data-shape` | 形状 | `pill` `circle` | — |
+| `data-block` | 撑满父容器宽度 | 布尔 | — |
+| `data-loading` | 加载态：旋转圈 + 禁止点击 | 布尔 | — |
+| `data-ripple` | 按压水波纹（需引入 button.js，任意元素可用） | 布尔 | — |
+| `disabled` / `aria-disabled="true"` | 禁用 | 布尔 | — |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.button.loading(el, on)` | 切换加载态，同步 `aria-busy` |
+
+### 可定制变量
+| 变量 | 说明 |
+|---|---|
+| `--nv-primary` / `--nv-hue` | 主色（改 `--nv-hue` 即可整体换色） |
+| `--nv-radius` | 圆角基准 |
+| `--nv-h-sm` `--nv-h-md` `--nv-h-lg` | 控件高度 |
+-->

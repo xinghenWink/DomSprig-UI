@@ -1,0 +1,124 @@
+<!--
+@name border-beam
+@title Border Beam 光束边框
+@category effects
+@order 2
+@deps button
+@desc 一束光沿卡片圆角边框匀速环绕；另有流动渐变描边 `.nv-gradient-border`。适合定价卡、推荐方案与 AI 输入框。
+-->
+
+<!-- @demo 基础 | 给卡片加 `.nv-border-beam`，光束路径自动贴合圆角（读取元素自身的 `border-radius`）。 -->
+<style>
+  .beam-card {
+    width: min(100%, 340px); padding: 22px;
+    border: 1px solid var(--nv-border); border-radius: var(--nv-radius-xl);
+    background: var(--nv-surface);
+  }
+  .beam-card h4 { margin: 0 0 6px; font-size: var(--nv-text-md); }
+  .beam-card p { margin: 0; font-size: var(--nv-text-sm); color: var(--nv-fg-2); line-height: 1.6; }
+</style>
+<div class="beam-card nv-border-beam">
+  <h4>智能周报</h4>
+  <p>每周一 9:00 自动汇总上周的提交、需求与线上告警，生成一页可分享的报告。</p>
+</div>
+
+<!-- @demo 多束、反向与时长 | `data-beams="2"` 同时运行两束光并均匀错开；`data-reverse` 逆时针；`--nv-beam-duration` 控制绕一圈的时长。 -->
+<div class="beam-card nv-border-beam" data-beams="2">
+  <h4>双光束</h4>
+  <p><code>data-beams="2"</code>，默认 6 秒一圈。</p>
+</div>
+<div class="beam-card nv-border-beam beam-slow" data-reverse>
+  <h4>逆时针 · 慢速</h4>
+  <p><code>data-reverse</code>，<code>--nv-beam-duration: 12s</code>。</p>
+</div>
+<style>
+  .beam-slow { --nv-beam-duration: 12s; }
+</style>
+
+<!-- @demo 定价卡 | 推荐方案用光束突出，颜色可用 `--nv-beam-from` / `--nv-beam-to` 定制（这里取成功色）。 | block -->
+<style>
+  .beam-pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .beam-plan { display: grid; gap: 10px; align-content: start; padding: 22px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-xl); background: var(--nv-surface); }
+  .beam-plan h4 { margin: 0; font-size: var(--nv-text-md); }
+  .beam-plan .beam-price { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .beam-plan .beam-price small { font-size: var(--nv-text-sm); font-weight: 400; color: var(--nv-fg-3); }
+  .beam-plan ul { margin: 0 0 6px; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--nv-text-sm); color: var(--nv-fg-2); }
+  .beam-plan li::before { content: "✓ "; color: var(--nv-success-text); }
+  .beam-plan.is-hot { --nv-beam-from: transparent; --nv-beam-to: var(--nv-success); --nv-beam-size: 160px; }
+</style>
+<div class="beam-pricing">
+  <div class="beam-plan">
+    <h4>个人版</h4>
+    <div class="beam-price">¥0<small> / 月</small></div>
+    <ul><li>3 个项目</li><li>社区支持</li></ul>
+    <button class="nv-btn" data-variant="outline">当前方案</button>
+  </div>
+  <div class="beam-plan nv-border-beam is-hot">
+    <h4>团队版 · 推荐</h4>
+    <div class="beam-price">¥99<small> / 人 / 月</small></div>
+    <ul><li>不限项目</li><li>权限与审计日志</li><li>优先工单支持</li></ul>
+    <button class="nv-btn" data-color="success">升级团队版</button>
+  </div>
+  <div class="beam-plan">
+    <h4>企业版</h4>
+    <div class="beam-price">定制</div>
+    <ul><li>私有化部署</li><li>专属客户经理</li></ul>
+    <button class="nv-btn" data-variant="outline">联系销售</button>
+  </div>
+</div>
+
+<!-- @demo AI 输入框 | 光束容器可以放任何内容，装饰层 `aria-hidden` 且不拦截点击，输入框照常聚焦与输入。 | block -->
+<style>
+  .beam-prompt { display: flex; gap: 10px; align-items: center; max-width: 560px; margin: 0 auto; padding: 8px 8px 8px 16px; border: 1px solid var(--nv-border); border-radius: var(--nv-radius-full); background: var(--nv-surface); }
+  .beam-prompt input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: inherit; font: inherit; }
+</style>
+<label class="beam-prompt nv-border-beam" data-beams="2">
+  <span class="nv-sr-only">向 AI 提问</span>
+  <input id="border-beam-ask" placeholder="帮我写一封产品发布邮件…">
+  <button class="nv-btn" data-shape="pill" type="button"><i data-nv-icon="sparkles"></i>生成</button>
+</label>
+
+<!-- @demo 流动渐变描边 | `.nv-gradient-border` 纯 CSS 实现，描边颜色沿主色相缓慢流动；`--nv-gradient-border-width` 调整粗细。 -->
+<style>
+  .beam-gb { padding: 18px 22px; border-radius: var(--nv-radius-xl); text-align: center; }
+  .beam-gb b { display: block; font-size: 24px; }
+  .beam-gb span { font-size: var(--nv-text-sm); color: var(--nv-fg-2); }
+  .beam-gb.is-thick { --nv-gradient-border-width: 3px; }
+</style>
+<div class="nv-gradient-border beam-gb"><b>99.99%</b><span>可用性 SLA</span></div>
+<div class="nv-gradient-border beam-gb is-thick"><b>3px</b><span>更粗的描边</span></div>
+<button class="nv-btn nv-gradient-border" data-variant="ghost" data-shape="pill">渐变描边按钮</button>
+
+<!-- @api
+### 类名与属性
+| 名称 | 位置 | 说明 | 取值 | 默认 |
+|---|---|---|---|---|
+| `.nv-border-beam` | 任意块级元素 | 沿边框环绕的光束；脚本注入 `<span class="nv-border-beam-track" aria-hidden="true">` | — | — |
+| `data-beams` | `.nv-border-beam` | 同时运行的光束数，均匀错开 | `1`–`4` | `1` |
+| `data-reverse` | `.nv-border-beam` | 逆时针运动 | 布尔 | 顺时针 |
+| `data-paused` | `.nv-border-beam` | 暂停（离开视口时脚本自动设置） | 布尔 | — |
+| `.nv-gradient-border` | 任意元素 | 流动的渐变描边（纯 CSS，不占伪元素） | — | — |
+
+### CSS 变量
+| 变量 | 说明 | 默认 |
+|---|---|---|
+| `--nv-beam-duration` | 绕一圈的时长 | `6s` |
+| `--nv-beam-size` | 光束长度 | `110px` |
+| `--nv-beam-width` | 光束粗细 | `1.5px` |
+| `--nv-beam-from` / `--nv-beam-to` | 尾部 / 头部颜色 | 主色相两侧的渐变 |
+| `--nv-beam-offset` | 卡片自身边框宽度，光束压在边框上 | `1px` |
+| `--nv-gradient-border-width` | 渐变描边宽度 | `1.5px` |
+| `--nv-gradient-border-duration` | 渐变流动一周的时长 | `4s` |
+| `--nv-gradient-border-bg` | 描边内部的底色 | `var(--nv-surface)` |
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.get(el, 'border-beam').refresh()` | 修改 `data-beams` 或圆角后重新读取 |
+| `Nova.get(el, 'border-beam').destroy()` | 移除光层与监听 |
+
+### 说明与降级
+- 光束用 `offset-path: rect()` 沿圆角矩形移动；不支持的浏览器退回旋转的 conic 渐变描边。
+- 离开视口时暂停动画，回到视口继续。
+- **减少动态**：光束停在上边框（多束时沿边框错开）形成静态高光；渐变描边停止流动。
+-->

@@ -1,0 +1,61 @@
+<!--
+@name kbd
+@title Kbd 按键
+@category data
+@order 60
+@desc 显示键盘按键与快捷键组合。写 `data-keys="mod+k"` 会按平台自动渲染：Mac 显示 ⌘ K，Windows 显示 Ctrl K。
+-->
+
+<!-- @demo 基础 | 原生 `<kbd>` 加 `.nv-kbd`。按键之间可以用 `.nv-kbd-sep` 写加号，也可以放进 `.nv-kbd-group` 紧凑排列。 -->
+<kbd class="nv-kbd">Esc</kbd>
+<kbd class="nv-kbd">Tab</kbd>
+<span><kbd class="nv-kbd">Ctrl</kbd><span class="nv-kbd-sep">+</span><kbd class="nv-kbd">C</kbd></span>
+<span class="nv-kbd-group" aria-label="Shift Command P"><kbd class="nv-kbd">⇧</kbd><kbd class="nv-kbd">⌘</kbd><kbd class="nv-kbd">P</kbd></span>
+<kbd class="nv-kbd"><i data-nv-icon="arrow-up"></i></kbd>
+<kbd class="nv-kbd"><i data-nv-icon="arrow-down"></i></kbd>
+
+<!-- @demo 按平台渲染 | `data-keys` 用 `+` 连接按键名；`mod` 在 Mac 上是 ⌘，在其他系统是 Ctrl。 -->
+<kbd class="nv-kbd" data-keys="mod+k"></kbd>
+<kbd class="nv-kbd" data-keys="mod+shift+p"></kbd>
+<kbd class="nv-kbd" data-keys="alt+enter"></kbd>
+<kbd class="nv-kbd" data-keys="ctrl+alt+delete"></kbd>
+<span class="doc-hint">当前识别为：<b id="kbd-os"></b></span>
+<script>
+  Nova.ready(() => { document.getElementById('kbd-os').textContent = Nova.kbd.isMac ? 'Mac' : '非 Mac'; });
+</script>
+
+<!-- @demo 尺寸与场景 | `data-size` 取 sm / md / lg；`data-variant="ghost"` 去掉边框，适合放在按钮、输入框和菜单里。 | col left -->
+<div class="doc-row">
+  <kbd class="nv-kbd" data-size="sm">K</kbd>
+  <kbd class="nv-kbd">K</kbd>
+  <kbd class="nv-kbd" data-size="lg">K</kbd>
+</div>
+<div class="doc-row">
+  <button class="nv-btn" data-variant="outline">搜索文档 <kbd class="nv-kbd" data-variant="ghost" data-keys="mod+k"></kbd></button>
+  <button class="nv-btn">保存 <kbd class="nv-kbd" data-variant="ghost" data-size="sm" data-keys="mod+s"></kbd></button>
+</div>
+<p style="margin:0;color:var(--nv-fg-2);font-size:var(--nv-text-sm)">按 <kbd class="nv-kbd" data-size="sm" data-keys="mod+enter"></kbd> 发送，<kbd class="nv-kbd" data-size="sm">Shift</kbd> + <kbd class="nv-kbd" data-size="sm">Enter</kbd> 换行。</p>
+
+<!-- @api
+### 类名与属性
+| 名称 | 说明 |
+|---|---|
+| `.nv-kbd` | 单个按键，建议用 `<kbd>` |
+| `.nv-kbd-group` | 组合键紧凑排列 |
+| `.nv-kbd-sep` | 按键之间的分隔符（如 `+`） |
+| `data-size` | `sm` `md` `lg`（18 / 22 / 28px） |
+| `data-variant` | `ghost` 无边框、继承文字颜色 |
+| `data-keys` | 快捷键描述，如 `mod+shift+p`；需 kbd.js |
+
+### 按键名
+`mod` `cmd` `ctrl` `alt` `option` `shift` `enter` `esc` `tab` `space` `backspace` `delete` `up` `down` `left` `right` `pageup` `pagedown` `home` `end` `plus`，其他按原样显示（单个字母转大写）。
+
+### 方法
+| 方法 | 说明 |
+|---|---|
+| `Nova.kbd.isMac` | 是否为 Apple 平台 |
+| `Nova.kbd.format('mod+k')` | 返回按键文字数组，如 `['⌘', 'K']` |
+
+### 无障碍
+多键组合渲染后整组带 `aria-label`（如「Command Shift P」），读屏不会逐个念符号。手写的 `.nv-kbd-group` 里如果用了 ⌘ ⇧ 这类符号，请自己补上 `aria-label`。
+-->
